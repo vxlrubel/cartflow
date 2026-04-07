@@ -12,7 +12,11 @@ class UserController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $users = User::with('role')->paginate($request->per_page ?? 15);
+        $perPage = min((int) ($request->per_page ?? 10), 50);
+
+        $users = User::select('id', 'name', 'email', 'role_id', 'created_at')
+            ->with('role:id,name')
+            ->paginate($perPage);
 
         return response()->json($users);
     }

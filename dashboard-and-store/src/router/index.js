@@ -25,12 +25,12 @@ const routes = [
     component: () => import('@/pages/RegisterPage.vue'),
     meta: { guestOnly: true },
   },
-  {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: () => import('@/pages/DashboardPage.vue'),
-    meta: { requiresAuth: true, roles: ['admin', 'manager'] },
-  },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('@/pages/admin/DashboardPage.vue'),
+      meta: { requiresAuth: true, roles: ['admin', 'manager'] },
+    },
 ]
 
 const router = createRouter({

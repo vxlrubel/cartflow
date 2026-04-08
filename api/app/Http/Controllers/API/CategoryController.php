@@ -11,7 +11,7 @@ class CategoryController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Category::with('parent');
+        $query = Category::with('parent')->withCount('products');
         if ($request->parent_id === 'null') {
             $query->whereNull('parent_id');
         }

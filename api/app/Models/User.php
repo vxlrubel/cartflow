@@ -25,6 +25,13 @@ class User extends Authenticatable
         ];
     }
 
+    protected $appends = ['role'];
+
+    public function getRoleAttribute(): ?string
+    {
+        return Role::find($this->role_id)?->name;
+    }
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);

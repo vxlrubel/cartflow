@@ -1,96 +1,108 @@
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import api from '@/services/api'
 import API_ENDPOINTS from '@/services/api-endpoints'
 import router from '@/router'
 
-export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    user: null,
-    token: localStorage.getItem('token') || null,
-    loading: false,
-    error: null,
-  }),
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref(null)
+  const token = ref(localStorage.getItem('token') || null)
+  const loading = ref(false)
+  const error = ref(null)
 
-  getters: {
-    isAuthenticated: (state) => !!state.token,
-    isAdminOrManager: (state) => state.user && ['admin', 'manager'].includes(state.user.role),
-    isCustomer: (state) => state.user && state.user.role === 'customer',
-    userRole: (state) => state.user?.role || null,
-  },
+  const isAuthenticated = computed(() => !!token.value)
+  const isAdminOrManager = computed(() => user.value && ['admin', 'manager'].includes(user.value.role))
+  const isCustomer = computed(() => user.value && user.value.role === 'customer')
+  const userRole = computed(() => user.value?.role || null)
 
-  actions: {
-    async login(credentials) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await api.post(API_ENDPOINTS.auth.login, credentials)
-        this.token = response.data.token
-        this.user = response.data.user
-        localStorage.setItem('token', this.token)
-        return response.data
-      } catch (error) {
-        this.error = error.response?.data?.message || 'Login failed'
-        throw error
-      } finally {
-        this.loading = false
+  async function login(credentials) {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await api.post(API_ENDPOINTS.auth.login, credentials)
+      token.value = response.data.token
+      user.value = response.data.user
+      localStorage.setItem('token', token.value)
+      return response.data
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Login failed'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function register(userData) {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await api.post(API_ENDPOINTS.auth.register, userData)
+      token.value = response.data.token
+      user.value = response.data.user
+      localStorage.setItem('token', token.value)
+      return response.data
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Registration failed'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function logout() {
+    try {
+      if (token.value) {
+        await api.post(API_ENDPOINTS.auth.logout)
       }
-    },
+    } catch (err) {
+      console.error('Logout error:', err)
+    } finally {
+      clearAuth()
+      router.push('/')
+    }
+  }
 
-    async register(userData) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await api.post(API_ENDPOINTS.auth.register, userData)
-        this.token = response.data.token
-        this.user = response.data.user
-        localStorage.setItem('token', this.token)
-        return response.data
-      } catch (error) {
-        this.error = error.response?.data?.message || 'Registration failed'
-        throw error
-      } finally {
-        this.loading = false
-      }
-    },
+  async function fetchUser() {
+    if (!token.value) return null
+    try {
+      const response = await api.get(API_ENDPOINTS.auth.me)
+      user.value = response.data
+      return user.value
+    } catch (err) {
+      clearAuth()
+      return null
+    }
+  }
 
-    async logout() {
-      try {
-        if (this.token) {
-          await api.post(API_ENDPOINTS.auth.logout)
-        }
-      } catch (error) {
-        console.error('Logout error:', error)
-      } finally {
-        this.clearAuth()
-        router.push('/')
-      }
-    },
+  function clearAuth() {
+    user.value = null
+    token.value = null
+    error.value = null
+    localStorage.removeItem('token')
+  }
 
-    async fetchUser() {
-      if (!this.token) return null
-      try {
-        const response = await api.get(API_ENDPOINTS.auth.me)
-        this.user = response.data
-        return this.user
-      } catch (error) {
-        this.clearAuth()
-        return null
-      }
-    },
+  function redirectBasedOnRole() {
+    if (isAdminOrManager.value) {
+      router.push('/dashboard')
+    } else if (isCustomer.value) {
+      router.push('/')
+    }
+  }
 
-    clearAuth() {
-      this.user = null
-      this.token = null
-      this.error = null
-      localStorage.removeItem('token')
-    },
-
-    redirectBasedOnRole() {
-      if (this.isAdminOrManager) {
-        router.push('/dashboard')
-      } else if (this.isCustomer) {
-        router.push('/')
-      }
-    },
-  },
+  return {
+    user,
+    token,
+    loading,
+    error,
+    isAuthenticated,
+    isAdminOrManager,
+    isCustomer,
+    userRole,
+    login,
+    register,
+    logout,
+    fetchUser,
+    clearAuth,
+    redirectBasedOnRole,
+  }
 })

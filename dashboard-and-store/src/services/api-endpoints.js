@@ -1,6 +1,6 @@
 const API_VERSION = '/api/v1';
 
-export const api = {
+export const API_ENDPOINTS = {
   auth: {
     register: `${API_VERSION}/auth/register`,
     login: `${API_VERSION}/auth/login`,
@@ -139,4 +139,4 @@ export const api = {
   },
 };
 
-export default api;
+export default API_ENDPOINTS;

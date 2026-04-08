@@ -14,8 +14,8 @@ class ProductController extends Controller
     {
         $query = Product::with(['category', 'brand', 'images']);
 
-        if ($request->category) {
-            $query->where('category_id', $request->category);
+        if ($request->category || $request->category_id) {
+            $query->where('category_id', $request->category ?? $request->category_id);
         }
         if ($request->brand) {
             $query->where('brand_id', $request->brand);
@@ -26,6 +26,16 @@ class ProductController extends Controller
         if ($request->status) {
             $query->where('status', $request->status);
         }
+
+        $sort = $request->sort ?? 'name_asc';
+        $sortMap = [
+            'name_asc' => ['name', 'asc'],
+            'name_desc' => ['name', 'desc'],
+            'price_asc' => ['price', 'asc'],
+            'price_desc' => ['price', 'desc'],
+        ];
+        [$sortField, $sortDir] = $sortMap[$sort] ?? ['name', 'asc'];
+        $query->orderBy($sortField, $sortDir);
 
         $products = $query->paginate($request->per_page ?? 15);
 

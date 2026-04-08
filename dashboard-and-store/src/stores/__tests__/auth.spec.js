@@ -1,22 +1,32 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useAuthStore } from '../auth'
+
+const { mockPush, mockApiPost, mockApiGet } = vi.hoisted(() => ({
+  mockPush: vi.fn(),
+  mockApiPost: vi.fn(),
+  mockApiGet: vi.fn(),
+}))
 
 vi.mock('@/services/api', () => ({
   default: {
-    post: vi.fn(),
-    get: vi.fn(),
+    post: mockApiPost,
+    get: mockApiGet,
   },
 }))
 
 vi.mock('vue-router', () => ({
+  createRouter: vi.fn(() => ({
+    push: mockPush,
+    install: vi.fn(),
+    beforeEach: vi.fn(),
+  })),
+  createWebHistory: vi.fn(() => ({})),
   default: {
-    push: vi.fn(),
+    push: mockPush,
   },
 }))
 
-import api from '@/services/api'
-import router from '@/router'
+import { useAuthStore } from '../auth'
 
 describe('useAuthStore', () => {
   beforeEach(() => {
@@ -109,12 +119,12 @@ describe('useAuthStore', () => {
           token: 'fake-jwt-token',
         },
       }
-      api.post.mockResolvedValue(mockResponse)
+      mockApiPost.mockResolvedValue(mockResponse)
 
       const store = useAuthStore()
       const result = await store.login({ email: 'admin@test.com', password: 'password' })
 
-      expect(api.post).toHaveBeenCalledWith('/auth/login', { email: 'admin@test.com', password: 'password' })
+      expect(mockApiPost).toHaveBeenCalledWith('/auth/login', { email: 'admin@test.com', password: 'password' })
       expect(store.user).toEqual(mockResponse.data.user)
       expect(store.token).toBe('fake-jwt-token')
       expect(store.loading).toBeFalsy()
@@ -124,27 +134,27 @@ describe('useAuthStore', () => {
 
     it('should set error on login failure', async () => {
       const errorResponse = { response: { data: { message: 'Invalid credentials' } } }
-      api.post.mockRejectedValue(errorResponse)
+      mockApiPost.mockRejectedValue(errorResponse)
 
       const store = useAuthStore()
-      
+
       await expect(store.login({ email: 'wrong@test.com', password: 'wrong' })).rejects.toThrow()
       expect(store.error).toBe('Invalid credentials')
       expect(store.loading).toBeFalsy()
     })
 
     it('should set generic error on login failure without message', async () => {
-      api.post.mockRejectedValue(new Error('Network error'))
+      mockApiPost.mockRejectedValue(new Error('Network error'))
 
       const store = useAuthStore()
-      
+
       await expect(store.login({ email: 'test@test.com', password: 'test' })).rejects.toThrow()
       expect(store.error).toBe('Login failed')
     })
 
     it('should set loading to true during login', async () => {
       const mockResponse = { data: { user: {}, token: 'token' } }
-      api.post.mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve(mockResponse), 100)))
+      mockApiPost.mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve(mockResponse), 100)))
 
       const store = useAuthStore()
       const loginPromise = store.login({ email: 'test@test.com', password: 'password' })
@@ -161,7 +171,7 @@ describe('useAuthStore', () => {
           token: 'jwt-token-123',
         },
       }
-      api.post.mockResolvedValue(mockResponse)
+      mockApiPost.mockResolvedValue(mockResponse)
 
       const store = useAuthStore()
       await store.login({ email: 'test@test.com', password: 'password' })
@@ -178,7 +188,7 @@ describe('useAuthStore', () => {
           token: 'new-token',
         },
       }
-      api.post.mockResolvedValue(mockResponse)
+      mockApiPost.mockResolvedValue(mockResponse)
 
       const store = useAuthStore()
       const result = await store.register({
@@ -188,7 +198,7 @@ describe('useAuthStore', () => {
         password_confirmation: 'password123',
       })
 
-      expect(api.post).toHaveBeenCalledWith('/auth/register', {
+      expect(mockApiPost).toHaveBeenCalledWith('/auth/register', {
         name: 'New User',
         email: 'new@test.com',
         password: 'password123',
@@ -200,7 +210,7 @@ describe('useAuthStore', () => {
 
     it('should set error on registration failure', async () => {
       const errorResponse = { response: { data: { message: 'Email already exists' } } }
-      api.post.mockRejectedValue(errorResponse)
+      mockApiPost.mockRejectedValue(errorResponse)
 
       const store = useAuthStore()
 
@@ -211,17 +221,17 @@ describe('useAuthStore', () => {
 
   describe('logout', () => {
     it('should call logout API when authenticated', async () => {
-      api.post.mockResolvedValue({ data: { message: 'Logged out' } })
+      mockApiPost.mockResolvedValue({ data: { message: 'Logged out' } })
 
       const store = useAuthStore()
       store.token = 'some-token'
       await store.logout()
 
-      expect(api.post).toHaveBeenCalledWith('/auth/logout')
+      expect(mockApiPost).toHaveBeenCalledWith('/auth/logout')
     })
 
     it('should clear auth state on logout', async () => {
-      api.post.mockResolvedValue({ data: {} })
+      mockApiPost.mockResolvedValue({ data: {} })
 
       const store = useAuthStore()
       store.token = 'token'
@@ -234,7 +244,7 @@ describe('useAuthStore', () => {
     })
 
     it('should remove token from localStorage on logout', async () => {
-      api.post.mockResolvedValue({ data: {} })
+      mockApiPost.mockResolvedValue({ data: {} })
       localStorage.setItem('token', 'token')
 
       const store = useAuthStore()
@@ -247,29 +257,29 @@ describe('useAuthStore', () => {
       const store = useAuthStore()
       await store.logout()
 
-      expect(api.post).not.toHaveBeenCalled()
+      expect(mockApiPost).not.toHaveBeenCalled()
     })
 
     it('should redirect to home page after logout', async () => {
-      api.post.mockResolvedValue({ data: {} })
+      mockApiPost.mockResolvedValue({ data: {} })
 
       const store = useAuthStore()
       await store.logout()
 
-      expect(router.push).toHaveBeenCalledWith('/')
+      expect(mockPush).toHaveBeenCalledWith('/')
     })
   })
 
   describe('fetchUser', () => {
     it('should fetch user data successfully', async () => {
       const mockUser = { id: 1, name: 'User', email: 'user@test.com', role: 'customer' }
-      api.get.mockResolvedValue({ data: mockUser })
+      mockApiGet.mockResolvedValue({ data: mockUser })
 
       const store = useAuthStore()
       store.token = 'valid-token'
       const result = await store.fetchUser()
 
-      expect(api.get).toHaveBeenCalledWith('/auth/me')
+      expect(mockApiGet).toHaveBeenCalledWith('/auth/me')
       expect(store.user).toEqual(mockUser)
       expect(result).toEqual(mockUser)
     })
@@ -279,12 +289,12 @@ describe('useAuthStore', () => {
       store.token = null
       const result = await store.fetchUser()
 
-      expect(api.get).not.toHaveBeenCalled()
+      expect(mockApiGet).not.toHaveBeenCalled()
       expect(result).toBeNull()
     })
 
     it('should clear auth on fetch user failure', async () => {
-      api.get.mockRejectedValue(new Error('Unauthorized'))
+      mockApiGet.mockRejectedValue(new Error('Unauthorized'))
 
       const store = useAuthStore()
       store.token = 'invalid-token'
@@ -318,7 +328,7 @@ describe('useAuthStore', () => {
       store.user = { role: 'admin' }
       store.redirectBasedOnRole()
 
-      expect(router.push).toHaveBeenCalledWith('/dashboard')
+      expect(mockPush).toHaveBeenCalledWith('/dashboard')
     })
 
     it('should redirect manager to dashboard', () => {
@@ -326,7 +336,7 @@ describe('useAuthStore', () => {
       store.user = { role: 'manager' }
       store.redirectBasedOnRole()
 
-      expect(router.push).toHaveBeenCalledWith('/dashboard')
+      expect(mockPush).toHaveBeenCalledWith('/dashboard')
     })
 
     it('should redirect customer to home', () => {
@@ -334,7 +344,7 @@ describe('useAuthStore', () => {
       store.user = { role: 'customer' }
       store.redirectBasedOnRole()
 
-      expect(router.push).toHaveBeenCalledWith('/')
+      expect(mockPush).toHaveBeenCalledWith('/')
     })
   })
 })

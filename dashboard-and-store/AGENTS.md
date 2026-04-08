@@ -37,6 +37,14 @@ src/
 └── App.vue            # Root component
 
 
+# API ENDPOINTS
+
+Read the api end point from the below source.
+src/services/api-endpoints.js
+
+# API URL
+Read the **.env** file for api url and use the api url form this file.
+
 # 1. DASHBOARD MENU (ROLE-BASED)
 
 If the user’s role is admin or manager, they are allowed to access the main dashboard. If the role is customer, they will have a separate “My Account” dashboard on the frontend store.

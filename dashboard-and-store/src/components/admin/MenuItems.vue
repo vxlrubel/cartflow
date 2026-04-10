@@ -1,7 +1,8 @@
 
 <script setup>
-import {  reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 
 const expandedCategories = reactive({
@@ -97,16 +98,33 @@ const toggleCategory = (category) => {
 }
 
 const isActive = (path) => {
-  return route.path.startsWith(path.split('/').slice(0, 3).join('/'))
+  return route.path === path
 }
 
+const isParentActive = (items) => {
+  return items.some(item => item.path === route.path)
+}
+
+watch(
+  () => route.path,
+  () => {
+    for (const [category, items] of Object.entries(menuItems)) {
+      if (items.some(item => item.path === route.path)) {
+        expandedCategories[category] = true
+        break
+      }
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
   <div v-for="(items, category) in menuItems" :key="category" class="mb-2">
     <button
       @click="toggleCategory(category)"
-      class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+      class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium"
+      :class="isParentActive(items) ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700 hover:bg-gray-50'"
     >
       <span>{{ category }}</span>
       <svg
@@ -123,11 +141,17 @@ const isActive = (path) => {
         v-for="item in items"
         :key="item.path"
         :to="item.path"
-        class="block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-indigo-600"
-        :class="{ 'text-indigo-600 bg-indigo-50': isActive(item.path) }"
+        class="block pl-8 pr-4 py-2 text-sm border-l-2"
+        :class="isActive(item.path)
+          ? 'text-indigo-600 bg-indigo-50 border-indigo-600 font-medium'
+          : 'text-gray-600 hover:bg-gray-50 hover:text-indigo-600 border-transparent'"
       >
         {{ item.label }}
       </router-link>
     </div>
   </div>
 </template>
+
+<style scoped>
+
+</style>

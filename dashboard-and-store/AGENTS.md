@@ -21,6 +21,52 @@ This project is a modern Vue 3 application built using Vite, designed for scalab
 - Prettier
 - Oxlint
 
+
+# Vue Component Structure (STRICT RULE)
+
+All Vue Single File Components (SFC) MUST follow this exact order:
+
+## Required Order
+```
+01. <script setup>
+02. <template>
+03. <style scoped> (optional)
+```
+
+## Standard Component Template
+
+```vue
+<script setup>
+// imports
+// props
+// emits
+// state
+// computed
+// methods
+// lifecycle hooks
+</script>
+
+<template>
+  <!-- UI Markup -->
+</template>
+
+<style scoped>
+/* Styles (only if needed) */
+</style>
+```
+
+# Rules
+
+```
+- ALWAYS use <script setup>
+- NEVER use Options API (data, methods, etc.)
+- <script> MUST be at the TOP
+- <template> MUST be in the MIDDLE
+- <style> MUST be at the BOTTOM
+- Use scoped styles by default
+- Do NOT include <style> if not needed
+```
+
 # Project Structure
 
 src/

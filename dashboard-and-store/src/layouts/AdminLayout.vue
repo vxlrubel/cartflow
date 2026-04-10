@@ -1,3 +1,37 @@
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import MenuItems from '@/components/admin/MenuItems.vue'
+
+const authStore = useAuthStore()
+const sidebarOpen = ref(false)
+const currentTime = ref('')
+
+const updateTime = () => {
+  const now = new Date()
+  currentTime.value = now.toLocaleTimeString('en-US', {
+    hour12: true,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+}
+
+let timeInterval
+onMounted(() => {
+  updateTime()
+  timeInterval = setInterval(updateTime, 1000)
+})
+
+onUnmounted(() => {
+  clearInterval(timeInterval)
+})
+
+const handleLogout = async () => {
+  await authStore.logout()
+}
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-100">
     <aside
@@ -33,6 +67,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
+              <span class="text-sm font-medium text-gray-700">{{ currentTime }}</span>
             </div>
             <div class="flex items-center space-x-4">
               <span class="text-gray-700">{{ authStore.user?.name }}</span>
@@ -53,15 +88,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import { useAuthStore } from '@/stores/auth'
-import MenuItems from '@/components/admin/MenuItems.vue'
-
-const authStore = useAuthStore()
-const sidebarOpen = ref(false)
-const handleLogout = async () => {
-  await authStore.logout()
-}
-</script>

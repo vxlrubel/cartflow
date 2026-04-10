@@ -1,4 +1,3 @@
-
 <script setup>
 import { reactive, watch } from 'vue'
 import { useRoute } from 'vue-router'

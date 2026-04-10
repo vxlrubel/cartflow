@@ -295,7 +295,7 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from) => {
   const authStore = useAuthStore()
 
   if (authStore.token && !authStore.user) {
@@ -304,26 +304,26 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     if (to.path === '/customer/login') {
-      return next()
+      return true
     }
-    return next('/customer/login')
+    return '/customer/login'
   }
 
   if (to.meta.guestOnly && authStore.isAuthenticated) {
     if (authStore.isAdminOrManager) {
-      return next('/dashboard')
+      return '/dashboard'
     }
-    return next('/')
+    return '/'
   }
 
   if (to.meta.roles && authStore.user) {
     const allowedRoles = to.meta.roles
     if (!allowedRoles.includes(authStore.user.role)) {
-      return next('/')
+      return '/'
     }
   }
 
-  next()
+  return true
 })
 
 export default router

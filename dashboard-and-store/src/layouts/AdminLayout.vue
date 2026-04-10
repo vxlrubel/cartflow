@@ -43,7 +43,7 @@ const handleLogout = async () => {
         'lg:translate-x-0'
       ]"
     >
-      <div class="flex items-center justify-between h-16 px-4 border-b border-neutral-200">
+      <div class="flex items-center justify-between h-11 px-4 border-b border-neutral-200">
         <router-link to="/dashboard" class="text-xl font-bold text-indigo-600">
           CartFlow Admin
         </router-link>
@@ -54,7 +54,7 @@ const handleLogout = async () => {
         </button>
       </div>
 
-      <nav class="overflow-y-auto h-[calc(100vh-4rem)] py-4">
+      <nav class="overflow-y-auto h-[calc(100vh-2.75rem)] py-4">
         <MenuItems/>
       </nav>
     </aside>
@@ -62,7 +62,7 @@ const handleLogout = async () => {
     <div class="lg:pl-64">
       <header class="bg-white border-b border-neutral-200">
         <div class="px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between h-16">
+          <div class="flex justify-between h-11">
             <div class="flex items-center">
               <button @click="sidebarOpen = true" class="lg:hidden p-2">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

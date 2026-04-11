@@ -122,8 +122,63 @@ export const useProductStore = defineStore('products', () => {
     try {
       const response = await api.get(API_ENDPOINTS.categories.list)
       categories.value = response.data.data || response.data
+      return categories.value
     } catch (err) {
       console.error('Failed to fetch categories:', err)
+      return []
+    }
+  }
+
+  const fetchProduct = async (id) => {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await api.get(API_ENDPOINTS.products.single(id))
+      return response.data
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Failed to fetch product'
+      return null
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const createProduct = async (productData) => {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await api.post(API_ENDPOINTS.products.create, productData)
+      await fetchCounts()
+      return response.data
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Failed to create product'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const updateProduct = async (id, productData) => {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await api.put(API_ENDPOINTS.products.update(id), productData)
+      return response.data
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Failed to update product'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const fetchBrands = async () => {
+    try {
+      const response = await api.get(API_ENDPOINTS.brands.list)
+      return response.data.data || response.data
+    } catch (err) {
+      console.error('Failed to fetch brands:', err)
+      return []
     }
   }
 
@@ -310,6 +365,10 @@ export const useProductStore = defineStore('products', () => {
     fetchProducts,
     fetchCounts,
     fetchCategories,
+    fetchProduct,
+    createProduct,
+    updateProduct,
+    fetchBrands,
     setPage,
     setSort,
     setStatus,

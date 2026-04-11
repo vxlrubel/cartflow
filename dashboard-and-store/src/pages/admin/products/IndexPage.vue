@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/products'
+import CurrencySymbol from '@/components/CurrencySymble.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -271,21 +272,29 @@ watch(() => route.query, () => {
                   <div class="text-sm text-gray-500">{{ product.stock || 0 }}</div>
                 </td>
                 <td class="px-4 py-4">
-                  <span
-                    :class="[
-                      'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-                      product.status === 'active'
-                        ? 'bg-green-100 text-green-800'
-                        : product.status === 'inactive'
-                        ? 'bg-red-100 text-red-800'
-                        : 'bg-gray-100 text-gray-800'
-                    ]"
-                  >
-                    {{ product.status || 'inactive' }}
-                  </span>
+                  <div class="flex items-center gap-1 w-[70px]">
+                    <span
+                      :class="[
+                        'inline-flex rounded-full h-2 w-2',
+                        product.status === 'active'
+                          ? 'bg-green-700'
+                          : product.status === 'inactive'
+                          ? 'bg-red-800'
+                          : 'bg-gray-800'
+                      ]"
+                    ></span>
+                    <span :class="[
+                        'inline-flex capitalize text-sm font-medium',
+                        product.status === 'active'
+                          ? 'text-green-700'
+                          : product.status === 'inactive'
+                          ? 'text-red-800'
+                          : 'text-gray-800'
+                      ]">{{ product.status || 'inactive' }}</span>
+                  </div>
                 </td>
                 <td class="px-4 py-4">
-                  <div class="text-sm text-gray-900">${{ parseFloat(product.price || 0).toFixed(2) }}</div>
+                  <div class="text-sm text-gray-900"><CurrencySymbol />{{ parseFloat(product.price || 0).toFixed(2) }}</div>
                 </td>
                 <td class="px-4 py-4">
                   <div class="text-sm text-gray-500">{{ formatDate(product.created_at) }}</div>

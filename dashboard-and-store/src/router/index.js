@@ -97,6 +97,11 @@ const routes = [
         component: () => import('@/pages/admin/products/CreatePage.vue'),
       },
       {
+        path: 'products/edit/:id',
+        name: 'product-edit',
+        component: () => import('@/pages/admin/products/EditPage.vue'),
+      },
+      {
         path: 'products/categories',
         name: 'product-categories',
         component: () => import('@/pages/admin/products/CategoriesPage.vue'),

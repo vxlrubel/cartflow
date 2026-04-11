@@ -53,6 +53,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/products/{id}/restore', [ProductController::class, 'restore']);
         Route::delete('/products/{id}/force', [ProductController::class, 'forceDelete']);
         Route::get('/trash/products', [ProductController::class, 'trash']);
+        Route::post('/products/bulk-soft-delete', [ProductController::class, 'bulkSoftDelete']);
+        Route::post('/products/bulk-active', [ProductController::class, 'bulkActive']);
+        Route::post('/products/bulk-inactive', [ProductController::class, 'bulkInactive']);
 
         // Categories
         Route::apiResource('categories', CategoryController::class);

@@ -21,21 +21,26 @@ class ProductController extends Controller
             $query->where('brand_id', $request->brand);
         }
         if ($request->search) {
-            $query->where('name', 'like', '%'.$request->search.'%');
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->search.'%')
+                  ->orWhere('description', 'like', '%'.$request->search.'%');
+            });
         }
         if ($request->status) {
             $query->where('status', $request->status);
         }
 
-        $sort = $request->sort ?? 'name_asc';
-        $sortMap = [
-            'name_asc' => ['name', 'asc'],
-            'name_desc' => ['name', 'desc'],
-            'price_asc' => ['price', 'asc'],
-            'price_desc' => ['price', 'desc'],
-        ];
-        [$sortField, $sortDir] = $sortMap[$sort] ?? ['name', 'asc'];
-        $query->orderBy($sortField, $sortDir);
+        if ($request->trashed) {
+            $query->onlyTrashed();
+        }
+
+        $sortBy = $request->sort_by ?? 'name';
+        $sortOrder = $request->sort_order ?? 'asc';
+        
+        $allowedSortFields = ['name', 'status', 'price', 'created_at', 'updated_at'];
+        if (in_array($sortBy, $allowedSortFields)) {
+            $query->orderBy($sortBy, $sortOrder === 'desc' ? 'desc' : 'asc');
+        }
 
         $products = $query->paginate($request->per_page ?? 15);
 
@@ -126,5 +131,32 @@ class ProductController extends Controller
         $products = Product::onlyTrashed()->with(['category', 'brand'])->paginate();
 
         return response()->json($products);
+    }
+
+    public function bulkSoftDelete(Request $request): JsonResponse
+    {
+        $request->validate(['ids' => 'required|array']);
+        
+        Product::whereIn('id', $request->ids)->delete();
+
+        return response()->json(['message' => 'Products moved to trash']);
+    }
+
+    public function bulkActive(Request $request): JsonResponse
+    {
+        $request->validate(['ids' => 'required|array']);
+        
+        Product::whereIn('id', $request->ids)->update(['status' => 'active']);
+
+        return response()->json(['message' => 'Products activated']);
+    }
+
+    public function bulkInactive(Request $request): JsonResponse
+    {
+        $request->validate(['ids' => 'required|array']);
+        
+        Product::whereIn('id', $request->ids)->update(['status' => 'inactive']);
+
+        return response()->json(['message' => 'Products deactivated']);
     }
 }

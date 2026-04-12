@@ -182,6 +182,26 @@ export const useProductStore = defineStore('products', () => {
     }
   }
 
+  const createCategory = async (name) => {
+    try {
+      const response = await api.post(API_ENDPOINTS.categories.create, { name })
+      return response.data
+    } catch (err) {
+      console.error('Failed to create category:', err)
+      throw err
+    }
+  }
+
+  const createBrand = async (name) => {
+    try {
+      const response = await api.post(API_ENDPOINTS.brands.create, { name })
+      return response.data
+    } catch (err) {
+      console.error('Failed to create brand:', err)
+      throw err
+    }
+  }
+
   const setPage = (page) => {
     pagination.value.currentPage = page
     updateQueryParams()
@@ -369,6 +389,8 @@ export const useProductStore = defineStore('products', () => {
     createProduct,
     updateProduct,
     fetchBrands,
+    createCategory,
+    createBrand,
     setPage,
     setSort,
     setStatus,

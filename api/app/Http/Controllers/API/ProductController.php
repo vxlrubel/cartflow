@@ -12,7 +12,7 @@ class ProductController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Product::with(['category', 'brand', 'images']);
+        $query = Product::with(['categories', 'category', 'brand', 'images']);
 
         if ($request->category || $request->category_id) {
             $query->where('category_id', $request->category ?? $request->category_id);
@@ -52,9 +52,12 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'slug' => 'nullable|string|regex:/^[a-z0-9-]+$/|unique:products,slug',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
             'category_id' => 'nullable|exists:categories,id',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:categories,id',
             'brand_id' => 'nullable|exists:brands,id',
             'stock' => 'required|integer|min:0',
             'sku' => 'required|string|unique:products',
@@ -62,10 +65,16 @@ class ProductController extends Controller
             'images' => 'nullable|array',
         ]);
 
+        $slug = $request->slug ? $request->slug : Str::slug($request->name);
+        
         $product = Product::create([
-            ...$request->except('images'),
-            'slug' => Str::slug($request->name),
+            ...$request->except('images', 'category_ids'),
+            'slug' => $slug,
         ]);
+
+        if ($request->category_ids) {
+            $product->categories()->sync($request->category_ids);
+        }
 
         if ($request->images) {
             foreach ($request->images as $url) {
@@ -73,12 +82,12 @@ class ProductController extends Controller
             }
         }
 
-        return response()->json($product->load('images'), 201);
+        return response()->json($product->load(['images', 'categories']), 201);
     }
 
     public function show(int $id): JsonResponse
     {
-        $product = Product::with(['category', 'brand', 'images', 'variations.attributeValues'])->findOrFail($id);
+        $product = Product::with(['categories', 'category', 'brand', 'images', 'variations.attributeValues'])->findOrFail($id);
 
         return response()->json($product);
     }
@@ -89,17 +98,24 @@ class ProductController extends Controller
 
         $request->validate([
             'name' => 'sometimes|string|max:255',
+            'slug' => 'sometimes|string|regex:/^[a-z0-9-]+$/|unique:products,slug,'.$id,
             'price' => 'sometimes|numeric|min:0',
             'sku' => 'sometimes|unique:products,sku,'.$id,
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:categories,id',
         ]);
 
-        $product->update($request->except('images'));
+        if ($request->slug) {
+            $product->update(['slug' => $request->slug]);
+        }
+        
+        $product->update($request->except('images', 'category_ids', 'slug'));
 
-        if ($request->name) {
-            $product->update(['slug' => Str::slug($request->name)]);
+        if ($request->has('category_ids')) {
+            $product->categories()->sync($request->category_ids ?? []);
         }
 
-        return response()->json($product->load('images'));
+        return response()->json($product->load(['images', 'categories']));
     }
 
     public function destroy(int $id): JsonResponse
@@ -128,7 +144,7 @@ class ProductController extends Controller
 
     public function trash(): JsonResponse
     {
-        $products = Product::onlyTrashed()->with(['category', 'brand'])->paginate();
+        $products = Product::onlyTrashed()->with(['categories', 'category', 'brand'])->paginate();
 
         return response()->json($products);
     }

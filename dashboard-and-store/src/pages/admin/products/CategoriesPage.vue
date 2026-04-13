@@ -98,12 +98,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold">Categories</h2>
+  <div>
+    <div class="flex justify-between items-center mb-6 px-6 py-3 bg-white border border-neutral-200 rounded">
+      <h2 class="text-2xl font-medium capitalize tracking-wide">Categories</h2>
       <button
         @click="showModal = true; resetForm()"
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm cursor-pointer"
       >
         Add Category
       </button>
@@ -113,14 +113,14 @@ onMounted(() => {
       <div class="lg:col-span-1">
         <div class="bg-white rounded-lg shadow p-6">
           <h3 class="text-lg font-semibold mb-4">{{ editingId ? 'Edit Category' : 'Add Category' }}</h3>
-          <form @submit.prevent="submitForm" class="space-y-4">
+          <form @submit.prevent="submitForm" class="space-y-3">
             <div>
               <label class="block text-sm font-medium mb-1">Name</label>
               <input
                 v-model="form.name"
                 @blur="generateSlug"
                 type="text"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="input-field"
                 required
               />
             </div>
@@ -129,7 +129,7 @@ onMounted(() => {
               <input
                 v-model="form.slug"
                 type="text"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="input-field"
                 required
               />
             </div>
@@ -138,14 +138,14 @@ onMounted(() => {
               <textarea
                 v-model="form.description"
                 rows="3"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border border-gray-300 rounded text-sm px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
               ></textarea>
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Parent Category</label>
               <select
                 v-model="form.parent_id"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border border-gray-300 rounded text-sm px-3 h-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option :value="null">None</option>
                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">

@@ -10,3 +10,7 @@
 .search-field {
   @apply w-64 pl-10 pr-4 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500;
 }
+
+.input-field {
+  @apply w-full border border-gray-300 rounded text-sm px-3 h-8 focus:outline-none focus:ring-2 focus:ring-blue-500;
+}

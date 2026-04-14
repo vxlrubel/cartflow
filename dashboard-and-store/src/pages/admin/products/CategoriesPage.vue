@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import api from '@/services/api'
 import API_ENDPOINTS from '@/services/api-endpoints'
+import CustomSelect from '@/components/CustomSelect.vue';
 
 const categories = ref([])
 const loading = ref(false)
@@ -95,6 +96,14 @@ const filteredCategories = computed(() => categories.value)
 onMounted(() => {
   fetchCategories()
 })
+
+const categoryOptions = computed(() => [
+  { value: null, label: 'None' },
+  ...categories.value.map(cat => ({
+    value: cat.id,
+    label: cat.name
+  }))
+]);
 </script>
 
 <template>
@@ -143,15 +152,10 @@ onMounted(() => {
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Parent Category</label>
-              <select
+              <CustomSelect
                 v-model="form.parent_id"
-                class="w-full border border-gray-300 rounded text-sm px-3 h-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option :value="null">None</option>
-                <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                  {{ cat.name }}
-                </option>
-              </select>
+                :options="categoryOptions"
+              />
             </div>
             <div class="flex items-center">
               <input

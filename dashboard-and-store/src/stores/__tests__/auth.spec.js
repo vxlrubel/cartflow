@@ -124,7 +124,10 @@ describe('useAuthStore', () => {
       const store = useAuthStore()
       const result = await store.login({ email: 'admin@test.com', password: 'password' })
 
-      expect(mockApiPost).toHaveBeenCalledWith('/auth/login', { email: 'admin@test.com', password: 'password' })
+      expect(mockApiPost).toHaveBeenCalledWith('/auth/login', {
+        email: 'admin@test.com',
+        password: 'password',
+      })
       expect(store.user).toEqual(mockResponse.data.user)
       expect(store.token).toBe('fake-jwt-token')
       expect(store.loading).toBeFalsy()
@@ -154,7 +157,9 @@ describe('useAuthStore', () => {
 
     it('should set loading to true during login', async () => {
       const mockResponse = { data: { user: {}, token: 'token' } }
-      mockApiPost.mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve(mockResponse), 100)))
+      mockApiPost.mockImplementation(
+        () => new Promise((resolve) => setTimeout(() => resolve(mockResponse), 100)),
+      )
 
       const store = useAuthStore()
       const loginPromise = store.login({ email: 'test@test.com', password: 'password' })
@@ -214,7 +219,9 @@ describe('useAuthStore', () => {
 
       const store = useAuthStore()
 
-      await expect(store.register({ email: 'existing@test.com', password: 'password' })).rejects.toThrow()
+      await expect(
+        store.register({ email: 'existing@test.com', password: 'password' }),
+      ).rejects.toThrow()
       expect(store.error).toBe('Email already exists')
     })
   })

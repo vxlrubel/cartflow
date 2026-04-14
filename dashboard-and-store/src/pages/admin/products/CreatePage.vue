@@ -41,7 +41,7 @@ const loadFormData = async () => {
 
 const createCategory = async () => {
   if (!newCategory.value.trim()) return
-  
+
   try {
     const category = await store.createCategory(newCategory.value.trim())
     if (category) {
@@ -56,7 +56,7 @@ const createCategory = async () => {
 
 const createBrand = async () => {
   if (!newBrand.value.trim()) return
-  
+
   try {
     const brand = await store.createBrand(newBrand.value.trim())
     if (brand) {
@@ -76,7 +76,8 @@ const validateForm = () => {
     errors.value.name = 'Product name is required'
   }
   if (form.value.slug && !isValidSlug.value) {
-    errors.value.slug = 'Slug can only contain lowercase letters (a-z), numbers (0-9), and hyphens (-)'
+    errors.value.slug =
+      'Slug can only contain lowercase letters (a-z), numbers (0-9), and hyphens (-)'
   }
   if (!form.value.price || form.value.price <= 0) {
     errors.value.price = 'Price is required and must be greater than 0'
@@ -125,18 +126,19 @@ onMounted(loadFormData)
     <div class="bg-white rounded-lg shadow">
       <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-200">
         <h2 class="text-2xl font-bold text-gray-800">Add Product</h2>
-        <button
-          @click="handleCancel"
-          class="text-gray-600 hover:text-gray-900"
-        >
+        <button @click="handleCancel" class="text-gray-600 hover:text-gray-900">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-6">
-
         <div class="grid grid-cols-12 gap-6 px-6 py-4 border-b border-neutral-200">
           <div class="col-span-12 md:col-span-7 lg:col-span-8 xl:col-span-9 space-y-5">
             <div>
@@ -156,15 +158,17 @@ onMounted(loadFormData)
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
-              <input 
-                type="text" 
-                v-model="form.slug" 
-                class="select w-full" 
+              <input
+                type="text"
+                v-model="form.slug"
+                class="select w-full"
                 :class="{ 'border-red-500': errors.slug }"
                 placeholder="Enter product slug (e.g., product-name)"
               />
               <p v-if="errors.slug" class="mt-1 text-sm text-red-500">{{ errors.slug[0] }}</p>
-              <p v-else-if="form.slug && !isValidSlug" class="mt-1 text-sm text-red-500">Slug can only contain lowercase letters (a-z), numbers (0-9), and hyphens (-)</p>
+              <p v-else-if="form.slug && !isValidSlug" class="mt-1 text-sm text-red-500">
+                Slug can only contain lowercase letters (a-z), numbers (0-9), and hyphens (-)
+              </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="space-y-6">
@@ -223,14 +227,18 @@ onMounted(loadFormData)
               <div class="px-3 py-1 font-medium bg-neutral-200">Status</div>
               <ul class="select-none overflow-y-auto text-sm">
                 <li>
-                  <label class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100">
-                    <input type="radio" name="status" value="active" v-model="form.status">
+                  <label
+                    class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100"
+                  >
+                    <input type="radio" name="status" value="active" v-model="form.status" />
                     <span>Active</span>
                   </label>
                 </li>
                 <li>
-                  <label class="text-sm text-gray-700 flex items-center space-x-1 py-1 px-3 cursor-pointer hover:bg-neutral-100">
-                    <input type="radio" name="status" value="inactive" v-model="form.status">
+                  <label
+                    class="text-sm text-gray-700 flex items-center space-x-1 py-1 px-3 cursor-pointer hover:bg-neutral-100"
+                  >
+                    <input type="radio" name="status" value="inactive" v-model="form.status" />
                     <span>Inactive</span>
                   </label>
                 </li>
@@ -241,52 +249,58 @@ onMounted(loadFormData)
               <div class="px-3 py-1 font-medium bg-neutral-200">Category</div>
               <ul class="h-30 select-none overflow-y-auto text-sm">
                 <li v-for="category in categories" :key="category.id">
-                  <label class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100">
-                    <input type="checkbox" :value="category.id" v-model="form.category_ids">
+                  <label
+                    class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100"
+                  >
+                    <input type="checkbox" :value="category.id" v-model="form.category_ids" />
                     <span>{{ category.name }}</span>
                   </label>
                 </li>
               </ul>
               <div class="border-t border-neutral-200 px-3 py-2 flex items-center space-x-2">
-                <input 
-                  type="text" 
-                  v-model="newCategory" 
+                <input
+                  type="text"
+                  v-model="newCategory"
                   @keyup.enter="createCategory"
-                  placeholder="Add new category" 
+                  placeholder="Add new category"
                   class="flex-1 text-[12px] h-7 px-3 border border-indigo-400 bg-neutral-100 rounded focus:bg-indigo-50 focus:text-indigo-700 focus:border-indigo-400 focus:outline-indigo-400"
-                >
-                <button 
-                  type="button" 
+                />
+                <button
+                  type="button"
                   @click="createCategory"
                   class="px-3 h-7 text-[12px] font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
                 >
                   Add
                 </button>
               </div>
-              <p v-if="errors.category" class="px-3 pb-2 text-xs text-red-500">{{ errors.category }}</p>
+              <p v-if="errors.category" class="px-3 pb-2 text-xs text-red-500">
+                {{ errors.category }}
+              </p>
             </div>
 
             <div class="border border-neutral-200 rounded">
               <div class="px-3 py-1 font-medium bg-neutral-200">Brand</div>
               <ul class="h-30 select-none overflow-y-auto text-sm">
                 <li v-for="brand in brands" :key="brand.id">
-                  <label class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100">
-                    <input type="radio" name="brand" :value="brand.id" v-model="form.brand_id">
+                  <label
+                    class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100"
+                  >
+                    <input type="radio" name="brand" :value="brand.id" v-model="form.brand_id" />
                     <span>{{ brand.name }}</span>
                   </label>
                 </li>
               </ul>
 
               <div class="border-t border-neutral-200 px-3 py-2 flex items-center space-x-2">
-                <input 
-                  type="text" 
-                  v-model="newBrand" 
+                <input
+                  type="text"
+                  v-model="newBrand"
                   @keyup.enter="createBrand"
-                  placeholder="Add new brand" 
+                  placeholder="Add new brand"
                   class="flex-1 text-[12px] h-7 px-3 border border-indigo-400 bg-neutral-100 rounded focus:bg-indigo-50 focus:text-indigo-700 focus:border-indigo-400 focus:outline-indigo-400"
-                >
-                <button 
-                  type="button" 
+                />
+                <button
+                  type="button"
                   @click="createBrand"
                   class="px-3 h-7 text-[12px] font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
                 >
@@ -295,9 +309,6 @@ onMounted(loadFormData)
               </div>
               <p v-if="errors.brand" class="px-3 pb-2 text-xs text-red-500">{{ errors.brand }}</p>
             </div>
-
-
-
           </div>
         </div>
 

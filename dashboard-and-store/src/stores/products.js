@@ -44,7 +44,9 @@ export const useProductStore = defineStore('products', () => {
   ]
 
   const hasActiveFilters = computed(() => {
-    return search.value || status.value !== 'all' || sortBy.value !== 'name' || sortOrder.value !== 'asc'
+    return (
+      search.value || status.value !== 'all' || sortBy.value !== 'name' || sortOrder.value !== 'asc'
+    )
   })
 
   const allSelected = computed(() => {
@@ -271,7 +273,7 @@ export const useProductStore = defineStore('products', () => {
     if (allSelected.value) {
       selectedIds.value = []
     } else {
-      selectedIds.value = products.value.map(p => p.id)
+      selectedIds.value = products.value.map((p) => p.id)
     }
   }
 
@@ -353,9 +355,7 @@ export const useProductStore = defineStore('products', () => {
     if (selectedIds.value.length === 0) return
     loading.value = true
     try {
-      await Promise.all(
-        selectedIds.value.map(id => api.post(`/products/${id}/restore`))
-      )
+      await Promise.all(selectedIds.value.map((id) => api.post(`/products/${id}/restore`)))
       selectedIds.value = []
       await fetchProducts()
       await fetchCounts()

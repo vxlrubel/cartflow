@@ -135,6 +135,6 @@ export const API_ENDPOINTS = {
   audits: {
     list: '/audits',
   },
-};
+}
 
-export default API_ENDPOINTS;
+export default API_ENDPOINTS

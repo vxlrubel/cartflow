@@ -121,7 +121,9 @@ onMounted(() => {
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-1">
         <div class="bg-white rounded-lg shadow p-6">
-          <h3 class="text-lg font-semibold mb-4">{{ editingId ? 'Edit Variation' : 'Add Variation' }}</h3>
+          <h3 class="text-lg font-semibold mb-4">
+            {{ editingId ? 'Edit Variation' : 'Add Variation' }}
+          </h3>
           <form @submit.prevent="submitForm" class="space-y-4">
             <div>
               <label class="block text-sm font-medium mb-1">Product</label>
@@ -178,12 +180,7 @@ onMounted(() => {
               />
             </div>
             <div class="flex items-center">
-              <input
-                v-model="form.is_active"
-                type="checkbox"
-                id="is_active"
-                class="mr-2"
-              />
+              <input v-model="form.is_active" type="checkbox" id="is_active" class="mr-2" />
               <label for="is_active" class="text-sm">Active</label>
             </div>
             <div class="flex gap-2">
@@ -211,7 +208,10 @@ onMounted(() => {
           <div class="p-4 border-b">
             <input
               v-model="search"
-              @input="currentPage = 1; fetchVariations()"
+              @input="
+                currentPage = 1
+                fetchVariations()
+              "
               type="text"
               placeholder="Search variations..."
               class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -235,17 +235,29 @@ onMounted(() => {
                   <td colspan="7" class="px-4 py-8 text-center text-gray-500">Loading...</td>
                 </tr>
                 <tr v-else-if="variations.length === 0">
-                  <td colspan="7" class="px-4 py-8 text-center text-gray-500">No variations found</td>
+                  <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                    No variations found
+                  </td>
                 </tr>
-                <tr v-for="variation in filteredVariations" :key="variation.id" class="border-t hover:bg-gray-50">
-                  <td class="px-4 py-3">{{ variation.product_name || variation.product?.name || '-' }}</td>
+                <tr
+                  v-for="variation in filteredVariations"
+                  :key="variation.id"
+                  class="border-t hover:bg-gray-50"
+                >
+                  <td class="px-4 py-3">
+                    {{ variation.product_name || variation.product?.name || '-' }}
+                  </td>
                   <td class="px-4 py-3">{{ variation.name }}</td>
                   <td class="px-4 py-3 text-gray-600">{{ variation.sku }}</td>
                   <td class="px-4 py-3">${{ variation.price }}</td>
                   <td class="px-4 py-3">{{ variation.stock }}</td>
                   <td class="px-4 py-3">
                     <span
-                      :class="variation.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+                      :class="
+                        variation.is_active
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-800'
+                      "
                       class="px-2 py-1 rounded text-xs"
                     >
                       {{ variation.is_active ? 'Active' : 'Inactive' }}
@@ -274,7 +286,9 @@ onMounted(() => {
               v-for="page in totalPages"
               :key="page"
               @click="paginate(page)"
-              :class="page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'"
+              :class="
+                page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
+              "
               class="px-3 py-1 rounded"
             >
               {{ page }}

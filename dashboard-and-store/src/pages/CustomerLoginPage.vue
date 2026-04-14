@@ -6,7 +6,10 @@
     </div>
 
     <form @submit.prevent="handleLogin" class="space-y-6">
-      <div v-if="authStore.error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+      <div
+        v-if="authStore.error"
+        class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg"
+      >
         {{ authStore.error }}
       </div>
 

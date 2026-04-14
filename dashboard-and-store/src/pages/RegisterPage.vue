@@ -6,18 +6,22 @@
     </div>
 
     <form @submit.prevent="handleRegister" class="space-y-6">
-      <div v-if="authStore.error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+      <div
+        v-if="authStore.error"
+        class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg"
+      >
         {{ authStore.error }}
       </div>
 
-      <div v-if="successMessage" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+      <div
+        v-if="successMessage"
+        class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg"
+      >
         {{ successMessage }}
       </div>
 
       <div>
-        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-          Full Name
-        </label>
+        <label for="name" class="block text-sm font-medium text-gray-700 mb-2"> Full Name </label>
         <input
           id="name"
           v-model="form.name"
@@ -122,11 +126,11 @@ const handleRegister = async () => {
   }
 
   try {
-      await authStore.register(form.value)
-      successMessage.value = 'Account created successfully! Redirecting to login...'
-      setTimeout(() => {
-        router.push('/customer/login')
-      }, 1500)
+    await authStore.register(form.value)
+    successMessage.value = 'Account created successfully! Redirecting to login...'
+    setTimeout(() => {
+      router.push('/customer/login')
+    }, 1500)
   } catch (error) {
     console.error('Registration failed:', error)
   }

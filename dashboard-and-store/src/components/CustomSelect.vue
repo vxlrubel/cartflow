@@ -9,14 +9,17 @@
         {{ selectedLabel || 'Select an option' }}
       </span>
       <span>
-        <svg :class="[
-          'duration-50',
-          {'rotate-180': isOpen}
-        ]" xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor">
-          <path d="M480-384 288-576h384L480-384Z"/>
+        <svg
+          :class="['duration-50', { 'rotate-180': isOpen }]"
+          xmlns="http://www.w3.org/2000/svg"
+          height="22px"
+          viewBox="0 -960 960 960"
+          width="22px"
+          fill="currentColor"
+        >
+          <path d="M480-384 288-576h384L480-384Z" />
         </svg>
       </span>
-
     </div>
 
     <!-- Dropdown -->
@@ -30,64 +33,63 @@
         @click.stop="selectOption(option)"
         class="px-3 py-1 cursor-pointer hover:bg-gray-100 select-none active:bg-blue-500 active:text-white border-b border-gray-200 last:border-0"
         :class="{
-          'bg-blue-500 text-white hover:bg-blue-500': option.value === selectedOption
+          'bg-blue-500 text-white hover:bg-blue-500': option.value === selectedOption,
         }"
       >
         {{ option.label }}
       </li>
     </ul>
-
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-const selectedOption = ref('');
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+const selectedOption = ref('')
 
 // Props
 const props = defineProps({
   options: {
     type: Array,
-    required: true
+    required: true,
   },
   modelValue: {
     type: [Number, String],
-    default: ''
-  }
-});
+    default: '',
+  },
+})
 
 // Emit
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue'])
 
-const isOpen = ref(false);
-const selectRef = ref(null);
+const isOpen = ref(false)
+const selectRef = ref(null)
 
 // Computed selected value
 const selectedLabel = computed(() => {
-  return props.options.find(o => o.value === props.modelValue)?.label;
-});
+  return props.options.find((o) => o.value === props.modelValue)?.label
+})
 
 const toggleDropdown = () => {
-  isOpen.value = !isOpen.value;
-};
+  isOpen.value = !isOpen.value
+}
 
 const selectOption = (option) => {
-  emit('update:modelValue', option.value);
-  isOpen.value = false;
-};
+  emit('update:modelValue', option.value)
+  isOpen.value = false
+}
 
 // Close outside
 const handleClickOutside = (e) => {
   if (selectRef.value && !selectRef.value.contains(e.target)) {
-    isOpen.value = false;
+    isOpen.value = false
   }
-};
+}
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-});
+  document.addEventListener('click', handleClickOutside)
+})
 
 onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside);
-});
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>

@@ -82,7 +82,10 @@ const paginate = (page) => {
 }
 
 const generateSlug = () => {
-  form.value.slug = form.value.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+  form.value.slug = form.value.name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
 }
 
 const filteredBrands = computed(() => brands.value)
@@ -158,12 +161,7 @@ onMounted(() => {
               />
             </div>
             <div class="flex items-center">
-              <input
-                v-model="form.is_active"
-                type="checkbox"
-                id="is_active"
-                class="mr-2"
-              />
+              <input v-model="form.is_active" type="checkbox" id="is_active" class="mr-2" />
               <label for="is_active" class="text-sm">Active</label>
             </div>
             <div class="flex gap-2">
@@ -191,7 +189,10 @@ onMounted(() => {
           <div class="p-4 border-b">
             <input
               v-model="search"
-              @input="currentPage = 1; fetchBrands()"
+              @input="
+                currentPage = 1
+                fetchBrands()
+              "
               type="text"
               placeholder="Search brands..."
               class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -216,7 +217,11 @@ onMounted(() => {
                 <tr v-else-if="brands.length === 0">
                   <td colspan="6" class="px-4 py-8 text-center text-gray-500">No brands found</td>
                 </tr>
-                <tr v-for="brand in filteredBrands" :key="brand.id" class="border-t hover:bg-gray-50">
+                <tr
+                  v-for="brand in filteredBrands"
+                  :key="brand.id"
+                  class="border-t hover:bg-gray-50"
+                >
                   <td class="px-4 py-3">
                     <img
                       v-if="brand.logo_url"
@@ -224,7 +229,10 @@ onMounted(() => {
                       :alt="brand.name"
                       class="w-10 h-10 object-cover rounded"
                     />
-                    <div v-else class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-xs">
+                    <div
+                      v-else
+                      class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-xs"
+                    >
                       N/A
                     </div>
                   </td>
@@ -243,7 +251,11 @@ onMounted(() => {
                   </td>
                   <td class="px-4 py-3">
                     <span
-                      :class="brand.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+                      :class="
+                        brand.is_active
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-800'
+                      "
                       class="px-2 py-1 rounded text-xs"
                     >
                       {{ brand.is_active ? 'Active' : 'Inactive' }}
@@ -256,10 +268,7 @@ onMounted(() => {
                     >
                       Edit
                     </button>
-                    <button
-                      @click="deleteBrand(brand.id)"
-                      class="text-red-600 hover:text-red-800"
-                    >
+                    <button @click="deleteBrand(brand.id)" class="text-red-600 hover:text-red-800">
                       Delete
                     </button>
                   </td>
@@ -272,7 +281,9 @@ onMounted(() => {
               v-for="page in totalPages"
               :key="page"
               @click="paginate(page)"
-              :class="page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'"
+              :class="
+                page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
+              "
               class="px-3 py-1 rounded"
             >
               {{ page }}

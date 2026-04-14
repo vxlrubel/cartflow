@@ -50,11 +50,14 @@ const editor = useEditor({
   },
 })
 
-watch(() => props.modelValue, (newValue) => {
-  if (editor.value && editor.value.getHTML() !== newValue) {
-    editor.value.commands.setContent(newValue, false)
-  }
-})
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (editor.value && editor.value.getHTML() !== newValue) {
+      editor.value.commands.setContent(newValue, false)
+    }
+  },
+)
 
 onBeforeUnmount(() => {
   if (editor.value) {
@@ -81,8 +84,13 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
 </script>
 
 <template>
-  <div class="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500">
-    <div v-if="editor" class="flex flex-wrap items-center gap-1 p-2 bg-gray-50 border-b border-gray-300">
+  <div
+    class="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500"
+  >
+    <div
+      v-if="editor"
+      class="flex flex-wrap items-center gap-1 p-2 bg-gray-50 border-b border-gray-300"
+    >
       <!-- Text Format -->
       <button
         type="button"
@@ -92,8 +100,18 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Bold (Ctrl+B)"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2.5"
+            d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2.5"
+            d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z"
+          />
         </svg>
       </button>
       <button
@@ -104,7 +122,13 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Italic (Ctrl+I)"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 4h4m-2 0v16m-4 0h8" transform="skewX(-12)" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 4h4m-2 0v16m-4 0h8"
+            transform="skewX(-12)"
+          />
         </svg>
       </button>
       <button
@@ -115,7 +139,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Underline (Ctrl+U)"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 3v7a6 6 0 006 6 6 6 0 006-6V3M4 21h16" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 3v7a6 6 0 006 6 6 6 0 006-6V3M4 21h16"
+          />
         </svg>
       </button>
       <button
@@ -126,7 +155,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Strikethrough"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16M7 8c0 2 2 3 5 3s5-1 5-3" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 12h16M7 8c0 2 2 3 5 3s5-1 5-3"
+          />
         </svg>
       </button>
       <button
@@ -137,7 +171,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Inline Code"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+          />
         </svg>
       </button>
 
@@ -174,7 +213,13 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleParagraph().run()"
-        :class="{ 'bg-gray-200': editor.isActive('paragraph') && !isHeadingActive(1) && !isHeadingActive(2) && !isHeadingActive(3) }"
+        :class="{
+          'bg-gray-200':
+            editor.isActive('paragraph') &&
+            !isHeadingActive(1) &&
+            !isHeadingActive(2) &&
+            !isHeadingActive(3),
+        }"
         class="p-1.5 rounded hover:bg-gray-200 transition-colors text-sm"
         title="Paragraph"
       >
@@ -192,7 +237,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Bullet List"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
         </svg>
       </button>
       <button
@@ -203,7 +253,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Numbered List"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h10M7 16h10M3 8h.01M3 12h.01M3 16h.01" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M7 8h10M7 12h10M7 16h10M3 8h.01M3 12h.01M3 16h.01"
+          />
         </svg>
       </button>
       <button
@@ -214,7 +269,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Blockquote"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 10h.01M12 10h.01M16 10h.01M9 16h6"
+          />
         </svg>
       </button>
 
@@ -229,7 +289,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Align Left"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8M4 18h16" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h8M4 18h16"
+          />
         </svg>
       </button>
       <button
@@ -240,7 +305,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Align Center"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M8 12h8M4 18h16" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M8 12h8M4 18h16"
+          />
         </svg>
       </button>
       <button
@@ -251,7 +321,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Align Right"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M12 12h8M4 18h16" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M12 12h8M4 18h16"
+          />
         </svg>
       </button>
       <button
@@ -262,7 +337,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Justify"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
         </svg>
       </button>
 
@@ -278,7 +358,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
           title="Insert Link"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+            />
           </svg>
         </button>
         <div
@@ -302,18 +387,22 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
           <button
             v-if="editor.isActive('link')"
             type="button"
-            @click="editor.chain().focus().unsetLink().run(); closeLinkInput()"
+            @click="
+              editor.chain().focus().unsetLink().run()
+              closeLinkInput()
+            "
             class="px-2 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
           >
             Remove
           </button>
-          <button
-            type="button"
-            @click="closeLinkInput"
-            class="text-gray-500 hover:text-gray-700"
-          >
+          <button type="button" @click="closeLinkInput" class="text-gray-500 hover:text-gray-700">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -352,7 +441,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Undo (Ctrl+Z)"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+          />
         </svg>
       </button>
       <button
@@ -363,7 +457,12 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         title="Redo (Ctrl+Y)"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"
+          />
         </svg>
       </button>
     </div>

@@ -82,9 +82,7 @@ const menuItems = {
     { label: 'Currency', path: '/dashboard/settings/currency' },
     { label: 'Store Config', path: '/dashboard/settings/store' },
   ],
-  Media: [
-    { label: 'Uploads', path: '/dashboard/media' },
-  ],
+  Media: [{ label: 'Uploads', path: '/dashboard/media' }],
   Trash: [
     { label: 'Products', path: '/dashboard/trash/products' },
     { label: 'Orders', path: '/dashboard/trash/orders' },
@@ -101,20 +99,20 @@ const isActive = (path) => {
 }
 
 const isParentActive = (items) => {
-  return items.some(item => item.path === route.path)
+  return items.some((item) => item.path === route.path)
 }
 
 watch(
   () => route.path,
   () => {
     for (const [category, items] of Object.entries(menuItems)) {
-      if (items.some(item => item.path === route.path)) {
+      if (items.some((item) => item.path === route.path)) {
         expandedCategories[category] = true
         break
       }
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 
@@ -123,7 +121,9 @@ watch(
     <button
       @click="toggleCategory(category)"
       class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium"
-      :class="isParentActive(items) ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700 hover:bg-gray-50'"
+      :class="
+        isParentActive(items) ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700 hover:bg-gray-50'
+      "
     >
       <span>{{ category }}</span>
       <svg
@@ -141,9 +141,11 @@ watch(
         :key="item.path"
         :to="item.path"
         class="block pl-8 pr-4 py-2 text-sm border-l-2"
-        :class="isActive(item.path)
-          ? 'text-indigo-600 bg-indigo-50 border-indigo-600 font-medium'
-          : 'text-gray-600 hover:bg-gray-50 hover:text-indigo-600 border-transparent'"
+        :class="
+          isActive(item.path)
+            ? 'text-indigo-600 bg-indigo-50 border-indigo-600 font-medium'
+            : 'text-gray-600 hover:bg-gray-50 hover:text-indigo-600 border-transparent'
+        "
       >
         {{ item.label }}
       </router-link>

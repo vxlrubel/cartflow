@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import api from '@/services/api'
 import API_ENDPOINTS from '@/services/api-endpoints'
-import CustomSelect from '@/components/CustomSelect.vue';
+import CustomSelect from '@/components/CustomSelect.vue'
 
 const categories = ref([])
 const loading = ref(false)
@@ -88,7 +88,10 @@ const paginate = (page) => {
 }
 
 const generateSlug = () => {
-  form.value.slug = form.value.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+  form.value.slug = form.value.name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
 }
 
 const filteredCategories = computed(() => categories.value)
@@ -99,19 +102,24 @@ onMounted(() => {
 
 const categoryOptions = computed(() => [
   { value: null, label: 'None' },
-  ...categories.value.map(cat => ({
+  ...categories.value.map((cat) => ({
     value: cat.id,
-    label: cat.name
-  }))
-]);
+    label: cat.name,
+  })),
+])
 </script>
 
 <template>
   <div>
-    <div class="flex justify-between items-center mb-6 px-6 py-3 bg-white border border-neutral-200 rounded">
+    <div
+      class="flex justify-between items-center mb-6 px-6 py-3 bg-white border border-neutral-200 rounded"
+    >
       <h2 class="text-2xl font-medium capitalize tracking-wide">Categories</h2>
       <button
-        @click="showModal = true; resetForm()"
+        @click="
+          showModal = true
+          resetForm()
+        "
         class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm cursor-pointer"
       >
         Add Category
@@ -121,7 +129,9 @@ const categoryOptions = computed(() => [
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-1">
         <div class="bg-white rounded-lg shadow p-6">
-          <h3 class="text-lg font-semibold mb-4">{{ editingId ? 'Edit Category' : 'Add Category' }}</h3>
+          <h3 class="text-lg font-semibold mb-4">
+            {{ editingId ? 'Edit Category' : 'Add Category' }}
+          </h3>
           <form @submit.prevent="submitForm" class="space-y-3">
             <div>
               <label class="block text-sm font-medium mb-1">Name</label>
@@ -135,12 +145,7 @@ const categoryOptions = computed(() => [
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Slug</label>
-              <input
-                v-model="form.slug"
-                type="text"
-                class="input-field"
-                required
-              />
+              <input v-model="form.slug" type="text" class="input-field" required />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Description</label>
@@ -152,18 +157,10 @@ const categoryOptions = computed(() => [
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Parent Category</label>
-              <CustomSelect
-                v-model="form.parent_id"
-                :options="categoryOptions"
-              />
+              <CustomSelect v-model="form.parent_id" :options="categoryOptions" />
             </div>
             <div class="flex items-center">
-              <input
-                v-model="form.is_active"
-                type="checkbox"
-                id="is_active"
-                class="mr-2"
-              />
+              <input v-model="form.is_active" type="checkbox" id="is_active" class="mr-2" />
               <label for="is_active" class="text-sm">Active</label>
             </div>
             <div class="flex gap-2">
@@ -176,7 +173,10 @@ const categoryOptions = computed(() => [
               <button
                 v-if="editingId"
                 type="button"
-                @click="resetForm(); showModal = false"
+                @click="
+                  resetForm()
+                  showModal = false
+                "
                 class="px-4 py-2 border rounded hover:bg-gray-50"
               >
                 Cancel
@@ -191,7 +191,10 @@ const categoryOptions = computed(() => [
           <div class="p-4 border-b">
             <input
               v-model="search"
-              @input="currentPage = 1; fetchCategories()"
+              @input="
+                currentPage = 1
+                fetchCategories()
+              "
               type="text"
               placeholder="Search categories..."
               class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -212,14 +215,24 @@ const categoryOptions = computed(() => [
                   <td colspan="4" class="px-4 py-8 text-center text-gray-500">Loading...</td>
                 </tr>
                 <tr v-else-if="categories.length === 0">
-                  <td colspan="4" class="px-4 py-8 text-center text-gray-500">No categories found</td>
+                  <td colspan="4" class="px-4 py-8 text-center text-gray-500">
+                    No categories found
+                  </td>
                 </tr>
-                <tr v-for="category in filteredCategories" :key="category.id" class="border-t hover:bg-gray-50">
+                <tr
+                  v-for="category in filteredCategories"
+                  :key="category.id"
+                  class="border-t hover:bg-gray-50"
+                >
                   <td class="px-4 py-3">{{ category.name }}</td>
                   <td class="px-4 py-3 text-gray-600">{{ category.slug }}</td>
                   <td class="px-4 py-3">
                     <span
-                      :class="category.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+                      :class="
+                        category.is_active
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-800'
+                      "
                       class="px-2 py-1 rounded text-xs"
                     >
                       {{ category.is_active ? 'Active' : 'Inactive' }}
@@ -248,7 +261,9 @@ const categoryOptions = computed(() => [
               v-for="page in totalPages"
               :key="page"
               @click="paginate(page)"
-              :class="page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'"
+              :class="
+                page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
+              "
               class="px-3 py-1 rounded"
             >
               {{ page }}

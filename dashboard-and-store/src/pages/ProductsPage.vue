@@ -73,7 +73,12 @@
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
                   </svg>
                 </div>
               </div>
@@ -93,11 +98,17 @@
 
             <div v-if="hasActiveFilters" class="mt-4 flex items-center gap-2">
               <span class="text-sm text-gray-600">Active filters:</span>
-              <span v-if="search" class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">
+              <span
+                v-if="search"
+                class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm"
+              >
                 Search: {{ search }}
               </span>
-              <span v-if="selectedCategory" class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">
-                {{ categories.find(c => c.id === selectedCategory)?.name }}
+              <span
+                v-if="selectedCategory"
+                class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm"
+              >
+                {{ categories.find((c) => c.id === selectedCategory)?.name }}
               </span>
               <button @click="clearFilters" class="text-sm text-red-600 hover:text-red-800">
                 Clear all
@@ -109,13 +120,29 @@
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
           </div>
 
-          <div v-else-if="error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-6 rounded-lg text-center">
+          <div
+            v-else-if="error"
+            class="bg-red-50 border border-red-200 text-red-700 px-4 py-6 rounded-lg text-center"
+          >
             {{ error }}
           </div>
 
-          <div v-else-if="products.length === 0" class="bg-white rounded-lg shadow-md p-12 text-center">
-            <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+          <div
+            v-else-if="products.length === 0"
+            class="bg-white rounded-lg shadow-md p-12 text-center"
+          >
+            <svg
+              class="w-16 h-16 mx-auto text-gray-400 mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+              />
             </svg>
             <h3 class="text-lg font-medium text-gray-900 mb-2">No products found</h3>
             <p class="text-gray-500 mb-4">Try adjusting your search or filter criteria</p>
@@ -137,7 +164,12 @@
                   class="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 19l-7-7 7-7"
+                    />
                   </svg>
                 </button>
 
@@ -163,14 +195,19 @@
                   class="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </button>
               </nav>
             </div>
 
             <div class="mt-4 text-center text-sm text-gray-500">
-              Showing {{ ((pagination.currentPage - 1) * pagination.perPage) + 1 }} to
+              Showing {{ (pagination.currentPage - 1) * pagination.perPage + 1 }} to
               {{ Math.min(pagination.currentPage * pagination.perPage, pagination.total) }} of
               {{ pagination.total }} products
             </div>
@@ -250,7 +287,7 @@ watch(
     syncFromQuery()
     fetchProducts()
   },
-  { immediate: false }
+  { immediate: false },
 )
 
 onMounted(() => {

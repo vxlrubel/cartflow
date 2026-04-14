@@ -4,9 +4,7 @@
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <div class="flex-shrink-0">
-            <router-link to="/" class="text-2xl font-bold text-indigo-600">
-              CartFlow
-            </router-link>
+            <router-link to="/" class="text-2xl font-bold text-indigo-600"> CartFlow </router-link>
           </div>
           <div class="flex items-center space-x-4">
             <router-link
@@ -52,9 +50,7 @@
     </main>
     <footer class="bg-white border-t mt-auto">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <p class="text-center text-gray-500 text-sm">
-          &copy; 2026 CartFlow. All rights reserved.
-        </p>
+        <p class="text-center text-gray-500 text-sm">&copy; 2026 CartFlow. All rights reserved.</p>
       </div>
     </footer>
   </div>

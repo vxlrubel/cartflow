@@ -21,7 +21,9 @@
     <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <div class="bg-white rounded-lg shadow p-6">
         <h2 class="text-2xl font-bold mb-4">Welcome, {{ authStore.user?.name }}!</h2>
-        <p class="text-gray-600">Role: <span class="font-semibold">{{ authStore.user?.role }}</span></p>
+        <p class="text-gray-600">
+          Role: <span class="font-semibold">{{ authStore.user?.role }}</span>
+        </p>
         <p class="text-gray-600 mt-2">This is your admin dashboard.</p>
       </div>
     </main>

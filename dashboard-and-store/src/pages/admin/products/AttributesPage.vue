@@ -172,7 +172,7 @@ onMounted(() => {
             <input
               v-model="search"
               @input="
-                currentPage = 1
+                currentPage = 1,
                 fetchAttributes()
               "
               type="text"

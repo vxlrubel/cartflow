@@ -388,7 +388,7 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
             v-if="editor.isActive('link')"
             type="button"
             @click="
-              editor.chain().focus().unsetLink().run()
+              editor.chain().focus().unsetLink().run(),
               closeLinkInput()
             "
             class="px-2 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"

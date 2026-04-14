@@ -117,7 +117,7 @@ const categoryOptions = computed(() => [
       <h2 class="text-2xl font-medium capitalize tracking-wide">Categories</h2>
       <button
         @click="
-          showModal = true
+          showModal = true,
           resetForm()
         "
         class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm cursor-pointer"
@@ -166,7 +166,7 @@ const categoryOptions = computed(() => [
             <div class="flex gap-2">
               <button
                 type="submit"
-                class="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                class="flex-1 text-sm bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700"
               >
                 {{ editingId ? 'Update' : 'Create' }}
               </button>
@@ -174,10 +174,10 @@ const categoryOptions = computed(() => [
                 v-if="editingId"
                 type="button"
                 @click="
-                  resetForm()
+                  resetForm(),
                   showModal = false
                 "
-                class="px-4 py-2 border rounded hover:bg-gray-50"
+                class="px-4 text-sm py-2 border border border-red-500 font-medium text-white cursor-pointer rounded bg-red-500 hover:bg-red-600"
               >
                 Cancel
               </button>
@@ -192,7 +192,7 @@ const categoryOptions = computed(() => [
             <input
               v-model="search"
               @input="
-                currentPage = 1
+                currentPage = 1,
                 fetchCategories()
               "
               type="text"

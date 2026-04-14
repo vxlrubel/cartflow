@@ -75,8 +75,10 @@ Route::prefix('v1')->group(function () {
         // Orders
         Route::apiResource('orders', OrderController::class);
         Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus']);
+        Route::put('/orders/{id}/payment-status', [OrderController::class, 'updatePaymentStatus']);
         Route::get('/trash/orders', [OrderController::class, 'trash']);
         Route::post('/trash/orders/{id}/restore', [OrderController::class, 'restore']);
+        Route::delete('/trash/orders/{id}/force', [OrderController::class, 'forceDelete']);
 
         // Payments
         Route::apiResource('payments', PaymentController::class);

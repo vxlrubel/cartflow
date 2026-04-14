@@ -19,6 +19,34 @@ class OrderController extends Controller
         if ($request->user_id) {
             $query->where('user_id', $request->user_id);
         }
+        if ($request->payment_status) {
+            $query->where('payment_status', $request->payment_status);
+        }
+
+        if ($request->search) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('order_number', 'like', "%{$search}%")
+                  ->orWhereHas('user', function ($userQuery) use ($search) {
+                      $userQuery->where('name', 'like', "%{$search}%")
+                               ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $sortBy = $request->sort_by ?? 'created_at';
+        $sortOrder = $request->sort_order ?? 'desc';
+        
+        $allowedSortFields = ['order_number', 'total_amount', 'status', 'payment_status', 'created_at', 'updated_at'];
+        
+        if ($sortBy === 'customer') {
+            $query->join('users', 'orders.user_id', '=', 'users.id')
+                 ->orderBy('users.name', $sortOrder === 'desc' ? 'desc' : 'asc')
+                 ->select('orders.*');
+        } elseif (in_array($sortBy, $allowedSortFields)) {
+            $fieldMap = ['total_amount' => 'total_amount'];
+            $query->orderBy($fieldMap[$sortBy] ?? $sortBy, $sortOrder === 'desc' ? 'desc' : 'asc');
+        }
 
         $orders = $query->paginate($request->per_page ?? 15);
 
@@ -61,8 +89,17 @@ class OrderController extends Controller
     public function updateStatus(Request $request, int $id): JsonResponse
     {
         $order = Order::findOrFail($id);
-        $request->validate(['status' => 'required|in:pending,paid,shipped,delivered,cancelled']);
+        $request->validate(['status' => 'required|in:pending,completed,cancelled,return']);
         $order->update(['status' => $request->status]);
+
+        return response()->json($order);
+    }
+
+    public function updatePaymentStatus(Request $request, int $id): JsonResponse
+    {
+        $order = Order::findOrFail($id);
+        $request->validate(['payment_status' => 'required|in:paid,unpaid,pending,refunded']);
+        $order->update(['payment_status' => $request->payment_status]);
 
         return response()->json($order);
     }
@@ -75,9 +112,19 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order deleted']);
     }
 
-    public function trash(): JsonResponse
+    public function trash(Request $request): JsonResponse
     {
-        $orders = Order::onlyTrashed()->with(['user'])->paginate();
+        $query = Order::onlyTrashed()->with(['user']);
+
+        $sortBy = $request->sort_by ?? 'created_at';
+        $sortOrder = $request->sort_order ?? 'desc';
+        $allowedSortFields = ['order_number', 'total_amount', 'created_at', 'updated_at'];
+        
+        if (in_array($sortBy, $allowedSortFields)) {
+            $query->orderBy($sortBy, $sortOrder === 'desc' ? 'desc' : 'asc');
+        }
+
+        $orders = $query->paginate($request->per_page ?? 15);
 
         return response()->json($orders);
     }
@@ -88,5 +135,13 @@ class OrderController extends Controller
         $order->restore();
 
         return response()->json($order);
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        $order = Order::onlyTrashed()->findOrFail($id);
+        $order->forceDelete();
+
+        return response()->json(['message' => 'Order permanently deleted']);
     }
 }

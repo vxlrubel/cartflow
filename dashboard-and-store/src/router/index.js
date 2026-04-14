@@ -87,6 +87,11 @@ const routes = [
         component: () => import('@/pages/admin/orders/ReturnsPage.vue'),
       },
       {
+        path: 'orders/:id',
+        name: 'order-detail',
+        component: () => import('@/pages/admin/orders/DetailPage.vue'),
+      },
+      {
         path: 'products',
         name: 'admin-products',
         component: () => import('@/pages/admin/products/IndexPage.vue'),

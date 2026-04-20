@@ -19,9 +19,20 @@ use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\WishlistController;
+use App\Http\Controllers\API\UploadController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
+
+    // Upload (temp: no auth for testing)
+    Route::post('/upload', [UploadController::class, 'upload']);
+    Route::delete('/upload', [UploadController::class, 'delete']);
+
+    // Upload (requires auth)
+    // Route::middleware('auth:sanctum')->group(function () {
+    //     Route::post('/upload', [UploadController::class, 'upload']);
+    //     Route::delete('/upload', [UploadController::class, 'delete']);
+    // });
 
     // Debug route
     Route::get('/test', function () {

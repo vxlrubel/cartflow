@@ -103,6 +103,7 @@ class ProductController extends Controller
             'sku' => 'sometimes|unique:products,sku,'.$id,
             'category_ids' => 'nullable|array',
             'category_ids.*' => 'exists:categories,id',
+            'images' => 'nullable|array',
         ]);
 
         if ($request->slug) {
@@ -113,6 +114,13 @@ class ProductController extends Controller
 
         if ($request->has('category_ids')) {
             $product->categories()->sync($request->category_ids ?? []);
+        }
+
+        if ($request->has('images')) {
+            $product->images()->delete();
+            foreach ($request->images as $url) {
+                $product->images()->create(['url' => $url]);
+            }
         }
 
         return response()->json($product->load(['images', 'categories']));

@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/products'
 import TiptapEditor from '@/components/TiptapEditor.vue'
+import ImageUploader from '@/components/ImageUploader.vue'
 
 const router = useRouter()
 const store = useProductStore()
@@ -18,6 +19,7 @@ const form = ref({
   stock: '',
   sku: '',
   status: 'active',
+  images: [],
 })
 
 const categories = ref([])
@@ -182,6 +184,10 @@ onMounted(loadFormData)
                     placeholder="Enter SKU"
                   />
                   <p v-if="errors.sku" class="mt-1 text-sm text-red-500">{{ errors.sku[0] }}</p>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Images</label>
+                  <ImageUploader v-model="form.images" :multiple="true" :max-files="5" />
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Price *</label>

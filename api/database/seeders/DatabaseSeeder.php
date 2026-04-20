@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             AttributeSeeder::class,
             AttributeValueSeeder::class,
             ProductVariationSeeder::class,
+            ReviewSeeder::class,
             OrderSeeder::class,
             PaymentSeeder::class,
             CouponSeeder::class,

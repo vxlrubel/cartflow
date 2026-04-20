@@ -30,7 +30,7 @@
       <li
         v-for="option in options"
         :key="option.value"
-        @click.stop="selectOption(option)"
+        @click.stop="selectOptionHandler(option)"
         class="px-3 py-1 cursor-pointer hover:bg-gray-100 select-none active:bg-blue-500 active:text-white border-b border-gray-200 last:border-0"
         :class="{
           'bg-blue-500 text-white hover:bg-blue-500': option.value === selectedOption,
@@ -43,8 +43,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-const selectedOption = ref('')
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 
 // Props
 const props = defineProps({
@@ -63,6 +62,12 @@ const emit = defineEmits(['update:modelValue'])
 
 const isOpen = ref(false)
 const selectRef = ref(null)
+const selectedOption = ref(props.modelValue)
+
+// Sync local ref with prop
+watch(() => props.modelValue, (val) => {
+  selectedOption.value = val
+})
 
 // Computed selected value
 const selectedLabel = computed(() => {
@@ -73,8 +78,9 @@ const toggleDropdown = () => {
   isOpen.value = !isOpen.value
 }
 
-const selectOption = (option) => {
+const selectOptionHandler = (option) => {
   emit('update:modelValue', option.value)
+  selectedOption.value = option.value
   isOpen.value = false
 }
 

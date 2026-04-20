@@ -123,8 +123,8 @@ onMounted(() => {
 
 watch(
   () => route.query.page,
-  (newPage) => {
-    if (newPage) {
+  (newPage, oldPage) => {
+    if (newPage && newPage !== oldPage) {
       currentPage.value = parseInt(newPage) || 1
       fetchAttributes(currentPage.value)
     }

@@ -40,6 +40,15 @@ export const API_ENDPOINTS = {
     createVariation: (productId) => `/products/${productId}/variations`,
   },
 
+  reviews: {
+    list: '/reviews',
+    create: '/reviews',
+    single: (id) => `/reviews/${id}`,
+    update: (id) => `/reviews/${id}`,
+    delete: (id) => `/reviews/${id}`,
+    updateStatus: (id) => `/reviews/${id}/status`,
+  },
+
   categories: {
     list: '/categories',
     create: '/categories',

@@ -15,6 +15,7 @@ use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\PermissionController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\WishlistController;
@@ -73,6 +74,10 @@ Route::prefix('v1')->group(function () {
         Route::post('/products/{productId}/variations', [AttributeController::class, 'storeVariation']);
         Route::put('/variations/{id}', [AttributeController::class, 'updateVariation']);
         Route::delete('/variations/{id}', [AttributeController::class, 'destroyVariation']);
+
+        // Reviews
+        Route::apiResource('reviews', ReviewController::class);
+        Route::post('/reviews/{id}/status', [ReviewController::class, 'updateStatus']);
 
         // Orders
         Route::apiResource('orders', OrderController::class);

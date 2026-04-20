@@ -9,6 +9,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\CouponController;
+use App\Http\Controllers\API\InventoryController;
 use App\Http\Controllers\API\OfferController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\PaymentController;
@@ -115,5 +116,17 @@ Route::prefix('v1')->group(function () {
 
         // Audits
         Route::get('/audits', [AuditController::class, 'index']);
+
+        // Inventory Management
+        Route::get('/inventory', [InventoryController::class, 'index']);
+        Route::put('/inventory/{id}', [InventoryController::class, 'update']);
+        Route::post('/inventory/bulk-update', [InventoryController::class, 'bulkUpdate']);
+        Route::get('/inventory/alerts', [InventoryController::class, 'alerts']);
+        Route::post('/inventory/alerts/{id}/dismiss', [InventoryController::class, 'dismissAlert']);
+
+        // SKU Management
+        Route::get('/inventory/skus', [InventoryController::class, 'skus']);
+        Route::put('/inventory/skus/{id}', [InventoryController::class, 'updateSku']);
+        Route::post('/inventory/skus/generate', [InventoryController::class, 'generateSku']);
     });
 });

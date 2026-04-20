@@ -93,6 +93,7 @@ const navigateToPage = (page) => {
 const syncFromQuery = () => {
   currentPage.value = parseInt(route.query.page) || 1
   statusFilter.value = route.query.status || ''
+  search.value = route.query.search || ''
 }
 
 const formatDate = (date) => {
@@ -133,9 +134,22 @@ watch(
   },
 )
 
+watch(
+  () => route.query.search,
+  (newSearch) => {
+    search.value = newSearch || ''
+    fetchReviews(1)
+  },
+)
+
 watch(statusFilter, (newStatus) => {
   currentPage.value = 1
   router.push({ query: { ...route.query, page: 1, status: newStatus || undefined } })
+})
+
+watch(search, () => {
+  currentPage.value = 1
+  router.push({ query: { ...route.query, page: 1, search: search.value || undefined } })
 })
 </script>
 

@@ -125,10 +125,17 @@ watch(
   },
 )
 
+watch(
+  () => route.query.status,
+  (newStatus) => {
+    statusFilter.value = newStatus || ''
+    fetchReviews(1)
+  },
+)
+
 watch(statusFilter, (newStatus) => {
   currentPage.value = 1
-  router.replace({ query: { ...route.query, page: 1, status: newStatus || undefined } })
-  fetchReviews(1)
+  router.push({ query: { ...route.query, page: 1, status: newStatus || undefined } })
 })
 </script>
 

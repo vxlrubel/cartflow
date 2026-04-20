@@ -85,16 +85,16 @@ class ProductController extends Controller
         return response()->json($product->load(['images', 'categories']), 201);
     }
 
-    public function show(int $id): JsonResponse
+    public function show($id): JsonResponse
     {
-        $product = Product::with(['categories', 'category', 'brand', 'images', 'variations.attributeValues'])->findOrFail($id);
+        $product = Product::with(['categories', 'category', 'brand', 'images', 'variations.attributeValues'])->findOrFail((int) $id);
 
         return response()->json($product);
     }
 
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail((int) $id);
 
         $request->validate([
             'name' => 'sometimes|string|max:255',
@@ -118,25 +118,25 @@ class ProductController extends Controller
         return response()->json($product->load(['images', 'categories']));
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy($id): JsonResponse
     {
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail((int) $id);
         $product->delete();
 
         return response()->json(['message' => 'Product deleted']);
     }
 
-    public function restore(int $id): JsonResponse
+    public function restore($id): JsonResponse
     {
-        $product = Product::onlyTrashed()->findOrFail($id);
+        $product = Product::onlyTrashed()->findOrFail((int) $id);
         $product->restore();
 
         return response()->json($product);
     }
 
-    public function forceDelete(int $id): JsonResponse
+    public function forceDelete($id): JsonResponse
     {
-        $product = Product::onlyTrashed()->findOrFail($id);
+        $product = Product::onlyTrashed()->findOrFail((int) $id);
         $product->forceDelete();
 
         return response()->json(['message' => 'Product permanently deleted']);

@@ -47,6 +47,24 @@ const clearSearch = () => {
   store.setSearch('')
 }
 
+const handleStockEdit = (item) => {
+  editingStockId.value = item.id
+  editingStockValue.value = item.stock
+}
+
+const saveStockEdit = async () => {
+  if (editingStockId.value) {
+    await store.updateStock(editingStockId.value, { stock: editingStockValue.value })
+    editingStockId.value = null
+    editingStockValue.value = 0
+  }
+}
+
+const cancelStockEdit = () => {
+  editingStockId.value = null
+  editingStockValue.value = 0
+}
+
 const formatDate = (date) => {
   if (!date) return ''
   return new Date(date).toLocaleDateString('en-US', {
@@ -344,7 +362,7 @@ watch(
                       Edit Stock
                     </button>
                     <router-link
-                      :to="`/dashboard/products/edit/${item.product_id}`"
+                      :to="`/dashboard/products/edit/${Number(item.id)}`"
                       class="text-gray-600 hover:text-gray-900 text-sm font-medium"
                     >
                       View Product

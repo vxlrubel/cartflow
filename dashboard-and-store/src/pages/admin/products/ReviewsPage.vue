@@ -249,16 +249,6 @@ watch(statusFilter, (newStatus) => {
 
       <div v-if="paginationLinks.length > 0" class="p-4 border-t flex justify-center gap-1">
         <button
-          @click="currentPage > 1 && navigateToPage(currentPage - 1)"
-          :disabled="currentPage <= 1"
-          :class="[
-            currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
-          ]"
-          class="px-3 py-1 rounded bg-gray-100"
-        >
-          Previous
-        </button>
-        <button
           v-for="link in paginationLinks"
           :key="link.label"
           @click="link.url && navigateToPage(getLinkPage(link))"
@@ -273,16 +263,6 @@ watch(statusFilter, (newStatus) => {
           class="px-3 py-1 rounded"
           v-html="link.label"
         ></button>
-        <button
-          @click="currentPage < lastPage && navigateToPage(currentPage + 1)"
-          :disabled="currentPage >= lastPage"
-          :class="[
-            currentPage >= lastPage ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
-          ]"
-          class="px-3 py-1 rounded bg-gray-100"
-        >
-          Next
-        </button>
       </div>
     </div>
   </div>

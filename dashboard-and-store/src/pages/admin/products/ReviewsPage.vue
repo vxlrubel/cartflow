@@ -111,6 +111,7 @@ const filteredReviews = computed(() => reviews.value)
 
 onMounted(() => {
   syncFromQuery()
+  statusFilter.value = route.query.status || ''
   fetchReviews(currentPage.value)
 })
 
@@ -123,6 +124,12 @@ watch(
     }
   },
 )
+
+watch(statusFilter, (newStatus) => {
+  currentPage.value = 1
+  router.replace({ query: { ...route.query, page: 1, status: newStatus || undefined } })
+  fetchReviews(1)
+})
 </script>
 
 <template>

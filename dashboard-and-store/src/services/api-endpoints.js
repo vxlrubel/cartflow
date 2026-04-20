@@ -61,6 +61,7 @@ export const API_ENDPOINTS = {
     list: '/attributes',
     create: '/attributes',
     addValue: (id) => `/attributes/${id}/values`,
+    variations: '/variations',
     updateVariation: (id) => `/variations/${id}`,
     deleteVariation: (id) => `/variations/${id}`,
   },

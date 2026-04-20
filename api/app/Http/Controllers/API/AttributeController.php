@@ -17,6 +17,25 @@ class AttributeController extends Controller
         return response()->json($attributes);
     }
 
+    public function indexVariations(Request $request): JsonResponse
+    {
+        $query = ProductVariation::with(['product', 'attributeValues']);
+
+        if ($request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('sku', 'like', '%'.$request->search.'%');
+            });
+        }
+
+        if ($request->product_id) {
+            $query->where('product_id', $request->product_id);
+        }
+
+        $variations = $query->paginate($request->per_page ?? 15);
+
+        return response()->json($variations);
+    }
+
     public function store(Request $request): JsonResponse
     {
         $request->validate(['name' => 'required|string|max:255']);

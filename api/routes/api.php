@@ -69,6 +69,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/attributes', [AttributeController::class, 'index']);
         Route::post('/attributes', [AttributeController::class, 'store']);
         Route::post('/attributes/{id}/values', [AttributeController::class, 'addValue']);
+        Route::get('/variations', [AttributeController::class, 'indexVariations']);
         Route::post('/products/{productId}/variations', [AttributeController::class, 'storeVariation']);
         Route::put('/variations/{id}', [AttributeController::class, 'updateVariation']);
         Route::delete('/variations/{id}', [AttributeController::class, 'destroyVariation']);

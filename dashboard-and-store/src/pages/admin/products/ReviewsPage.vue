@@ -92,6 +92,7 @@ const navigateToPage = (page) => {
 
 const syncFromQuery = () => {
   currentPage.value = parseInt(route.query.page) || 1
+  statusFilter.value = route.query.status || ''
 }
 
 const formatDate = (date) => {
@@ -111,7 +112,6 @@ const filteredReviews = computed(() => reviews.value)
 
 onMounted(() => {
   syncFromQuery()
-  statusFilter.value = route.query.status || ''
   fetchReviews(currentPage.value)
 })
 

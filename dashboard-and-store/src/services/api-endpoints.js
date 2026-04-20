@@ -135,6 +135,22 @@ export const API_ENDPOINTS = {
   audits: {
     list: '/audits',
   },
+
+  inventory: {
+    list: '/inventory',
+    update: (id) => `/inventory/${id}`,
+    bulkUpdate: '/inventory/bulk-update',
+    alerts: '/inventory/alerts',
+    alertsDismiss: (id) => `/inventory/alerts/${id}/dismiss`,
+    skus: '/inventory/skus',
+    updateSku: (id) => `/inventory/skus/${id}`,
+    generateSku: '/inventory/skus/generate',
+  },
+
+  productsInventory: {
+    single: (id) => `/products/${id}/inventory`,
+    update: (id) => `/products/${id}/inventory`,
+  },
 }
 
 export default API_ENDPOINTS

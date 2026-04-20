@@ -9,7 +9,11 @@ const search = ref('')
 const currentPage = ref(1)
 const perPage = ref(10)
 const totalItems = ref(0)
-const totalPages = computed(() => Math.ceil(totalItems.value / perPage.value))
+const totalPages = ref(1)
+const paginationLinks = ref([])
+const lastPage = ref(1)
+const nextPageUrl = ref(null)
+const prevPageUrl = ref(null)
 
 const form = ref({
   name: '',
@@ -19,19 +23,27 @@ const form = ref({
 })
 const editingId = ref(null)
 
-const fetchAttributes = async () => {
+const fetchAttributes = async (page = 1) => {
   loading.value = true
   try {
     const response = await api.get(API_ENDPOINTS.attributes.list, {
-      params: { page: currentPage.value, per_page: perPage.value, search: search.value },
+      params: { page, per_page: perPage.value, search: search.value },
     })
     const resData = response.data
     if (Array.isArray(resData)) {
       attributes.value = resData
       totalItems.value = resData.length
+      totalPages.value = 1
+      paginationLinks.value = []
     } else {
-      attributes.value = resData.data || resData.attributes || resData || []
-      totalItems.value = resData.total || attributes.value.length
+      attributes.value = resData.data || []
+      totalItems.value = resData.total || 0
+      totalPages.value = resData.last_page || 1
+      currentPage.value = resData.current_page || 1
+      lastPage.value = resData.last_page || 1
+      nextPageUrl.value = resData.next_page_url
+      prevPageUrl.value = resData.prev_page_url
+      paginationLinks.value = resData.links || []
     }
   } catch (error) {
     console.error('Error fetching attributes:', error)
@@ -53,7 +65,7 @@ const submitForm = async () => {
       await api.post(API_ENDPOINTS.attributes.create, form.value)
     }
     resetForm()
-    fetchAttributes()
+    fetchAttributes(currentPage.value)
   } catch (error) {
     console.error('Error saving attribute:', error)
   }
@@ -68,7 +80,7 @@ const deleteAttribute = async (id) => {
   if (!confirm('Are you sure you want to delete this attribute?')) return
   try {
     await api.delete(`/attributes/${id}`)
-    fetchAttributes()
+    fetchAttributes(currentPage.value)
   } catch (error) {
     console.error('Error deleting attribute:', error)
   }
@@ -76,7 +88,21 @@ const deleteAttribute = async (id) => {
 
 const paginate = (page) => {
   currentPage.value = page
-  fetchAttributes()
+  fetchAttributes(page)
+}
+
+const goToPrevPage = () => {
+  if (prevPageUrl.value) {
+    currentPage.value--
+    fetchAttributes(currentPage.value)
+  }
+}
+
+const goToNextPage = () => {
+  if (nextPageUrl.value) {
+    currentPage.value++
+    fetchAttributes(currentPage.value)
+  }
 }
 
 const generateSlug = () => {
@@ -87,6 +113,12 @@ const generateSlug = () => {
 }
 
 const filteredAttributes = computed(() => attributes.value)
+
+const getLinkUrl = (link) => {
+  if (!link.url) return null
+  const url = new URL(link.url)
+  return url.searchParams.get('page')
+}
 
 onMounted(() => {
   fetchAttributes()
@@ -240,17 +272,41 @@ onMounted(() => {
               </tbody>
             </table>
           </div>
-          <div v-if="totalPages > 1" class="p-4 border-t flex justify-center gap-2">
+          <div v-if="paginationLinks.length > 0" class="p-4 border-t flex justify-center gap-1">
             <button
-              v-for="page in totalPages"
-              :key="page"
-              @click="paginate(page)"
-              :class="
-                page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
-              "
-              class="px-3 py-1 rounded"
+              @click="goToPrevPage"
+              :disabled="!prevPageUrl"
+              :class="[
+                !prevPageUrl ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
+              ]"
+              class="px-3 py-1 rounded bg-gray-100"
             >
-              {{ page }}
+              Previous
+            </button>
+            <button
+              v-for="link in paginationLinks"
+              :key="link.label"
+              @click="link.url && paginate(getLinkUrl(link))"
+              :disabled="!link.url"
+              :class="[
+                link.active
+                  ? 'bg-blue-600 text-white'
+                  : !link.url
+                    ? 'opacity-50 cursor-not-allowed'
+                    : 'bg-gray-100 hover:bg-gray-200'
+              ]"
+              class="px-3 py-1 rounded"
+              v-html="link.label"
+            ></button>
+            <button
+              @click="goToNextPage"
+              :disabled="!nextPageUrl"
+              :class="[
+                !nextPageUrl ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
+              ]"
+              class="px-3 py-1 rounded bg-gray-100"
+            >
+              Next
             </button>
           </div>
         </div>

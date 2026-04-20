@@ -19,12 +19,21 @@ const paginationLinks = ref([])
 const lastPage = ref(1)
 
 const statusFilter = ref('')
+const searchTimeout = ref(null)
 const statusOptions = [
   { value: '', label: 'All Status' },
   { value: 'pending', label: 'Pending' },
   { value: 'approved', label: 'Approved' },
   { value: 'rejected', label: 'Rejected' },
 ]
+
+const handleSearch = () => {
+  if (searchTimeout.value) clearTimeout(searchTimeout.value)
+  searchTimeout.value = setTimeout(() => {
+    currentPage.value = 1
+    router.push({ query: { ...route.query, page: 1, search: search.value || undefined } })
+  }, 200)
+}
 
 const fetchReviews = async (page = 1) => {
   router.replace({ query: { ...route.query, page } })
@@ -146,11 +155,6 @@ watch(statusFilter, (newStatus) => {
   currentPage.value = 1
   router.push({ query: { ...route.query, page: 1, status: newStatus || undefined } })
 })
-
-watch(search, () => {
-  currentPage.value = 1
-  router.push({ query: { ...route.query, page: 1, search: search.value || undefined } })
-})
 </script>
 
 <template>
@@ -170,7 +174,7 @@ watch(search, () => {
         <div class="flex-1 min-w-[200px]">
           <input
             v-model="search"
-            @input="currentPage = 1, fetchReviews()"
+            @input="handleSearch"
             type="text"
             placeholder="Search reviews..."
             class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -1,7 +1,11 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api'
 import API_ENDPOINTS from '@/services/api-endpoints'
+
+const route = useRoute()
+const router = useRouter()
 
 const attributes = ref([])
 const loading = ref(false)
@@ -25,6 +29,7 @@ const editingId = ref(null)
 
 const fetchAttributes = async (page = 1) => {
   loading.value = true
+  router.replace({ query: { ...route.query, page } })
   try {
     const response = await api.get(API_ENDPOINTS.attributes.list, {
       params: { page, per_page: perPage.value, search: search.value },
@@ -86,25 +91,6 @@ const deleteAttribute = async (id) => {
   }
 }
 
-const paginate = (page) => {
-  currentPage.value = page
-  fetchAttributes(page)
-}
-
-const goToPrevPage = () => {
-  if (prevPageUrl.value) {
-    currentPage.value--
-    fetchAttributes(currentPage.value)
-  }
-}
-
-const goToNextPage = () => {
-  if (nextPageUrl.value) {
-    currentPage.value++
-    fetchAttributes(currentPage.value)
-  }
-}
-
 const generateSlug = () => {
   form.value.slug = form.value.name
     .toLowerCase()
@@ -114,15 +100,36 @@ const generateSlug = () => {
 
 const filteredAttributes = computed(() => attributes.value)
 
-const getLinkUrl = (link) => {
+const getLinkPage = (link) => {
   if (!link.url) return null
   const url = new URL(link.url)
   return url.searchParams.get('page')
 }
 
+const navigateToPage = (page) => {
+  if (page) {
+    router.push({ query: { ...route.query, page } })
+  }
+}
+
+const syncFromQuery = () => {
+  currentPage.value = parseInt(route.query.page) || 1
+}
+
 onMounted(() => {
-  fetchAttributes()
+  syncFromQuery()
+  fetchAttributes(currentPage.value)
 })
+
+watch(
+  () => route.query.page,
+  (newPage) => {
+    if (newPage) {
+      currentPage.value = parseInt(newPage) || 1
+      fetchAttributes(currentPage.value)
+    }
+  },
+)
 </script>
 
 <template>
@@ -274,10 +281,10 @@ onMounted(() => {
           </div>
           <div v-if="paginationLinks.length > 0" class="p-4 border-t flex justify-center gap-1">
             <button
-              @click="goToPrevPage"
-              :disabled="!prevPageUrl"
+              @click="currentPage > 1 && navigateToPage(currentPage - 1)"
+              :disabled="currentPage <= 1"
               :class="[
-                !prevPageUrl ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
+                currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
               ]"
               class="px-3 py-1 rounded bg-gray-100"
             >
@@ -286,7 +293,7 @@ onMounted(() => {
             <button
               v-for="link in paginationLinks"
               :key="link.label"
-              @click="link.url && paginate(getLinkUrl(link))"
+              @click="link.url && navigateToPage(getLinkPage(link))"
               :disabled="!link.url"
               :class="[
                 link.active
@@ -299,10 +306,10 @@ onMounted(() => {
               v-html="link.label"
             ></button>
             <button
-              @click="goToNextPage"
-              :disabled="!nextPageUrl"
+              @click="currentPage < lastPage && navigateToPage(currentPage + 1)"
+              :disabled="currentPage >= lastPage"
               :class="[
-                !nextPageUrl ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
+                currentPage >= lastPage ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
               ]"
               class="px-3 py-1 rounded bg-gray-100"
             >

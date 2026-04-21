@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watch } from 'vue'
+import { reactive, watch, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import DashboardSquire from '@/components/icons/DashboardSquire.vue'
 import OrdersIcon from '@/components/icons/OrdersIcon.vue'
@@ -197,7 +197,7 @@ watch(
           <span>{{ category }}</span>
         </span>
         <svg
-          :class="['w-4 h-4 transition-transform', expandedCategories[category] ? 'rotate-180' : '']"
+          :class="['w-4 h-4 transition-transform duration-300 ease-in-out', expandedCategories[category] ? 'rotate-180' : '']"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -205,7 +205,8 @@ watch(
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      <div v-show="expandedCategories[category]" class="mt-1">
+      <div class="overflow-hidden transition-all duration-300 ease-in-out"
+        :class="expandedCategories[category] ? 'max-h-96 opacity-100 mt-1' : 'max-h-0 opacity-0 mt-0'">
         <router-link
           v-for="item in children"
           :key="item.path"

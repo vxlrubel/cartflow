@@ -152,6 +152,21 @@ const routes = [
         component: () => import('@/pages/admin/customers/IndexPage.vue'),
       },
       {
+        path: 'customers/create',
+        name: 'customer-create',
+        component: () => import('@/pages/admin/customers/CreatePage.vue'),
+      },
+      {
+        path: 'customers/edit/:id',
+        name: 'customer-edit',
+        component: () => import('@/pages/admin/customers/EditPage.vue'),
+      },
+      {
+        path: 'customers/:id',
+        name: 'customer-detail',
+        component: () => import('@/pages/admin/customers/DetailPage.vue'),
+      },
+      {
         path: 'customers/groups',
         name: 'customers-groups',
         component: () => import('@/pages/admin/customers/GroupsPage.vue'),

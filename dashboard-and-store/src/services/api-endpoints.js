@@ -138,6 +138,29 @@ export const API_ENDPOINTS = {
     delete: (id) => `/addresses/${id}`,
   },
 
+  customers: {
+    list: '/customers',
+    create: '/customers',
+    single: (id) => `/customers/${id}`,
+    update: (id) => `/customers/${id}`,
+    delete: (id) => `/customers/${id}`,
+    restore: (id) => `/customers/${id}/restore`,
+    forceDelete: (id) => `/customers/${id}/force`,
+    bulkSoftDelete: '/customers/bulk-soft-delete',
+    bulkActive: '/customers/bulk-active',
+    bulkInactive: '/customers/bulk-inactive',
+  },
+
+  customerGroups: {
+    list: '/customer-groups',
+    create: '/customer-groups',
+    single: (id) => `/customer-groups/${id}`,
+    update: (id) => `/customer-groups/${id}`,
+    delete: (id) => `/customer-groups/${id}`,
+    addCustomers: (id) => `/customer-groups/${id}/customers`,
+    removeCustomers: (id) => `/customer-groups/${id}/customers`,
+  },
+
   activityLogs: {
     list: '/activity-logs',
   },

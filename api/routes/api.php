@@ -9,6 +9,8 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\CouponController;
+use App\Http\Controllers\API\CustomerController;
+use App\Http\Controllers\API\CustomerGroupController;
 use App\Http\Controllers\API\InventoryController;
 use App\Http\Controllers\API\OfferController;
 use App\Http\Controllers\API\OrderController;
@@ -127,6 +129,19 @@ Route::prefix('v1')->group(function () {
         Route::post('/addresses', [AddressController::class, 'store']);
         Route::put('/addresses/{id}', [AddressController::class, 'update']);
         Route::delete('/addresses/{id}', [AddressController::class, 'destroy']);
+
+        // Customers
+        Route::apiResource('customers', CustomerController::class);
+        Route::post('/customers/{id}/restore', [CustomerController::class, 'restore']);
+        Route::delete('/customers/{id}/force', [CustomerController::class, 'forceDelete']);
+        Route::post('/customers/bulk-soft-delete', [CustomerController::class, 'bulkSoftDelete']);
+        Route::post('/customers/bulk-active', [CustomerController::class, 'bulkActive']);
+        Route::post('/customers/bulk-inactive', [CustomerController::class, 'bulkInactive']);
+
+        // Customer Groups
+        Route::apiResource('customer-groups', CustomerGroupController::class);
+        Route::post('/customer-groups/{id}/customers', [CustomerGroupController::class, 'addCustomers']);
+        Route::delete('/customer-groups/{id}/customers', [CustomerGroupController::class, 'removeCustomers']);
 
         // Activity Logs
         Route::get('/activity-logs', [ActivityLogController::class, 'index']);

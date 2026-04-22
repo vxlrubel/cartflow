@@ -43,13 +43,13 @@ const items = [
   {
     icon: LogoutIcon,
     label: "Logout",
-    path: '/dashboard/logout',
+    path: '#',
   },
 ]
 
-const routerHandler = async (path) => {
+const routerHandler = async (label) => {
   try {
-    if (path === '/dashboard/logout') {
+    if (label === 'Logout') {
       await authStore.logout()
       return
     }
@@ -83,7 +83,7 @@ const routerHandler = async (path) => {
         v-for="{icon, label, path} in items"
         :key="path"
         :to="path" class="flex items-center gap-1 text-theme-500 hover:text-theme-700 hover:bg-theme-50 font-medium text-sm px-3 py-0.5 mb-1 last:mb-0"
-        @click="routerHandler(path)">
+        @click="routerHandler(label)">
         <component :is="icon" size="16"/>
         <span class="text-[12px] capitalize">{{ label }}</span>
       </router-link>

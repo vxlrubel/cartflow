@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import MenuItems from '@/components/admin/MenuItems.vue'
+import logo from '@/assets/logo.svg'
 
 const authStore = useAuthStore()
 const sidebarOpen = ref(false)
@@ -49,8 +50,9 @@ const mouseLeaveFromDropdown = () => {
       ]"
     >
       <div class="flex items-center justify-between h-11 px-4 border-b border-neutral-200">
-        <router-link to="/dashboard" class="text-xl font-bold text-indigo-600">
-          CartFlow Admin
+        <router-link to="/dashboard" class="text-xl uppercase font-bold text-indigo-600 flex items-center gap-2">
+          <img :src="logo" alt="CartFlow Admin" class="h-10 w-10" />
+          Cartflow
         </router-link>
         <button @click="sidebarOpen = false" class="lg:hidden">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,7 +86,7 @@ const mouseLeaveFromDropdown = () => {
                   />
                 </svg>
               </button>
-              <span class="text-sm font-medium text-gray-700">{{ currentTime }}</span>
+              <span class="text-sm font-medium text-red-500 bg-indigo-600 p-1 w-25 text-center rounded">{{ currentTime }}</span>
             </div>
             <div class="flex items-center gap-2 relative h-full">
               <span>{{ authStore.user?.name }}</span>

@@ -7,6 +7,14 @@
             <router-link to="/" class="text-2xl font-bold text-indigo-600"> CartFlow </router-link>
           </div>
           <div class="flex items-center space-x-4">
+            <template v-if="authStore.isAuthenticated">
+              <router-link
+                to="/dashboard"
+                class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Dashboard
+              </router-link>
+            </template>
             <router-link
               to="/products"
               class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"

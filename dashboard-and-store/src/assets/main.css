@@ -1,5 +1,18 @@
 @import 'tailwindcss';
-@import '@vueform/multiselect/themes/default.css';
+
+@theme {
+  --color-theme-50: oklch(96.9% 0.015 12.422);
+  --color-theme-100: oklch(94.1% 0.03 12.58);
+  --color-theme-200:oklch(89.2% 0.058 10.001);
+  --color-theme-300: oklch(81% 0.117 11.638);
+  --color-theme-400: oklch(71.2% 0.194 13.428);
+  --color-theme-500: oklch(64.5% 0.246 16.439);
+  --color-theme-600: oklch(58.6% 0.253 17.585);
+  --color-theme-700: oklch(51.4% 0.222 16.935);
+  --color-theme-800: oklch(45.5% 0.188 13.697);
+  --color-theme-900: oklch(41% 0.159 10.272);
+  --color-theme-950: oklch(27.1% 0.105 12.094);
+}
 
 .select {
   @apply px-3 py-1 border border-gray-300 text-sm rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed;

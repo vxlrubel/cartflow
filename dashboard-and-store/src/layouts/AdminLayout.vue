@@ -86,7 +86,7 @@ const mouseLeaveFromDropdown = () => {
                   />
                 </svg>
               </button>
-              <span class="text-sm font-medium text-red-500 bg-indigo-600 p-1 w-25 text-center rounded">{{ currentTime }}</span>
+              <span class="text-sm font-medium text-gray-700 bg-gray-200 p-1 w-25 text-center rounded">{{ currentTime }}</span>
             </div>
             <div class="flex items-center gap-2 relative h-full">
               <span>{{ authStore.user?.name }}</span>

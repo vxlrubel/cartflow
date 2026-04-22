@@ -13,6 +13,7 @@ import UserIcon from '@/components/icons/UserIcon.vue'
 import SettingsIcon from '@/components/icons/SettingsIcon.vue'
 import GalleryIcon from '@/components/icons/GalleryIcon.vue'
 import TrashIcon from '@/components/icons/TrashIcon.vue'
+import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 const route = useRoute()
 
@@ -196,14 +197,7 @@ watch(
           </span>
           <span>{{ category }}</span>
         </span>
-        <svg
-          :class="['w-4 h-4 transition-transform duration-300 ease-in-out', expandedCategories[category] ? 'rotate-180' : '']"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
+        <ChevronDown :class="['transition-transform duration-300 ease-in-out text-gray-600', expandedCategories[category] ? 'rotate-180' : '']" size="16" />
       </button>
       <div class="overflow-hidden transition-all duration-300 ease-in-out"
         :class="expandedCategories[category] ? 'max-h-96 opacity-100 mt-1' : 'max-h-0 opacity-0 mt-0'">
@@ -211,7 +205,7 @@ watch(
           v-for="item in children"
           :key="item.path"
           :to="item.path"
-          class="block pl-8 pr-4 py-2 text-sm border-l-2"
+          class="block pl-8 pr-4 py-2 text-sm border-l-3"
           :class="
             isActive(item.path)
               ? 'text-theme-600 bg-theme-50 border-theme-600 font-medium'

@@ -138,7 +138,7 @@ watch(
       <h2 class="text-2xl font-bold">Attributes</h2>
       <button
         @click="resetForm()"
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        class="bg-theme-600 text-white px-4 py-2 rounded hover:bg-theme-700"
       >
         Add Attribute
       </button>
@@ -157,7 +157,7 @@ watch(
                 v-model="form.name"
                 @blur="generateSlug"
                 type="text"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
                 placeholder="e.g., Size, Color"
                 required
               />
@@ -167,7 +167,7 @@ watch(
               <input
                 v-model="form.slug"
                 type="text"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
                 placeholder="e.g., size, color"
                 required
               />
@@ -177,7 +177,7 @@ watch(
               <textarea
                 v-model="form.description"
                 rows="3"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
                 placeholder="Describe this attribute..."
               ></textarea>
             </div>
@@ -188,7 +188,7 @@ watch(
             <div class="flex gap-2">
               <button
                 type="submit"
-                class="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                class="flex-1 bg-theme-600 text-white px-4 py-2 rounded hover:bg-theme-700"
               >
                 {{ editingId ? 'Update' : 'Create' }}
               </button>
@@ -216,7 +216,7 @@ watch(
               "
               type="text"
               placeholder="Search attributes..."
-              class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
             />
           </div>
           <div class="overflow-x-auto">
@@ -264,7 +264,7 @@ watch(
                   <td class="px-4 py-3">
                     <button
                       @click="editAttribute(attribute)"
-                      class="text-blue-600 hover:text-blue-800 mr-3"
+                      class="text-theme-600 hover:text-theme-800 mr-3"
                     >
                       Edit
                     </button>
@@ -297,7 +297,7 @@ watch(
               :disabled="!link.url"
               :class="[
                 link.active
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-theme-600 text-white'
                   : !link.url
                     ? 'opacity-50 cursor-not-allowed'
                     : 'bg-gray-100 hover:bg-gray-200'

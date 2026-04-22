@@ -27,7 +27,7 @@
           v-model="form.name"
           type="text"
           required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
           placeholder="John Doe"
         />
       </div>
@@ -41,7 +41,7 @@
           v-model="form.email"
           type="email"
           required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
           placeholder="you@example.com"
         />
       </div>
@@ -56,7 +56,7 @@
           type="password"
           required
           minlength="8"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
           placeholder="Min. 8 characters"
         />
       </div>
@@ -70,7 +70,7 @@
           v-model="form.password_confirmation"
           type="password"
           required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
           placeholder="Confirm your password"
         />
       </div>
@@ -78,7 +78,7 @@
       <button
         type="submit"
         :disabled="authStore.loading"
-        class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        class="w-full bg-theme-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-theme-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
       >
         {{ authStore.loading ? 'Creating account...' : 'Create Account' }}
       </button>
@@ -87,7 +87,7 @@
     <div class="mt-6 text-center">
       <p class="text-gray-600 text-sm">
         Already have an account?
-        <router-link to="/customer/login" class="text-indigo-600 hover:text-indigo-700 font-medium">
+        <router-link to="/customer/login" class="text-theme-600 hover:text-theme-700 font-medium">
           Sign in
         </router-link>
       </p>

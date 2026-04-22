@@ -101,7 +101,7 @@ onMounted(() => {
       <h2 class="text-2xl font-bold">Brands</h2>
       <button
         @click="resetForm()"
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        class="bg-theme-600 text-white px-4 py-2 rounded hover:bg-theme-700"
       >
         Add Brand
       </button>
@@ -118,7 +118,7 @@ onMounted(() => {
                 v-model="form.name"
                 @blur="generateSlug"
                 type="text"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
                 placeholder="Brand name"
                 required
               />
@@ -128,7 +128,7 @@ onMounted(() => {
               <input
                 v-model="form.slug"
                 type="text"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
                 placeholder="brand-slug"
                 required
               />
@@ -138,7 +138,7 @@ onMounted(() => {
               <textarea
                 v-model="form.description"
                 rows="3"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
                 placeholder="Brand description..."
               ></textarea>
             </div>
@@ -147,7 +147,7 @@ onMounted(() => {
               <input
                 v-model="form.logo_url"
                 type="text"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
                 placeholder="https://example.com/logo.png"
               />
             </div>
@@ -156,7 +156,7 @@ onMounted(() => {
               <input
                 v-model="form.website"
                 type="text"
-                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
                 placeholder="https://brand-website.com"
               />
             </div>
@@ -167,7 +167,7 @@ onMounted(() => {
             <div class="flex gap-2">
               <button
                 type="submit"
-                class="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                class="flex-1 bg-theme-600 text-white px-4 py-2 rounded hover:bg-theme-700"
               >
                 {{ editingId ? 'Update' : 'Create' }}
               </button>
@@ -195,7 +195,7 @@ onMounted(() => {
               "
               type="text"
               placeholder="Search brands..."
-              class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
             />
           </div>
           <div class="overflow-x-auto">
@@ -243,7 +243,7 @@ onMounted(() => {
                       v-if="brand.website"
                       :href="brand.website"
                       target="_blank"
-                      class="text-blue-600 hover:text-blue-800"
+                      class="text-theme-600 hover:text-theme-800"
                     >
                       Visit
                     </a>
@@ -264,7 +264,7 @@ onMounted(() => {
                   <td class="px-4 py-3">
                     <button
                       @click="editBrand(brand)"
-                      class="text-blue-600 hover:text-blue-800 mr-3"
+                      class="text-theme-600 hover:text-theme-800 mr-3"
                     >
                       Edit
                     </button>
@@ -282,7 +282,7 @@ onMounted(() => {
               :key="page"
               @click="paginate(page)"
               :class="
-                page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
+                page === currentPage ? 'bg-theme-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
               "
               class="px-3 py-1 rounded"
             >

@@ -23,7 +23,7 @@
     <div class="p-4">
       <router-link :to="`/products/${product.id}`">
         <h3
-          class="font-semibold text-gray-900 hover:text-indigo-600 transition-colors line-clamp-2"
+          class="font-semibold text-gray-900 hover:text-theme-600 transition-colors line-clamp-2"
         >
           {{ product.name }}
         </h3>
@@ -32,10 +32,10 @@
         {{ product.category.name }}
       </p>
       <div class="flex items-center justify-between mt-3">
-        <span class="text-lg font-bold text-indigo-600"> ${{ formatPrice(product.price) }} </span>
+        <span class="text-lg font-bold text-theme-600"> ${{ formatPrice(product.price) }} </span>
         <button
           @click.prevent="addToCart"
-          class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors"
+          class="p-2 text-theme-600 hover:bg-theme-50 rounded-full transition-colors"
           title="Add to cart"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

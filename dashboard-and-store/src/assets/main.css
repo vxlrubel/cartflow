@@ -1,29 +1,29 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-theme-50: oklch(96.9% 0.015 12.422);
-  --color-theme-100: oklch(94.1% 0.03 12.58);
-  --color-theme-200:oklch(89.2% 0.058 10.001);
-  --color-theme-300: oklch(81% 0.117 11.638);
-  --color-theme-400: oklch(71.2% 0.194 13.428);
-  --color-theme-500: oklch(64.5% 0.246 16.439);
-  --color-theme-600: oklch(58.6% 0.253 17.585);
-  --color-theme-700: oklch(51.4% 0.222 16.935);
-  --color-theme-800: oklch(45.5% 0.188 13.697);
-  --color-theme-900: oklch(41% 0.159 10.272);
-  --color-theme-950: oklch(27.1% 0.105 12.094);
+  --color-theme-50:  oklch(97.5% 0.02 260);
+  --color-theme-100: oklch(94.5% 0.04 258);
+  --color-theme-200: oklch(88.5% 0.08 256);
+  --color-theme-300: oklch(80.5% 0.13 254);
+  --color-theme-400: oklch(71.5% 0.18 252);
+  --color-theme-500: oklch(63.5% 0.22 250);
+  --color-theme-600: oklch(57.5% 0.24 248);
+  --color-theme-700: oklch(50.5% 0.21 246);
+  --color-theme-800: oklch(44.5% 0.18 244);
+  --color-theme-900: oklch(39.5% 0.15 242);
+  --color-theme-950: oklch(27.5% 0.10 240);
 }
 
 .select {
-  @apply px-3 py-1 border border-gray-300 text-sm rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply px-3 py-1 border border-gray-300 text-sm rounded focus:outline-none focus:ring-2 focus:ring-theme-500 disabled:opacity-50 disabled:cursor-not-allowed;
 }
 .apply-button {
-  @apply px-3 py-1 bg-indigo-600 text-white rounded text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply px-3 py-1 bg-theme-600 text-white rounded text-sm font-medium hover:bg-theme-700 focus:outline-none focus:ring-2 focus:ring-theme-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
 }
 .search-field {
-  @apply w-64 pl-10 pr-4 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500;
+  @apply w-64 pl-10 pr-4 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-theme-500;
 }
 
 .input-field {
-  @apply w-full border border-gray-300 rounded text-sm px-3 h-8 focus:outline-none focus:ring-2 focus:ring-blue-500;
+  @apply w-full border border-gray-300 rounded text-sm px-3 h-8 focus:outline-none focus:ring-2 focus:ring-theme-500;
 }

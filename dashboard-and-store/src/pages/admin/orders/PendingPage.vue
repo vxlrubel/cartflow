@@ -91,7 +91,7 @@ const getPaymentStatusClass = (status) => {
     paid: 'bg-green-100 text-green-800',
     unpaid: 'bg-red-100 text-red-800',
     pending: 'bg-yellow-100 text-yellow-800',
-    refunded: 'bg-blue-100 text-blue-800',
+    refunded: 'bg-theme-100 text-theme-800',
   }
   return statusMap[status] || 'bg-gray-100 text-gray-800'
 }
@@ -137,7 +137,7 @@ watch(
           @click="handleStatusChange(tab.value)"
           :class="[
             'py-1 cursor-pointer text-sm font-medium transition-colors',
-            currentStatus === tab.value ? 'text-indigo-600' : 'text-gray-600 hover:text-indigo-400',
+            currentStatus === tab.value ? 'text-theme-600' : 'text-gray-600 hover:text-theme-400',
           ]"
         >
           {{ tab.label }} ({{ tab.count }})
@@ -220,7 +220,7 @@ watch(
                     type="checkbox"
                     :checked="store.allSelected"
                     @change="store.toggleSelectAll"
-                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
                   />
                 </th>
                 <th
@@ -255,7 +255,7 @@ watch(
                       />
                     </svg>
                     {{ column.label }}
-                    <span v-if="isSorted(column.key)" class="text-indigo-600">
+                    <span v-if="isSorted(column.key)" class="text-theme-600">
                       {{ getSortIcon(column.key) }}
                     </span>
                   </div>
@@ -273,7 +273,7 @@ watch(
                 <td colspan="10" class="px-4 py-8 text-center text-gray-500">
                   <div class="flex items-center justify-center">
                     <svg
-                      class="animate-spin h-6 w-6 text-indigo-600 mr-2"
+                      class="animate-spin h-6 w-6 text-theme-600 mr-2"
                       fill="none"
                       viewBox="0 0 24 24"
                     >
@@ -304,7 +304,7 @@ watch(
                     type="checkbox"
                     :checked="store.selectedIds.includes(order.id)"
                     @change="store.toggleSelect(order.id)"
-                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
                   />
                 </td>
                 <td class="px-4 py-4">
@@ -351,7 +351,7 @@ watch(
                   <div class="flex items-center gap-2">
                     <button
                       @click="viewOrderDetails(order.id)"
-                      class="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+                      class="text-theme-600 hover:text-theme-900 text-sm font-medium"
                     >
                       View
                     </button>
@@ -389,7 +389,7 @@ watch(
               :class="[
                 'px-3 py-1 rounded text-sm',
                 store.pagination.currentPage === page
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-theme-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
               ]"
             >

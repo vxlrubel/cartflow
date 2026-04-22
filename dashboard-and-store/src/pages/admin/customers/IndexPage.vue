@@ -111,7 +111,7 @@ watch(
 
         <router-link
           to="/dashboard/customers/create"
-          class="inline-flex items-center px-3 py-1 text-sm bg-indigo-600 text-white hover:bg-indigo-700 rounded transition-colors"
+          class="inline-flex items-center px-3 py-1 text-sm bg-theme-600 text-white hover:bg-theme-700 rounded transition-colors"
         >
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -127,7 +127,7 @@ watch(
           @click="handleStatusChange(tab.value)"
           :class="[
             'py-1 cursor-pointer text-sm font-medium transition-colors',
-            currentStatus === tab.value ? 'text-indigo-600' : 'text-gray-600 hover:text-indigo-400',
+            currentStatus === tab.value ? 'text-theme-600' : 'text-gray-600 hover:text-theme-400',
           ]"
         >
           {{ tab.label }} ({{ tab.count }})
@@ -186,7 +186,7 @@ watch(
             <thead class="bg-gray-50">
               <tr>
                 <th class="px-4 py-3 text-left">
-                  <input type="checkbox" :checked="store.allSelected" @change="store.toggleSelectAll" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                  <input type="checkbox" :checked="store.allSelected" @change="store.toggleSelectAll" class="rounded border-gray-300 text-theme-600 focus:ring-theme-500" />
                 </th>
                 <th v-for="column in [
                   { key: 'name', label: 'Name' },
@@ -201,7 +201,7 @@ watch(
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                     </svg>
                     {{ column.label }}
-                    <span v-if="isSorted(column.key)" class="text-indigo-600">{{ getSortIcon(column.key) }}</span>
+                    <span v-if="isSorted(column.key)" class="text-theme-600">{{ getSortIcon(column.key) }}</span>
                   </div>
                   <span v-else>{{ column.label }}</span>
                 </th>
@@ -212,7 +212,7 @@ watch(
               <tr v-if="store.loading">
                 <td colspan="8" class="px-4 py-8 text-center text-gray-500">
                   <div class="flex items-center justify-center">
-                    <svg class="animate-spin h-6 w-6 text-indigo-600 mr-2" fill="none" viewBox="0 0 24 24">
+                    <svg class="animate-spin h-6 w-6 text-theme-600 mr-2" fill="none" viewBox="0 0 24 24">
                       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -225,7 +225,7 @@ watch(
               </tr>
               <tr v-for="customer in store.customers" :key="customer.id" class="hover:bg-gray-50">
                 <td class="px-4 py-4">
-                  <input type="checkbox" :checked="store.selectedIds.includes(customer.id)" @change="store.toggleSelect(customer.id)" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                  <input type="checkbox" :checked="store.selectedIds.includes(customer.id)" @change="store.toggleSelect(customer.id)" class="rounded border-gray-300 text-theme-600 focus:ring-theme-500" />
                 </td>
                 <td class="px-4 py-4">
                   <div class="text-sm font-medium text-gray-900">{{ customer.name }}</div>
@@ -252,8 +252,8 @@ watch(
                 </td>
                 <td class="px-4 py-4">
                   <div class="flex items-center gap-2">
-                    <button @click="navigateToDetail(customer.id)" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">View</button>
-                    <button @click="navigateToEdit(customer.id)" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">Edit</button>
+                    <button @click="navigateToDetail(customer.id)" class="text-theme-600 hover:text-theme-900 text-sm font-medium">View</button>
+                    <button @click="navigateToEdit(customer.id)" class="text-theme-600 hover:text-theme-900 text-sm font-medium">Edit</button>
                     <button v-if="!store.trashed" @click="store.softDelete(customer.id)" class="text-red-600 hover:text-red-900 text-sm font-medium">Trash</button>
                     <button v-else @click="store.restoreCustomer(customer.id)" class="text-green-600 hover:text-green-900 text-sm font-medium">Restore</button>
                   </div>
@@ -272,7 +272,7 @@ watch(
               v-for="page in store.pagination.lastPage"
               :key="page"
               @click="handlePageChange(page)"
-              :class="['px-3 py-1 rounded text-sm', store.pagination.currentPage === page ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+              :class="['px-3 py-1 rounded text-sm', store.pagination.currentPage === page ? 'bg-theme-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
             >
               {{ page }}
             </button>

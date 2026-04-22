@@ -85,7 +85,7 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
 
 <template>
   <div
-    class="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500"
+    class="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-theme-500 focus-within:border-theme-500"
   >
     <div
       v-if="editor"
@@ -380,7 +380,7 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
           <button
             type="button"
             @click="setLink"
-            class="px-2 py-1 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
+            class="px-2 py-1 bg-theme-600 text-white text-sm rounded hover:bg-theme-700"
           >
             Add
           </button>

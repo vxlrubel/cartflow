@@ -10,7 +10,7 @@
             <span class="text-gray-600 mr-4">{{ authStore.user?.name }}</span>
             <button
               @click="handleLogout"
-              class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
+              class="bg-theme-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-theme-700"
             >
               Logout
             </button>

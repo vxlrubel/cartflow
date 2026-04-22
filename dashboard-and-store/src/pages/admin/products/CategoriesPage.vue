@@ -120,7 +120,7 @@ const categoryOptions = computed(() => [
           showModal = true,
           resetForm()
         "
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm cursor-pointer"
+        class="bg-theme-600 text-white px-4 py-2 rounded hover:bg-theme-700 text-sm cursor-pointer"
       >
         Add Category
       </button>
@@ -152,7 +152,7 @@ const categoryOptions = computed(() => [
               <textarea
                 v-model="form.description"
                 rows="3"
-                class="w-full border border-gray-300 rounded text-sm px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border border-gray-300 rounded text-sm px-3 py-1 focus:outline-none focus:ring-2 focus:ring-theme-500"
               ></textarea>
             </div>
             <div>
@@ -166,7 +166,7 @@ const categoryOptions = computed(() => [
             <div class="flex gap-2">
               <button
                 type="submit"
-                class="flex-1 text-sm bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700"
+                class="flex-1 text-sm bg-theme-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-theme-700"
               >
                 {{ editingId ? 'Update' : 'Create' }}
               </button>
@@ -197,7 +197,7 @@ const categoryOptions = computed(() => [
               "
               type="text"
               placeholder="Search categories..."
-              class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
             />
           </div>
           <div class="overflow-x-auto">
@@ -241,7 +241,7 @@ const categoryOptions = computed(() => [
                   <td class="px-4 py-3">
                     <button
                       @click="editCategory(category)"
-                      class="text-blue-600 hover:text-blue-800 mr-3"
+                      class="text-theme-600 hover:text-theme-800 mr-3"
                     >
                       Edit
                     </button>
@@ -262,7 +262,7 @@ const categoryOptions = computed(() => [
               :key="page"
               @click="paginate(page)"
               :class="
-                page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
+                page === currentPage ? 'bg-theme-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
               "
               class="px-3 py-1 rounded"
             >

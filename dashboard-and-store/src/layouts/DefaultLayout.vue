@@ -4,7 +4,7 @@
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <div class="flex-shrink-0">
-            <router-link to="/" class="text-2xl font-bold text-indigo-600"> CartFlow </router-link>
+            <router-link to="/" class="text-2xl font-bold text-theme-600"> CartFlow </router-link>
           </div>
           <div class="flex items-center space-x-4">
             <template v-if="authStore.isAuthenticated">
@@ -36,7 +36,7 @@
               </router-link>
               <router-link
                 to="/register"
-                class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
+                class="bg-theme-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-theme-700"
               >
                 Register
               </router-link>

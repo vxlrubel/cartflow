@@ -171,7 +171,7 @@ watch(
     <div class="mb-2">
       <router-link to="/dashboard"
         :class="
-          isActive('/dashboard') ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700 hover:bg-gray-50'
+          isActive('/dashboard') ? 'text-theme-600 bg-theme-50' : 'text-gray-700 hover:bg-gray-50'
         "
         class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium cursor-pointer">
         <span class="flex items-center">
@@ -187,7 +187,7 @@ watch(
         @click="toggleCategory(category)"
         class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium cursor-pointer"
         :class="
-          isParentActive(children) ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700 hover:bg-gray-50'
+          isParentActive(children) ? 'text-theme-600 bg-theme-50' : 'text-gray-700 hover:bg-gray-50'
         "
       >
         <span class="flex-1 flex items-center">
@@ -214,8 +214,8 @@ watch(
           class="block pl-8 pr-4 py-2 text-sm border-l-2"
           :class="
             isActive(item.path)
-              ? 'text-indigo-600 bg-indigo-50 border-indigo-600 font-medium'
-              : 'text-gray-600 hover:bg-gray-50 hover:text-indigo-600 border-transparent'
+              ? 'text-theme-600 bg-theme-50 border-theme-600 font-medium'
+              : 'text-gray-600 hover:bg-gray-50 hover:text-theme-600 border-transparent'
           "
         >
           {{ item.label }}

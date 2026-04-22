@@ -124,7 +124,7 @@ onMounted(async () => {
             <input
               v-model="showDismissed"
               type="checkbox"
-              class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
             />
             <span class="text-sm text-gray-700">Show Dismissed</span>
           </label>
@@ -217,7 +217,7 @@ onMounted(async () => {
                     type="checkbox"
                     :checked="selectedAlerts.length === visibleAlerts.length && visibleAlerts.length > 0"
                     @change="toggleSelectAll"
-                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
                   />
                 </th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -248,7 +248,7 @@ onMounted(async () => {
                 <td colspan="8" class="px-4 py-8 text-center text-gray-500">
                   <div class="flex items-center justify-center">
                     <svg
-                      class="animate-spin h-6 w-6 text-indigo-600 mr-2"
+                      class="animate-spin h-6 w-6 text-theme-600 mr-2"
                       fill="none"
                       viewBox="0 0 24 24"
                     >
@@ -287,7 +287,7 @@ onMounted(async () => {
                     type="checkbox"
                     :checked="selectedAlerts.includes(alert.product_id)"
                     @change="toggleSelect(alert.product_id)"
-                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
                   />
                 </td>
                 <td class="px-4 py-4">
@@ -304,7 +304,7 @@ onMounted(async () => {
                       v-model="editingStockValue"
                       type="number"
                       min="0"
-                      class="w-20 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500"
+                      class="w-20 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-theme-500 focus:border-theme-500"
                     />
                     <button @click="saveRestock" class="text-green-600 hover:text-green-900 text-sm font-medium">
                       Save
@@ -337,7 +337,7 @@ onMounted(async () => {
                   <div class="flex items-center gap-2">
                     <button
                       @click="handleRestock(alert)"
-                      class="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+                      class="text-theme-600 hover:text-theme-900 text-sm font-medium"
                     >
                       Restock
                     </button>

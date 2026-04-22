@@ -31,9 +31,9 @@
         v-for="option in options"
         :key="option.value"
         @click.stop="selectOptionHandler(option)"
-        class="px-3 py-1 cursor-pointer hover:bg-gray-100 select-none active:bg-blue-500 active:text-white border-b border-gray-200 last:border-0"
+        class="px-3 py-1 cursor-pointer hover:bg-gray-100 select-none active:bg-theme-500 active:text-white border-b border-gray-200 last:border-0"
         :class="{
-          'bg-blue-500 text-white hover:bg-blue-500': option.value === selectedOption,
+          'bg-theme-500 text-white hover:bg-theme-500': option.value === selectedOption,
         }"
       >
         {{ option.label }}

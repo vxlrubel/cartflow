@@ -174,7 +174,7 @@ onMounted(async () => {
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-neutral-200 p-6">
         <h2 class="text-2xl font-medium text-gray-800">Customer Groups</h2>
 
-        <button @click="openCreateModal" class="inline-flex items-center px-3 py-1 text-sm bg-indigo-600 text-white hover:bg-indigo-700 rounded transition-colors">
+        <button @click="openCreateModal" class="inline-flex items-center px-3 py-1 text-sm bg-theme-600 text-white hover:bg-theme-700 rounded transition-colors">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
@@ -193,7 +193,7 @@ onMounted(async () => {
 
       <div class="px-6">
         <div v-if="store.loading" class="py-8 text-center text-gray-500">
-          <svg class="animate-spin h-6 w-6 text-indigo-600 mx-auto" fill="none" viewBox="0 0 24 24">
+          <svg class="animate-spin h-6 w-6 text-theme-600 mx-auto" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
@@ -216,7 +216,7 @@ onMounted(async () => {
               <span class="text-sm text-gray-500">{{ group.customers_count || 0 }} customers</span>
             </div>
             <div class="flex items-center gap-2 mt-4 pt-4 border-t">
-              <button @click="openEditModal(group)" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">Edit</button>
+              <button @click="openEditModal(group)" class="text-theme-600 hover:text-theme-900 text-sm font-medium">Edit</button>
               <button @click="manageGroupCustomers(group)" class="text-green-600 hover:text-green-900 text-sm font-medium">Manage</button>
               <button @click="viewGroupCustomers(group)" class="text-gray-600 hover:text-gray-900 text-sm font-medium">View</button>
               <button @click="deleteGroup(group.id)" class="text-red-600 hover:text-red-900 text-sm font-medium">Delete</button>
@@ -283,7 +283,7 @@ onMounted(async () => {
 
               <div v-else-if="modalMode === 'manage'" class="p-4 max-h-96 overflow-y-auto">
                 <div v-if="manageLoading" class="py-8 text-center text-gray-500">
-                  <svg class="animate-spin h-6 w-6 text-indigo-600 mx-auto" fill="none" viewBox="0 0 24 24">
+                  <svg class="animate-spin h-6 w-6 text-theme-600 mx-auto" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
@@ -303,10 +303,10 @@ onMounted(async () => {
 
             <div class="flex justify-end gap-2 p-4 border-t flex-shrink-0">
               <button @click="closeModal" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors">Cancel</button>
-              <button v-if="modalMode === 'form'" @click="saveGroup" :disabled="saving" class="px-4 py-2 text-sm bg-indigo-600 text-white hover:bg-indigo-700 rounded disabled:opacity-50 transition-colors">
+              <button v-if="modalMode === 'form'" @click="saveGroup" :disabled="saving" class="px-4 py-2 text-sm bg-theme-600 text-white hover:bg-theme-700 rounded disabled:opacity-50 transition-colors">
                 {{ saving ? 'Saving...' : 'Save' }}
               </button>
-              <button v-else-if="modalMode === 'manage'" @click="saveGroupCustomers" :disabled="saving" class="px-4 py-2 text-sm bg-indigo-600 text-white hover:bg-indigo-700 rounded disabled:opacity-50 transition-colors">
+              <button v-else-if="modalMode === 'manage'" @click="saveGroupCustomers" :disabled="saving" class="px-4 py-2 text-sm bg-theme-600 text-white hover:bg-theme-700 rounded disabled:opacity-50 transition-colors">
                 {{ saving ? 'Saving...' : 'Save' }}
               </button>
             </div>

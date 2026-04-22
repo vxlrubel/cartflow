@@ -9,7 +9,7 @@
               <button
                 v-if="selectedCategory"
                 @click="setCategory(null)"
-                class="text-sm text-indigo-600 hover:text-indigo-800"
+                class="text-sm text-theme-600 hover:text-theme-800"
               >
                 Clear
               </button>
@@ -21,7 +21,7 @@
                   :class="[
                     'w-full text-left px-3 py-2 rounded-md transition-colors',
                     !selectedCategory
-                      ? 'bg-indigo-100 text-indigo-700 font-medium'
+                      ? 'bg-theme-100 text-theme-700 font-medium'
                       : 'text-gray-600 hover:bg-gray-100',
                   ]"
                 >
@@ -39,7 +39,7 @@
                   :class="[
                     'w-full text-left px-3 py-2 rounded-md transition-colors',
                     selectedCategory === category.id
-                      ? 'bg-indigo-100 text-indigo-700 font-medium'
+                      ? 'bg-theme-100 text-theme-700 font-medium'
                       : 'text-gray-600 hover:bg-gray-100',
                   ]"
                 >
@@ -64,7 +64,7 @@
                     v-model="searchInput"
                     type="text"
                     placeholder="Search products..."
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
                     @keyup.enter="setSearch(searchInput)"
                   />
                   <svg
@@ -87,7 +87,7 @@
                 <select
                   :value="sort"
                   @change="setSort($event.target.value)"
-                  class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
                 >
                   <option v-for="option in sortOptions" :key="option.value" :value="option.value">
                     {{ option.label }}
@@ -100,13 +100,13 @@
               <span class="text-sm text-gray-600">Active filters:</span>
               <span
                 v-if="search"
-                class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm"
+                class="inline-flex items-center px-2 py-1 bg-theme-100 text-theme-700 rounded-full text-sm"
               >
                 Search: {{ search }}
               </span>
               <span
                 v-if="selectedCategory"
-                class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm"
+                class="inline-flex items-center px-2 py-1 bg-theme-100 text-theme-700 rounded-full text-sm"
               >
                 {{ categories.find((c) => c.id === selectedCategory)?.name }}
               </span>
@@ -117,7 +117,7 @@
           </div>
 
           <div v-if="loading" class="flex justify-center py-12">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-theme-600"></div>
           </div>
 
           <div
@@ -146,7 +146,7 @@
             </svg>
             <h3 class="text-lg font-medium text-gray-900 mb-2">No products found</h3>
             <p class="text-gray-500 mb-4">Try adjusting your search or filter criteria</p>
-            <button @click="clearFilters" class="text-indigo-600 hover:text-indigo-800 font-medium">
+            <button @click="clearFilters" class="text-theme-600 hover:text-theme-800 font-medium">
               Clear all filters
             </button>
           </div>
@@ -180,7 +180,7 @@
                     :class="[
                       'px-4 py-2 rounded-md',
                       page === pagination.currentPage
-                        ? 'bg-indigo-600 text-white'
+                        ? 'bg-theme-600 text-white'
                         : 'border border-gray-300 hover:bg-gray-50',
                     ]"
                   >

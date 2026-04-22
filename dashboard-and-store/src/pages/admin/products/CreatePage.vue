@@ -269,12 +269,12 @@ onMounted(loadFormData)
                   v-model="newCategory"
                   @keyup.enter="createCategory"
                   placeholder="Add new category"
-                  class="flex-1 text-[12px] h-7 px-3 border border-indigo-400 bg-neutral-100 rounded focus:bg-indigo-50 focus:text-indigo-700 focus:border-indigo-400 focus:outline-indigo-400"
+                  class="flex-1 text-[12px] h-7 px-3 border border-theme-400 bg-neutral-100 rounded focus:bg-theme-50 focus:text-theme-700 focus:border-theme-400 focus:outline-theme-400"
                 />
                 <button
                   type="button"
                   @click="createCategory"
-                  class="px-3 h-7 text-[12px] font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+                  class="px-3 h-7 text-[12px] font-medium text-white bg-theme-600 rounded hover:bg-theme-700 focus:outline-none focus:ring-2 focus:ring-theme-500 cursor-pointer"
                 >
                   Add
                 </button>
@@ -303,12 +303,12 @@ onMounted(loadFormData)
                   v-model="newBrand"
                   @keyup.enter="createBrand"
                   placeholder="Add new brand"
-                  class="flex-1 text-[12px] h-7 px-3 border border-indigo-400 bg-neutral-100 rounded focus:bg-indigo-50 focus:text-indigo-700 focus:border-indigo-400 focus:outline-indigo-400"
+                  class="flex-1 text-[12px] h-7 px-3 border border-theme-400 bg-neutral-100 rounded focus:bg-theme-50 focus:text-theme-700 focus:border-theme-400 focus:outline-theme-400"
                 />
                 <button
                   type="button"
                   @click="createBrand"
-                  class="px-3 h-7 text-[12px] font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+                  class="px-3 h-7 text-[12px] font-medium text-white bg-theme-600 rounded hover:bg-theme-700 focus:outline-none focus:ring-2 focus:ring-theme-500 cursor-pointer"
                 >
                   Add
                 </button>
@@ -329,7 +329,7 @@ onMounted(loadFormData)
           <button
             type="submit"
             :disabled="loading"
-            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+            class="px-4 py-2 text-sm font-medium text-white bg-theme-600 rounded-lg hover:bg-theme-700 focus:outline-none focus:ring-2 focus:ring-theme-500 disabled:opacity-50"
           >
             {{ loading ? 'Saving...' : 'Save Product' }}
           </button>

@@ -40,9 +40,9 @@ const fetchReviews = async (page = 1) => {
   loading.value = true
   try {
     const response = await api.get(API_ENDPOINTS.reviews.list, {
-      params: { 
-        page, 
-        per_page: perPage.value, 
+      params: {
+        page,
+        per_page: perPage.value,
         search: search.value,
         status: statusFilter.value || undefined,
       },
@@ -163,7 +163,7 @@ watch(statusFilter, (newStatus) => {
       <h2 class="text-2xl font-bold">Reviews</h2>
       <button
         @click="fetchReviews(currentPage)"
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        class="bg-theme-600 text-white px-4 py-2 rounded hover:bg-theme-700"
       >
         Refresh
       </button>
@@ -177,7 +177,7 @@ watch(statusFilter, (newStatus) => {
             @input="handleSearch"
             type="text"
             placeholder="Search reviews..."
-            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
           />
         </div>
         <CustomSelect
@@ -280,7 +280,7 @@ watch(statusFilter, (newStatus) => {
           :disabled="!link.url"
           :class="[
             link.active
-              ? 'bg-blue-600 text-white'
+              ? 'bg-theme-600 text-white'
               : !link.url
                 ? 'opacity-50 cursor-not-allowed'
                 : 'bg-gray-100 hover:bg-gray-200'

@@ -54,7 +54,7 @@ onMounted(async () => {
 
       <div class="px-6">
         <div v-if="store.loading" class="py-8 text-center text-gray-500">
-          <svg class="animate-spin h-6 w-6 text-indigo-600 mx-auto" fill="none" viewBox="0 0 24 24">
+          <svg class="animate-spin h-6 w-6 text-theme-600 mx-auto" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
@@ -67,7 +67,7 @@ onMounted(async () => {
             <thead class="bg-gray-50">
               <tr>
                 <th class="px-4 py-3 text-left">
-                  <input type="checkbox" :checked="store.allSelected" @change="store.toggleSelectAll" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                  <input type="checkbox" :checked="store.allSelected" @change="store.toggleSelectAll" class="rounded border-gray-300 text-theme-600 focus:ring-theme-500" />
                 </th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
@@ -78,7 +78,7 @@ onMounted(async () => {
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="customer in store.customers" :key="customer.id" class="hover:bg-gray-50">
                 <td class="px-4 py-4">
-                  <input type="checkbox" :checked="store.selectedIds.includes(customer.id)" @change="store.toggleSelect(customer.id)" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                  <input type="checkbox" :checked="store.selectedIds.includes(customer.id)" @change="store.toggleSelect(customer.id)" class="rounded border-gray-300 text-theme-600 focus:ring-theme-500" />
                 </td>
                 <td class="px-4 py-4">
                   <div class="text-sm font-medium text-gray-900">{{ customer.name }}</div>
@@ -109,7 +109,7 @@ onMounted(async () => {
               v-for="page in store.pagination.lastPage"
               :key="page"
               @click="store.setPage(page)"
-              :class="['px-3 py-1 rounded text-sm', store.pagination.currentPage === page ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+              :class="['px-3 py-1 rounded text-sm', store.pagination.currentPage === page ? 'bg-theme-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
             >
               {{ page }}
             </button>

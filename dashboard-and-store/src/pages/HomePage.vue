@@ -1,16 +1,16 @@
 <template>
   <DefaultLayout>
-    <section class="bg-indigo-700 text-white py-20">
+    <section class="bg-theme-700 text-white py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-4xl md:text-5xl font-bold mb-6">Welcome to CartFlow</h1>
-        <p class="text-xl md:text-2xl text-indigo-100 mb-8 max-w-3xl mx-auto">
+        <p class="text-xl md:text-2xl text-theme-100 mb-8 max-w-3xl mx-auto">
           Your one-stop e-commerce platform for seamless shopping experiences. Discover amazing
           products at unbeatable prices.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
           <router-link
             to="/products"
-            class="bg-white text-indigo-700 px-8 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition"
+            class="bg-white text-theme-700 px-8 py-3 rounded-lg font-semibold hover:bg-theme-50 transition"
           >
             Browse Products
           </router-link>
@@ -30,10 +30,10 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div class="text-center p-6">
             <div
-              class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4"
+              class="w-16 h-16 bg-theme-100 rounded-full flex items-center justify-center mx-auto mb-4"
             >
               <svg
-                class="w-8 h-8 text-indigo-600"
+                class="w-8 h-8 text-theme-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -51,10 +51,10 @@
           </div>
           <div class="text-center p-6">
             <div
-              class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4"
+              class="w-16 h-16 bg-theme-100 rounded-full flex items-center justify-center mx-auto mb-4"
             >
               <svg
-                class="w-8 h-8 text-indigo-600"
+                class="w-8 h-8 text-theme-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -72,10 +72,10 @@
           </div>
           <div class="text-center p-6">
             <div
-              class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4"
+              class="w-16 h-16 bg-theme-100 rounded-full flex items-center justify-center mx-auto mb-4"
             >
               <svg
-                class="w-8 h-8 text-indigo-600"
+                class="w-8 h-8 text-theme-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -103,7 +103,7 @@
         </p>
         <router-link
           to="/register"
-          class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"
+          class="bg-theme-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-theme-700 transition"
         >
           Get Started Now
         </router-link>

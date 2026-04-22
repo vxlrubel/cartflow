@@ -208,7 +208,7 @@ watch(
                     type="checkbox"
                     :checked="store.allSelected"
                     @change="store.toggleSelectAll"
-                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
                   />
                 </th>
                 <th
@@ -240,7 +240,7 @@ watch(
                       />
                     </svg>
                     {{ column.label }}
-                    <span v-if="isSorted(column.key)" class="text-indigo-600">
+                    <span v-if="isSorted(column.key)" class="text-theme-600">
                       {{ getSortIcon(column.key) }}
                     </span>
                   </div>
@@ -258,7 +258,7 @@ watch(
                 <td colspan="7" class="px-4 py-8 text-center text-gray-500">
                   <div class="flex items-center justify-center">
                     <svg
-                      class="animate-spin h-6 w-6 text-indigo-600 mr-2"
+                      class="animate-spin h-6 w-6 text-theme-600 mr-2"
                       fill="none"
                       viewBox="0 0 24 24"
                     >
@@ -289,7 +289,7 @@ watch(
                     type="checkbox"
                     :checked="store.selectedIds.includes(sku.id)"
                     @change="store.toggleSelect(sku.id)"
-                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
                   />
                 </td>
                 <td class="px-4 py-4">
@@ -297,7 +297,7 @@ watch(
                     <input
                       v-model="editingSkuValue"
                       type="text"
-                      class="w-32 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500"
+                      class="w-32 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-theme-500 focus:border-theme-500"
                     />
                     <button
                       @click="saveSkuEdit"
@@ -318,7 +318,7 @@ watch(
                   </div>
                   <div v-else class="flex items-center gap-2">
                     <span class="text-sm font-mono font-medium text-gray-900">{{ sku.sku }}</span>
-                    <span v-if="sku.auto_generated" class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                    <span v-if="sku.auto_generated" class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-theme-100 text-theme-800">
                       Auto
                     </span>
                   </div>
@@ -351,13 +351,13 @@ watch(
                   <div class="flex items-center gap-2">
                     <button
                       @click="handleEditSku(sku)"
-                      class="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+                      class="text-theme-600 hover:text-theme-900 text-sm font-medium"
                     >
                       Edit
                     </button>
                     <button
                       @click="handleGenerateSku(sku.product_id)"
-                      class="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                      class="text-theme-600 hover:text-theme-900 text-sm font-medium"
                     >
                       Regenerate
                     </button>
@@ -383,7 +383,7 @@ watch(
               :class="[
                 'px-3 py-1 rounded text-sm',
                 store.pagination.currentPage === page
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-theme-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
               ]"
             >
@@ -409,7 +409,7 @@ watch(
             v-model="generatePrefix"
             type="text"
             placeholder="e.g., PROD-001"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-theme-500 focus:border-theme-500"
           />
           <p class="mt-1 text-sm text-gray-500">
             Enter a prefix to generate a unique SKU
@@ -425,7 +425,7 @@ watch(
           <button
             @click="handleGenerate"
             :disabled="!generatePrefix"
-            class="px-4 py-2 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg disabled:opacity-50"
+            class="px-4 py-2 text-sm text-white bg-theme-600 hover:bg-theme-700 rounded-lg disabled:opacity-50"
           >
             Generate
           </button>

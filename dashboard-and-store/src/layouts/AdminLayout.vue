@@ -50,7 +50,7 @@ const mouseLeaveFromDropdown = () => {
       ]"
     >
       <div class="flex items-center justify-between h-11 px-4 border-b border-neutral-200">
-        <router-link to="/dashboard" class="text-xl uppercase font-bold text-indigo-600 flex items-center gap-2">
+        <router-link to="/dashboard" class="text-xl uppercase font-bold text-theme-600 flex items-center gap-2">
           <img :src="logo" alt="CartFlow Admin" class="h-10 w-10" />
           Cartflow
         </router-link>

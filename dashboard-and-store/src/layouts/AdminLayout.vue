@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import MenuItems from '@/components/admin/MenuItems.vue'
-import logo from '@/assets/logo.svg'
+import LogoIcon from '@/components/icons/LogoIcon.vue'
 
 const authStore = useAuthStore()
 const sidebarOpen = ref(false)
@@ -49,9 +49,11 @@ const mouseLeaveFromDropdown = () => {
         'lg:translate-x-0',
       ]"
     >
-      <div class="flex items-center justify-between h-11 px-4 border-b border-neutral-200">
-        <router-link to="/dashboard" class="text-xl uppercase font-bold text-theme-600 flex items-center gap-2">
-          <img :src="logo" alt="CartFlow Admin" class="h-10 w-10" />
+      <div class="flex items-center justify-between h-11 px-4 border-b border-neutral-200 bg-theme-600">
+        <router-link to="/dashboard" class="text-xl uppercase font-bold text-white flex items-center gap-2">
+          <span class="p-1 rounded bg-white text-theme-600">
+            <LogoIcon/>
+          </span>
           Cartflow
         </router-link>
         <button @click="sidebarOpen = false" class="lg:hidden">
@@ -66,7 +68,7 @@ const mouseLeaveFromDropdown = () => {
         </button>
       </div>
 
-      <nav class="overflow-y-auto h-[calc(100vh-2.75rem)] py-4">
+      <nav class="overflow-y-auto h-[calc(100vh-2.75rem)] py-4 scrollable">
         <MenuItems />
       </nav>
     </aside>

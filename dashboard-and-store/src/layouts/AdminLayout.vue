@@ -3,6 +3,10 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import MenuItems from '@/components/admin/MenuItems.vue'
 import LogoIcon from '@/components/icons/LogoIcon.vue'
+import CloseCircle from '@/components/icons/CloseCircle.vue'
+import MenuHamburger from '@/components/icons/MenuHamburger.vue'
+import StopWatch from '@/components/icons/StopWatch.vue'
+import UserIcon from '../components/icons/UserIcon.vue'
 
 const authStore = useAuthStore()
 const sidebarOpen = ref(false)
@@ -44,65 +48,56 @@ const mouseLeaveFromDropdown = () => {
   <div class="min-h-screen bg-gray-100">
     <aside
       :class="[
-        'fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-neutral-200 transform transition-transform duration-300 ease-in-out',
+        'fixed inset-y-0 left-0 z-50 w-64 bg-white transform transition-transform duration-300 ease-in-out',
         sidebarOpen ? 'translate-x-0' : '-translate-x-full',
         'lg:translate-x-0',
       ]"
     >
-      <div class="flex items-center justify-between h-11 px-4 border-b border-neutral-200 bg-theme-600">
+      <div class="flex items-center justify-between h-11 px-4 bg-theme-500">
         <router-link to="/dashboard" class="text-xl uppercase font-bold text-white flex items-center gap-2">
-          <span class="p-1 rounded bg-white text-theme-600">
-            <LogoIcon/>
+          <span class="p-1 rounded bg-white text-theme-500">
+            <LogoIcon size="20"/>
           </span>
           Cartflow
         </router-link>
-        <button @click="sidebarOpen = false" class="lg:hidden">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+        <button @click="sidebarOpen = false" class="lg:hidden text-white">
+          <CloseCircle/>
         </button>
       </div>
 
-      <nav class="overflow-y-auto h-[calc(100vh-2.75rem)] py-4 scrollable">
+      <nav class="overflow-y-auto h-[calc(100vh-2.75rem)] py-4 border-r border-neutral-200">
         <MenuItems />
       </nav>
     </aside>
 
     <div class="lg:pl-64">
-      <header class="bg-white border-b border-neutral-200">
+      <header class="bg-theme-500 sticky top-0 z-49 text-white">
         <div class="px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-11">
             <div class="flex items-center">
-              <button @click="sidebarOpen = true" class="lg:hidden p-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
+              <button @click="sidebarOpen = true" class="lg:hidden p-2 text-white">
+                <MenuHamburger/>
               </button>
-              <span class="text-sm font-medium text-gray-700 bg-gray-200 p-1 w-25 text-center rounded">{{ currentTime }}</span>
+              <span class="text-sm font-bold text-white text-center rounded flex items-center gap-1 w-30">
+                <StopWatch size="20" />
+                {{ currentTime }}
+              </span>
             </div>
             <div class="flex items-center gap-2 relative h-full">
-              <span>{{ authStore.user?.name }}</span>
+              <span class="text-sm font-medium">{{ authStore.user?.name }}</span>
               <button
                 type="button"
-                class="rounded-full h-7 w-7 bg-neutral-400 cursor-pointer"
+                class="rounded-full inline-flex items-center justify-center h-7 w-7 bg-white cursor-pointer ring-2 ring-theme-50 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-theme-100"
                 @click="toggleAdminOptions = !toggleAdminOptions"
-              ></button>
+              >
+                <UserIcon class="text-neutral-700" size="20"/>
+              </button>
               <div
                 @mouseleave="mouseLeaveFromDropdown"
-                class="absolute top-full right-0 w-35 px-3 py-2 bg-gray-200 border border-gray-300 rounded text-xs text-gray-700"
+                class="absolute top-full right-0 w-35 px-3 py-2 bg-white border border-neutral-200 shadow-lg text-xs text-gray-700"
                 v-show="toggleAdminOptions"
               >
-                <a href="#" class="flex items-center gap-1 mb-2 text-gray-600 hover:text-gray-900">
+                <a href="#" class="flex items-center gap-1 mb-2 text-theme-500 hover:text-theme-700 font-bold">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="16px"

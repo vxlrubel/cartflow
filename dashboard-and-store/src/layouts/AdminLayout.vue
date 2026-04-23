@@ -1,18 +1,14 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useAuthStore } from '@/stores/auth'
 import MenuItems from '@/components/admin/MenuItems.vue'
 import LogoIcon from '@/components/icons/LogoIcon.vue'
 import CloseCircle from '@/components/icons/CloseCircle.vue'
 import MenuHamburger from '@/components/icons/MenuHamburger.vue'
 import StopWatch from '@/components/icons/StopWatch.vue'
-import UserIcon from '@/components/icons/UserIcon.vue'
 import UserOptions from '@/components/admin/UserOptions.vue'
 
-const authStore = useAuthStore()
 const sidebarOpen = ref(false)
 const currentTime = ref('')
-const toggleAdminOptions = ref(false)
 
 const updateTime = () => {
   const now = new Date()
@@ -57,7 +53,7 @@ onUnmounted(() => {
         </button>
       </div>
 
-      <nav class="overflow-y-auto h-[calc(100vh-2.75rem)] py-4 border-r border-neutral-200">
+      <nav class="overflow-y-auto h-[calc(100vh-2.75rem)] py-4 border-r border-neutral-200 select-none">
         <MenuItems />
       </nav>
     </aside>
@@ -79,7 +75,7 @@ onUnmounted(() => {
           </div>
         </div>
       </header>
-      <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <main class="max-w-480 min-h-[calc(100vh-4.75rem)] mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <router-view v-slot="{ Component }">
           <Transition name="page" mode="out-in">
             <component :is="Component" />

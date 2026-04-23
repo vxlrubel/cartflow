@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watch, ref } from 'vue'
+import { reactive, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import DashboardSquire from '@/components/icons/DashboardSquire.vue'
 import OrdersIcon from '@/components/icons/OrdersIcon.vue'
@@ -197,7 +197,14 @@ watch(
           </span>
           <span>{{ category }}</span>
         </span>
-        <ChevronDown :class="['transition-transform duration-300 ease-in-out text-gray-600', expandedCategories[category] ? 'rotate-180' : '']" size="16" />
+        <ChevronDown
+        :class="[
+          'transition-transform transition-colors duration-300 ease-in-out text-neutral-800',
+          {
+            'rotate-180': expandedCategories[category],
+            'text-theme-500': isParentActive(children),
+          }
+        ]" size="16" />
       </button>
       <div class="overflow-hidden transition-all duration-300 ease-in-out"
         :class="expandedCategories[category] ? 'max-h-96 opacity-100 mt-1' : 'max-h-0 opacity-0 mt-0'">

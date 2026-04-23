@@ -3,10 +3,13 @@
     <!-- Selected -->
     <div
       @click="toggleDropdown"
-      class="border border-gray-300 rounded pl-3 h-8 bg-white cursor-pointer flex justify-between items-center"
+      :class="[
+        'border-2 rounded pl-3 h-8 bg-white cursor-pointer flex justify-between items-center',
+        isOpen ? 'border-theme-500 ring-2 ring-offset-1 ring-theme-300' : 'border-gray-300',
+      ]"
     >
       <span class="text-gray-700">
-        {{ selectedLabel || 'Select an option' }}
+        {{ selectedLabel || '-- Select --' }}
       </span>
       <span>
         <svg

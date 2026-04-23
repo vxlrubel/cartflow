@@ -45,6 +45,12 @@ const routes = [
         meta: { title: 'Dashboard' },
       },
       {
+        path: 'structure/list',
+        name: 'dashboard-structure',
+        component: () => import('@/pages/admin/structure/ListPage.vue'),
+        meta: { title: 'List Structure' },
+      },
+      {
         path: 'analytics/overview',
         name: 'analytics-overview',
         component: () => import('@/pages/admin/analytics/OverviewPage.vue'),

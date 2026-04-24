@@ -234,6 +234,16 @@ class ReportsController extends Controller
             ]);
         }
 
+        if ($format === 'pdf') {
+            $pdfData = $this->generatePdf($data, ucfirst($type) . ' Report');
+            return response()->json([
+                'type' => $type,
+                'format' => $format,
+                'data' => $pdfData,
+                'download_url' => '/exports/' . $type . '_' . now()->toDateString() . '.html',
+            ]);
+        }
+
         return response()->json([
             'type' => $type,
             'format' => $format,
@@ -245,18 +255,81 @@ class ReportsController extends Controller
 
     private function generateCsv($data): string
     {
+        $data = collect($data);
+        
         if ($data->isEmpty()) {
             return '';
         }
 
-        $headers = array_keys($data->first()->toArray());
+        $firstItem = $data->first();
+        $headers = is_array($firstItem) ? array_keys($firstItem) : array_keys($firstItem->toArray() ?? []);
         $csv = implode(',', $headers) . "\n";
 
         foreach ($data as $row) {
-            $csv .= implode(',', array_values($row->toArray())) . "\n";
+            $values = is_array($row) ? array_values($row) : array_values($row->toArray() ?? []);
+            $csv .= implode(',', $values) . "\n";
         }
 
         return $csv;
+    }
+
+    private function generatePdf($data, string $title = 'Report'): string
+    {
+        $data = collect($data);
+        
+        if ($data->isEmpty()) {
+            return '<html><body><p>No data found</p></body></html>';
+        }
+
+        $firstItem = $data->first();
+        $headers = is_array($firstItem) ? array_keys($firstItem) : array_keys($firstItem->toArray() ?? []);
+        
+        $html = '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>' . $title . '</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f5f5f5; }
+        tr:nth-child(even) { background-color: #fafafa; }
+        .total { font-weight: bold; background-color: #e8f5e9; }
+    </style>
+</head>
+<body>
+    <h1>' . $title . '</h1>
+    <p>Generated: ' . now()->toDateTimeString() . '</p>
+    <table>
+        <thead>
+            <tr>';
+        
+        foreach ($headers as $header) {
+            $html .= '<th>' . ucwords(str_replace('_', ' ', $header)) . '</th>';
+        }
+        
+        $html .= '</tr>
+        </thead>
+        <tbody>';
+        
+        foreach ($data as $row) {
+            $values = is_array($row) ? array_values($row) : array_values($row->toArray() ?? []);
+            $html .= '<tr>';
+            foreach ($values as $value) {
+                $html .= '<td>' . htmlspecialchars($value ?? '') . '</td>';
+            }
+            $html .= '</tr>';
+        }
+        
+        $html .= '</tbody>
+    </table>
+    <p style="margin-top: 20px; color: #666;">Total records: ' . $data->count() . '</p>
+</body>
+</html>';
+
+        return $html;
     }
 
     public function summary(): JsonResponse

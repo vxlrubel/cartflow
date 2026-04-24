@@ -25,16 +25,15 @@ const handleExport = async () => {
     store.setDateRange(startDate.value, endDate.value)
     const data = await store.fetchExport(exportType.value, exportFormat.value)
     
-    if (exportFormat.value === 'csv' && data.download_url) {
-      const response = await fetch(data.download_url)
-      const blob = await response.blob()
+    if (exportFormat.value === 'csv' && data.data) {
+      const blob = new Blob([data.data], { type: 'text/csv;charset=utf-8;' })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
       link.download = `${exportType.value}_export_${new Date().toISOString().split('T')[0]}.csv`
       link.click()
       window.URL.revokeObjectURL(url)
-    } else if (exportFormat.value === 'json') {
+    } else if (exportFormat.value === 'json' && data.data) {
       const blob = new Blob([JSON.stringify(data.data, null, 2)], { type: 'application/json' })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -42,8 +41,12 @@ const handleExport = async () => {
       link.download = `${exportType.value}_export_${new Date().toISOString().split('T')[0]}.json`
       link.click()
       window.URL.revokeObjectURL(url)
-    } else if (exportFormat.value === 'pdf') {
-      alert('PDF export is not yet implemented. Using CSV instead.')
+    } else if (exportFormat.value === 'pdf' && data.data) {
+      const pdfWindow = window.open('', '_blank')
+      if (pdfWindow) {
+        pdfWindow.document.write(data.data)
+        pdfWindow.document.close()
+      }
     }
   } catch (err) {
     console.error('Export failed:', err)

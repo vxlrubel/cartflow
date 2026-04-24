@@ -221,6 +221,21 @@ export const API_ENDPOINTS = {
     single: (id) => `/products/${id}/inventory`,
     update: (id) => `/products/${id}/inventory`,
   },
+
+  settings: {
+    list: '/settings',
+    create: '/settings',
+    single: (id) => `/settings/${id}`,
+    update: (id) => `/settings/${id}`,
+    delete: (id) => `/settings/${id}`,
+    restore: (id) => `/settings/${id}/restore`,
+    forceDelete: (id) => `/settings/${id}/force`,
+    trash: '/trash/settings',
+    byCategory: '/settings/category',
+    updateMultiple: '/settings/multiple',
+    config: '/settings/config',
+    initialize: '/settings/initialize',
+  },
 }
 
 export default API_ENDPOINTS

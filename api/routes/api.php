@@ -21,12 +21,14 @@ use App\Http\Controllers\API\PermissionController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\RoleController;
+use App\Http\Controllers\API\SettingsController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\WishlistController;
 use App\Http\Controllers\API\UploadController;
+use App\Http\Middleware\CorsMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware([CorsMiddleware::class])->group(function () {
 
     // Upload (temp: no auth for testing)
     Route::post('/upload', [UploadController::class, 'upload']);
@@ -212,5 +214,15 @@ Route::prefix('v1')->group(function () {
         Route::get('/inventory/skus', [InventoryController::class, 'skus']);
         Route::put('/inventory/skus/{id}', [InventoryController::class, 'updateSku']);
         Route::post('/inventory/skus/generate', [InventoryController::class, 'generateSku']);
+
+        // Settings
+        Route::apiResource('settings', SettingsController::class);
+        Route::post('/settings/{id}/restore', [SettingsController::class, 'restore']);
+        Route::delete('/settings/{id}/force', [SettingsController::class, 'forceDelete']);
+        Route::get('/trash/settings', [SettingsController::class, 'trash']);
+        Route::get('/settings/category', [SettingsController::class, 'byCategory']);
+        Route::post('/settings/multiple', [SettingsController::class, 'updateMultiple']);
+        Route::get('/settings/config', [SettingsController::class, 'getConfig']);
+        Route::post('/settings/initialize', [SettingsController::class, 'initialize']);
     });
 });

@@ -258,6 +258,7 @@
 ## 📊 Analytics
 
 ### analytics
+
 * id (PK)
 * total_sales
 * total_orders
@@ -265,6 +266,22 @@
 * date
 * created_at
 * updated_at
+
+---
+
+## ⚙️ Settings
+
+### settings
+* id (PK)
+* key (unique)
+* type (string, integer, boolean, json)
+* value
+* category
+* is_active (boolean)
+* sort_order
+* created_at
+* updated_at
+* deleted_at (soft delete)
 
 ---
 
@@ -325,6 +342,7 @@ All major tables include:
 | Email Campaigns | /email-campaigns, /email-campaigns/{id}, /email-campaigns/{id}/send, /trash/email-campaigns | EmailCampaignController |
 | Analytics | /analytics/overview, /analytics/revenue, /analytics/products | AnalyticsController |
 | Reports | /reports/sales, /reports/orders, /reports/customers | AnalyticsController |
+| Settings | /settings, /settings/{id}, /settings/config, /settings/initialize | SettingsController |
 | Wishlist | /wishlist | WishlistController |
 | Addresses | /addresses | AddressController |
 | Activity Logs | /activity-logs | ActivityLogController |

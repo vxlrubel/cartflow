@@ -276,10 +276,20 @@
 
 ## ⚙️ Settings
 
-| Method | Endpoint  |
-| ------ | --------- |
-| GET    | /settings |
-| PUT    | /settings |
+| Method | Endpoint                    | Description           |
+| ------ | ------------------------- | --------------------- |
+| GET    | /settings                 | List settings         |
+| POST   | /settings                 | Create setting       |
+| GET    | /settings/{id}            | Setting details      |
+| PUT    | /settings/{id}            | Update setting       |
+| DELETE | /settings/{id}            | Delete setting       |
+| POST   | /settings/{id}/restore   | Restore              |
+| DELETE | /settings/{id}/force      | Permanent delete     |
+| GET    | /trash/settings           | Trash list           |
+| GET    | /settings/category       | Settings by category  |
+| POST   | /settings/multiple       | Update multiple      |
+| GET    | /settings/config         | Get all config       |
+| POST   | /settings/initialize     | Initialize defaults |
 
 ---
 

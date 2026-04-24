@@ -215,14 +215,15 @@ Route::prefix('v1')->middleware([CorsMiddleware::class])->group(function () {
         Route::put('/inventory/skus/{id}', [InventoryController::class, 'updateSku']);
         Route::post('/inventory/skus/generate', [InventoryController::class, 'generateSku']);
 
-        // Settings
-        Route::apiResource('settings', SettingsController::class);
-        Route::post('/settings/{id}/restore', [SettingsController::class, 'restore']);
-        Route::delete('/settings/{id}/force', [SettingsController::class, 'forceDelete']);
-        Route::get('/trash/settings', [SettingsController::class, 'trash']);
+        // Settings (specific routes first to avoid conflicts)
         Route::get('/settings/category', [SettingsController::class, 'byCategory']);
         Route::post('/settings/multiple', [SettingsController::class, 'updateMultiple']);
         Route::get('/settings/config', [SettingsController::class, 'getConfig']);
         Route::post('/settings/initialize', [SettingsController::class, 'initialize']);
+
+        Route::apiResource('settings', SettingsController::class);
+        Route::post('/settings/{id}/restore', [SettingsController::class, 'restore']);
+        Route::delete('/settings/{id}/force', [SettingsController::class, 'forceDelete']);
+        Route::get('/trash/settings', [SettingsController::class, 'trash']);
     });
 });

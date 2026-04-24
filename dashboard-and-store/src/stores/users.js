@@ -84,9 +84,18 @@ export const useUsersStore = defineStore('users', () => {
         api.get(API_ENDPOINTS.users.list, { params: { per_page: 1 } }),
         api.get(API_ENDPOINTS.users.list, { params: { per_page: 1, trashed: 1 } }),
       ])
+      
+      const getTotal = (res) => {
+        if (res.data?.data?.total !== undefined) return res.data.data.total
+        if (res.data?.total !== undefined) return res.data.total
+        if (Array.isArray(res.data?.data)) return res.data.data.length
+        if (Array.isArray(res.data)) return res.data.length
+        return 0
+      }
+      
       counts.value = {
-        all: allRes.data.total || 0,
-        trash: trashRes.data.total || 0,
+        all: getTotal(allRes),
+        trash: getTotal(trashRes),
       }
     } catch (err) {
       console.error('Failed to fetch counts:', err)
@@ -138,7 +147,7 @@ export const useUsersStore = defineStore('users', () => {
   const deleteUser = async (id) => {
     try {
       await api.delete(API_ENDPOINTS.users.delete(id))
-      await fetchUsers()
+      await Promise.all([fetchUsers(), fetchCounts()])
     } catch (err) {
       error.value = err.response?.data?.message || 'Failed to delete user'
     }
@@ -147,7 +156,7 @@ export const useUsersStore = defineStore('users', () => {
   const restoreUser = async (id) => {
     try {
       await api.post(API_ENDPOINTS.users.restore(id))
-      await fetchUsers()
+      await Promise.all([fetchUsers(), fetchCounts()])
     } catch (err) {
       error.value = err.response?.data?.message || 'Failed to restore user'
     }
@@ -156,7 +165,7 @@ export const useUsersStore = defineStore('users', () => {
   const forceDeleteUser = async (id) => {
     try {
       await api.delete(API_ENDPOINTS.users.forceDelete(id))
-      await fetchUsers()
+      await Promise.all([fetchUsers(), fetchCounts()])
     } catch (err) {
       error.value = err.response?.data?.message || 'Failed to permanently delete user'
     }
@@ -238,6 +247,7 @@ export const useUsersStore = defineStore('users', () => {
     selectedIds.value = []
     updateQueryParams()
     fetchUsers()
+    fetchCounts()
   }
 
   const syncFromQuery = () => {

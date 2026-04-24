@@ -141,7 +141,11 @@ export const API_ENDPOINTS = {
   reports: {
     sales: '/reports/sales',
     orders: '/reports/orders',
-    customers: '/reports/customers',
+    period: '/reports/period',
+    revenue: '/reports/revenue',
+    taxes: '/reports/taxes',
+    export: '/reports/export',
+    summary: '/reports/summary',
   },
 
   wishlist: {

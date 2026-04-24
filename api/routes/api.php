@@ -13,6 +13,7 @@ use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\CustomerGroupController;
 use App\Http\Controllers\API\EmailCampaignController;
 use App\Http\Controllers\API\InventoryController;
+use App\Http\Controllers\API\ReportsController;
 use App\Http\Controllers\API\OfferController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\PaymentController;
@@ -163,6 +164,14 @@ Route::prefix('v1')->group(function () {
 
         // Audits
         Route::get('/audits', [AuditController::class, 'index']);
+
+        // Reports
+        Route::get('/reports/period', [ReportsController::class, 'period']);
+        Route::get('/reports/revenue', [ReportsController::class, 'revenue']);
+        Route::get('/reports/orders', [ReportsController::class, 'orders']);
+        Route::get('/reports/taxes', [ReportsController::class, 'taxes']);
+        Route::get('/reports/export', [ReportsController::class, 'export']);
+        Route::get('/reports/summary', [ReportsController::class, 'summary']);
 
         // Inventory Management
         Route::get('/inventory', [InventoryController::class, 'index']);

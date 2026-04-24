@@ -179,11 +179,16 @@
 ### Reports
 
 | Method | Endpoint                    |
-| ------ | --------------------------- |
-| GET    | /reports/sales?type=daily   |
-| GET    | /reports/sales?type=monthly |
-| GET    | /reports/orders             |
-| GET    | /reports/customers          |
+| ------ | ------------------------- |
+| GET    | /reports/period?type=daily   |
+| GET    | /reports/period?type=weekly   |
+| GET    | /reports/period?type=monthly  |
+| GET    | /reports/period?type=yearly  |
+| GET    | /reports/revenue           |
+| GET    | /reports/orders            |
+| GET    | /reports/taxes             |
+| GET    | /reports/export           |
+| GET    | /reports/summary          |
 
 ### Dashboard Analytics
 

@@ -17,6 +17,10 @@ class UserController extends Controller
         $query = User::select('id', 'name', 'email', 'role_id', 'created_at')
             ->with('role:id,name');
 
+        if ($request->trashed) {
+            $query->onlyTrashed();
+        }
+
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%')

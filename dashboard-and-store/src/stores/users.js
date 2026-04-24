@@ -29,6 +29,7 @@ export const useUsersStore = defineStore('users', () => {
 
   const status = ref(route.query.status || 'all')
   const trashed = ref(false)
+  const counts = ref({ all: 0, trash: 0 })
 
   const allSelected = computed(() => {
     return users.value.length > 0 && selectedIds.value.length === users.value.length
@@ -58,6 +59,9 @@ export const useUsersStore = defineStore('users', () => {
       if (filters.value.role) {
         params.role_id = filters.value.role
       }
+      if (trashed.value) {
+        params.trashed = 1
+      }
 
       const response = await api.get(API_ENDPOINTS.users.list, { params })
       users.value = response.data.data || response.data
@@ -71,6 +75,21 @@ export const useUsersStore = defineStore('users', () => {
       error.value = err.response?.data?.message || 'Failed to fetch users'
     } finally {
       loading.value = false
+    }
+  }
+
+  const fetchCounts = async () => {
+    try {
+      const [allRes, trashRes] = await Promise.all([
+        api.get(API_ENDPOINTS.users.list, { params: { per_page: 1 } }),
+        api.get(API_ENDPOINTS.users.list, { params: { per_page: 1, trashed: 1 } }),
+      ])
+      counts.value = {
+        all: allRes.data.total || 0,
+        trash: trashRes.data.total || 0,
+      }
+    } catch (err) {
+      console.error('Failed to fetch counts:', err)
     }
   }
 
@@ -263,8 +282,10 @@ export const useUsersStore = defineStore('users', () => {
     filters,
     status,
     trashed,
+    counts,
     allSelected,
     fetchUsers,
+    fetchCounts,
     fetchUser,
     createUser,
     updateUser,

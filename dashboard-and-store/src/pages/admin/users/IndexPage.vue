@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUsersStore } from '@/stores/users'
 
@@ -12,10 +12,12 @@ const searchInput = ref('')
 const roleFilter = ref('')
 const availableRoles = ref([])
 
-const statusTabs = [
-  { label: 'All', value: 'all' },
-  { label: 'Trash', value: 'trash' },
-]
+const counts = computed(() => store.counts)
+
+const statusTabs = computed(() => [
+  { label: `All (${counts.value.all})`, value: 'all' },
+  { label: `Trash (${counts.value.trash})`, value: 'trash' },
+])
 
 const form = ref({
   name: '',
@@ -85,7 +87,7 @@ onMounted(async () => {
   store.syncFromQuery()
   searchInput.value = store.filters.search
   roleFilter.value = store.filters.role
-  await Promise.all([store.fetchUsers(), store.fetchRoles()])
+  await Promise.all([store.fetchUsers(), store.fetchCounts()])
   availableRoles.value = store.roles
 })
 

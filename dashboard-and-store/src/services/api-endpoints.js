@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
     delete: (id) => `/users/${id}`,
     restore: (id) => `/users/${id}/restore`,
     forceDelete: (id) => `/users/${id}/force`,
+    trash: '/trash/users',
   },
 
   roles: {

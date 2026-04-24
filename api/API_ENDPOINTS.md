@@ -27,8 +27,8 @@
 | POST   | /users              | Create user      |
 | GET    | /users/{id}         | User details     |
 | PUT    | /users/{id}         | Update user      |
-| DELETE | /users/{id}         | Soft delete      |
-| POST   | /users/{id}/restore | Restore user     |
+| DELETE | /users/{id}         | Soft delete     |
+| POST   | /users/{id}/restore | Restore user   |
 | DELETE | /users/{id}/force   | Permanent delete |
 
 ---
@@ -39,8 +39,10 @@
 | ------ | ----------------------------- | ----------------- |
 | GET    | /roles                        | List roles        |
 | POST   | /roles                        | Create role       |
-| GET    | /permissions                  | List permissions  |
+| GET    | /roles/{id}                   | Role details      |
 | POST   | /roles/{id}/assign-permission | Assign permission |
+| GET    | /permissions                  | List permissions  |
+| POST   | /permissions                 | Create permission |
 
 ---
 

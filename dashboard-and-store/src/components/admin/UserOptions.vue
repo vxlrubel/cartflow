@@ -74,21 +74,39 @@ const routerHandler = async (label) => {
       <UserIcon class="text-neutral-700" size="20"/>
     </button>
 
-    <div
-      class="absolute top-full right-0 w-35 py-2 bg-white border border-neutral-200 shadow-lg text-xs text-gray-700 z-5"
-      v-show="toggle"
-    >
+    <Transition name="smooth-anim">
+      <div
+        class="absolute top-full right-0 w-35 py-2 bg-white border border-neutral-200 shadow-lg text-xs text-gray-700 z-5"
+        v-if="toggle"
+      >
 
-      <router-link
-        v-for="{icon, label, path} in items"
-        :key="path"
-        :to="path" class="flex items-center gap-1 text-theme-500 hover:text-theme-700 hover:bg-theme-50 font-medium text-sm px-3 py-0.5 mb-1 last:mb-0"
-        @click="routerHandler(label)">
-        <component :is="icon" size="16"/>
-        <span class="text-[12px] capitalize">{{ label }}</span>
-      </router-link>
-    </div>
+        <router-link
+          v-for="{icon, label, path} in items"
+          :key="path"
+          :to="path" class="flex items-center gap-1 text-theme-500 hover:text-theme-700 hover:bg-theme-50 font-medium text-sm px-3 py-0.5 mb-1 last:mb-0"
+          @click="routerHandler(label)">
+          <component :is="icon" size="16"/>
+          <span class="text-[12px] capitalize">{{ label }}</span>
+        </router-link>
+      </div>
+    </Transition>
 
   </div>
 
 </template>
+
+<style scoped>
+.smooth-anim-enter-active,
+.smooth-anim-leave-active {
+  transition: all 0.3s ease;
+}
+
+.smooth-anim-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.smooth-anim-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+</style>

@@ -7,6 +7,7 @@ import MenuHamburger from '@/components/icons/MenuHamburger.vue'
 import StopWatch from '@/components/icons/StopWatch.vue'
 import UserOptions from '@/components/admin/UserOptions.vue'
 import BackwordForword from '@/components/BackwordForword.vue'
+import GlobalSearch from '../components/admin/GlobalSearch.vue'
 
 const sidebarOpen = ref(false)
 const currentTime = ref('')
@@ -75,6 +76,9 @@ onUnmounted(() => {
                 {{ currentTime }}
               </span>
             </div>
+
+            <GlobalSearch/>
+
             <UserOptions/>
           </div>
         </div>

@@ -43,9 +43,29 @@ Route::prefix('v1')->group(function () {
         return response()->json(['message' => 'API is working']);
     });
 
+    Route::post('/auth/debug', function (\Illuminate\Http\Request $request) {
+        return response()->json([
+            'received' => $request->all(),
+            'headers' => $request->headers->all(),
+        ]);
+    });
+
     // Auth
     Route::post('/auth/register', [AuthController::class, 'register'])->name('register');
     Route::post('/auth/login', [AuthController::class, 'login'])->name('login');
+
+    Route::post('/auth/test-db', function () {
+        $users = \App\Models\User::with('role')->get(['id', 'email', 'name']);
+        return response()->json(['users' => $users, 'count' => $users->count()]);
+    });
+
+    Route::post('/auth/create-admin', function () {
+        $admin = \App\Models\User::updateOrCreate(
+            ['email' => 'admin@cartflow.com'],
+            ['name' => 'Admin User', 'password' => \Illuminate\Support\Facades\Hash::make('password')]
+        );
+        return response()->json(['user' => $admin]);
+    });
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/auth/logout', [AuthController::class, 'logout']);

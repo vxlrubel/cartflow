@@ -12,11 +12,23 @@ class UserController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $perPage = min((int) ($request->per_page ?? 10), 50);
+        $perPage = min((int) ($request->per_page ?? 15), 50);
 
-        $users = User::select('id', 'name', 'email', 'role_id', 'created_at')
-            ->with('role:id,name')
-            ->paginate($perPage);
+        $query = User::select('id', 'name', 'email', 'role_id', 'created_at')
+            ->with('role:id,name');
+
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->role_id) {
+            $query->where('role_id', $request->role_id);
+        }
+
+        $users = $query->paginate($perPage);
 
         return response()->json($users);
     }

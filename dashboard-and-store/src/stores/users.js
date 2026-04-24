@@ -52,8 +52,12 @@ export const useUsersStore = defineStore('users', () => {
         page: pagination.value.currentPage,
         per_page: pagination.value.perPage,
       }
-      if (filters.value.search) params.search = filters.value.search
-      if (filters.value.role) params.role_id = filters.value.role
+      if (filters.value.search) {
+        params.search = filters.value.search
+      }
+      if (filters.value.role) {
+        params.role_id = filters.value.role
+      }
 
       const response = await api.get(API_ENDPOINTS.users.list, { params })
       users.value = response.data.data || response.data
@@ -191,25 +195,30 @@ export const useUsersStore = defineStore('users', () => {
   const setPage = (page) => {
     pagination.value.currentPage = page
     updateQueryParams()
+    fetchUsers()
   }
 
   const setSearch = (searchValue) => {
     filters.value.search = searchValue
     pagination.value.currentPage = 1
     updateQueryParams()
+    fetchUsers()
   }
 
   const setRole = (roleValue) => {
     filters.value.role = roleValue
     pagination.value.currentPage = 1
     updateQueryParams()
+    fetchUsers()
   }
 
   const setStatus = (statusValue) => {
     status.value = statusValue
+    trashed.value = statusValue === 'trash'
     pagination.value.currentPage = 1
     selectedIds.value = []
     updateQueryParams()
+    fetchUsers()
   }
 
   const syncFromQuery = () => {

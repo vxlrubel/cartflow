@@ -57,9 +57,8 @@ const handleSubmit = async () => {
   }
 }
 
-const handleStatusChange = async (status) => {
+const handleStatusChange = (status) => {
   store.setStatus(status)
-  await store.fetchUsers()
 }
 
 const handleSearch = () => {
@@ -71,9 +70,8 @@ const clearSearch = () => {
   store.setSearch('')
 }
 
-const handleRoleFilter = async () => {
+const handleRoleFilter = () => {
   store.setRole(roleFilter.value)
-  await store.fetchUsers()
 }
 
 const handlePageChange = (page) => store.setPage(page)

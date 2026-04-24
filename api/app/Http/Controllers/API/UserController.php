@@ -14,11 +14,13 @@ class UserController extends Controller
     {
         $perPage = min((int) ($request->per_page ?? 15), 50);
 
-        $query = User::select('id', 'name', 'email', 'role_id', 'created_at')
-            ->with('role:id,name');
-
         if ($request->trashed) {
-            $query->onlyTrashed();
+            $query = User::withTrashed()
+                ->select('id', 'name', 'email', 'role_id', 'created_at');
+        } else {
+            $query = User::query()
+                ->select('id', 'name', 'email', 'role_id', 'created_at')
+                ->with('role:id,name');
         }
 
         if ($request->search) {

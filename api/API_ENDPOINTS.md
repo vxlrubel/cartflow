@@ -132,9 +132,14 @@
 | ------ | -------------- |
 | GET    | /coupons       |
 | POST   | /coupons       |
+| GET    | /coupons/{id}  |
 | PUT    | /coupons/{id}  |
 | DELETE | /coupons/{id}  |
 | POST   | /coupons/apply |
+| GET    | /trash/coupons |
+| POST   | /coupons/{id}/restore |
+| DELETE | /coupons/{id}/force |
+| GET    | /coupons/usage |
 
 ---
 
@@ -144,8 +149,28 @@
 | ------ | ------------ |
 | GET    | /offers      |
 | POST   | /offers      |
+| GET    | /offers/{id} |
 | PUT    | /offers/{id} |
 | DELETE | /offers/{id} |
+| GET    | /trash/offers |
+| POST   | /offers/{id}/restore |
+| DELETE | /offers/{id}/force |
+
+---
+
+## 📧 Email Campaigns
+
+| Method | Endpoint                    |
+| ------ | ------------------------- |
+| GET    | /email-campaigns           |
+| POST   | /email-campaigns           |
+| GET    | /email-campaigns/{id}    |
+| PUT    | /email-campaigns/{id}    |
+| DELETE | /email-campaigns/{id}    |
+| POST   | /email-campaigns/{id}/send |
+| GET    | /trash/email-campaigns  |
+| POST   | /email-campaigns/{id}/restore |
+| DELETE | /email-campaigns/{id}/force |
 
 ---
 

@@ -100,6 +100,10 @@ export const API_ENDPOINTS = {
     single: (id) => `/coupons/${id}`,
     update: (id) => `/coupons/${id}`,
     delete: (id) => `/coupons/${id}`,
+    restore: (id) => `/coupons/${id}/restore`,
+    forceDelete: (id) => `/coupons/${id}/force`,
+    trash: '/trash/coupons',
+    usage: '/coupons/usage',
     apply: '/coupons/apply',
   },
 
@@ -109,6 +113,23 @@ export const API_ENDPOINTS = {
     single: (id) => `/offers/${id}`,
     update: (id) => `/offers/${id}`,
     delete: (id) => `/offers/${id}`,
+    restore: (id) => `/offers/${id}/restore`,
+    forceDelete: (id) => `/offers/${id}/force`,
+    trash: '/trash/offers',
+  },
+
+  marketing: {
+    campaigns: {
+      list: '/email-campaigns',
+      create: '/email-campaigns',
+      single: (id) => `/email-campaigns/${id}`,
+      update: (id) => `/email-campaigns/${id}`,
+      delete: (id) => `/email-campaigns/${id}`,
+      send: (id) => `/email-campaigns/${id}/send`,
+      restore: (id) => `/email-campaigns/${id}/restore`,
+      forceDelete: (id) => `/email-campaigns/${id}/force`,
+      trash: '/trash/email-campaigns',
+    },
   },
 
   analytics: {

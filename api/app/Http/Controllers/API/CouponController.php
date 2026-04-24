@@ -74,6 +74,42 @@ class CouponController extends Controller
         return response()->json(['message' => 'Coupon deleted']);
     }
 
+    public function restore(int $id): JsonResponse
+    {
+        $coupon = Coupon::withTrashed()->findOrFail($id);
+        $coupon->restore();
+
+        return response()->json($coupon);
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        $coupon = Coupon::withTrashed()->findOrFail($id);
+        $coupon->forceDelete();
+
+        return response()->json(['message' => 'Coupon permanently deleted']);
+    }
+
+    public function trash(Request $request): JsonResponse
+    {
+        $coupons = Coupon::onlyTrashed()
+            ->when($request->type, fn($q) => $q->where('type', $request->type))
+            ->paginate($request->per_page ?? 15);
+
+        return response()->json($coupons);
+    }
+
+    public function usage(Request $request): JsonResponse
+    {
+        $query = \App\Models\CouponUsage::with(['coupon', 'user'])
+            ->when($request->coupon_id, fn($q) => $q->where('coupon_id', $request->coupon_id))
+            ->when($request->user_id, fn($q) => $q->where('user_id', $request->user_id));
+
+        $usages = $query->paginate($request->per_page ?? 15);
+
+        return response()->json($usages);
+    }
+
     public function apply(Request $request): JsonResponse
     {
         $request->validate(['code' => 'required|string']);

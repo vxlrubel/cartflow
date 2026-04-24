@@ -76,4 +76,30 @@ class OfferController extends Controller
 
         return response()->json(['message' => 'Offer deleted']);
     }
+
+    public function restore(int $id): JsonResponse
+    {
+        $offer = Offer::withTrashed()->findOrFail($id);
+        $offer->restore();
+
+        return response()->json($offer);
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        $offer = Offer::withTrashed()->findOrFail($id);
+        $offer->forceDelete();
+
+        return response()->json(['message' => 'Offer permanently deleted']);
+    }
+
+    public function trash(Request $request): JsonResponse
+    {
+        $offers = Offer::onlyTrashed()
+            ->when($request->type, fn($q) => $q->where('type', $request->type))
+            ->with('rules')
+            ->paginate($request->per_page ?? 15);
+
+        return response()->json($offers);
+    }
 }

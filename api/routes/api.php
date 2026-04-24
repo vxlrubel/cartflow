@@ -11,6 +11,7 @@ use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\CouponController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\CustomerGroupController;
+use App\Http\Controllers\API\EmailCampaignController;
 use App\Http\Controllers\API\InventoryController;
 use App\Http\Controllers\API\OfferController;
 use App\Http\Controllers\API\OrderController;
@@ -106,9 +107,23 @@ Route::prefix('v1')->group(function () {
         // Coupons
         Route::apiResource('coupons', CouponController::class);
         Route::post('/coupons/apply', [CouponController::class, 'apply']);
+        Route::get('/trash/coupons', [CouponController::class, 'trash']);
+        Route::post('/coupons/{id}/restore', [CouponController::class, 'restore']);
+        Route::delete('/coupons/{id}/force', [CouponController::class, 'forceDelete']);
+        Route::get('/coupons/usage', [CouponController::class, 'usage']);
 
         // Offers
         Route::apiResource('offers', OfferController::class);
+        Route::get('/trash/offers', [OfferController::class, 'trash']);
+        Route::post('/offers/{id}/restore', [OfferController::class, 'restore']);
+        Route::delete('/offers/{id}/force', [OfferController::class, 'forceDelete']);
+
+        // Email Campaigns
+        Route::apiResource('email-campaigns', EmailCampaignController::class);
+        Route::post('/email-campaigns/{id}/send', [EmailCampaignController::class, 'send']);
+        Route::get('/trash/email-campaigns', [EmailCampaignController::class, 'trash']);
+        Route::post('/email-campaigns/{id}/restore', [EmailCampaignController::class, 'restore']);
+        Route::delete('/email-campaigns/{id}/force', [EmailCampaignController::class, 'forceDelete']);
 
         // Analytics & Reports
         Route::get('/analytics/overview', [AnalyticsController::class, 'overview']);

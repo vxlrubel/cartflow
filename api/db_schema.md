@@ -167,6 +167,7 @@
 * expires_at (nullable)
 * created_at
 * updated_at
+* deleted_at (soft delete)
 
 ### coupon_products (pivot)
 * coupon_id (FK → coupons)
@@ -176,6 +177,16 @@
 * coupon_id (FK → coupons)
 * category_id (FK → categories)
 
+### coupon_usages
+* id (PK)
+* coupon_id (FK → coupons)
+* user_id (FK → users)
+* order_id (FK → orders, nullable)
+* discount_applied (decimal)
+* order_total (decimal)
+* created_at
+* updated_at
+
 ---
 
 ## 🎯 Offers
@@ -183,12 +194,13 @@
 ### offers
 * id (PK)
 * name
-* type (enum: black_friday/buy_x_get_y/flash_sale/percentage)
+* type (enum: black_friday/bxgy/flash/percentage)
 * start_date
 * end_date
 * status (enum: active/inactive)
 * created_at
 * updated_at
+* deleted_at (soft delete)
 
 ### offer_rules
 * id (PK)
@@ -197,6 +209,23 @@
 * conditions (JSON)
 * created_at
 * updated_at
+
+---
+
+## 📧 Email Campaigns
+
+### email_campaigns
+* id (PK)
+* name
+* subject
+* content (text)
+* status (enum: draft/scheduled/sent)
+* scheduled_at (nullable)
+* sent_at (nullable)
+* created_by (FK → users)
+* created_at
+* updated_at
+* deleted_at (soft delete)
 
 ---
 
@@ -291,8 +320,9 @@ All major tables include:
 | Reviews | /reviews, /reviews/{id}, /reviews/{id}/status | ReviewController |
 | Orders | /orders, /orders/{id}/status, /orders/{id}/payment-status, /trash/orders | OrderController |
 | Payments | /payments | PaymentController |
-| Coupons | /coupons, /coupons/{id}/apply | CouponController |
-| Offers | /offers | OfferController |
+| Coupons | /coupons, /coupons/{id}, /trash/coupons, /coupons/{id}/restore, /coupons/{id}/force, /coupons/apply, /coupons/usage | CouponController |
+| Offers | /offers, /offers/{id}, /trash/offers, /offers/{id}/restore, /offers/{id}/force | OfferController |
+| Email Campaigns | /email-campaigns, /email-campaigns/{id}, /email-campaigns/{id}/send, /trash/email-campaigns | EmailCampaignController |
 | Analytics | /analytics/overview, /analytics/revenue, /analytics/products | AnalyticsController |
 | Reports | /reports/sales, /reports/orders, /reports/customers | AnalyticsController |
 | Wishlist | /wishlist | WishlistController |

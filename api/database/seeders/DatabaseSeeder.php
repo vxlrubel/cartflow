@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             PaymentSeeder::class,
             CouponSeeder::class,
             OfferSeeder::class,
+            EmailCampaignSeeder::class,
             WishlistSeeder::class,
             AddressSeeder::class,
             AnalyticsSeeder::class,

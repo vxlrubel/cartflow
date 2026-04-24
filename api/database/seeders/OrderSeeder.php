@@ -15,8 +15,8 @@ class OrderSeeder extends Seeder
         $users = User::all();
         $products = Product::where('status', 'active')->get();
 
-        $statuses = ['pending', 'paid', 'shipped', 'delivered', 'cancelled'];
-        $paymentStatuses = ['pending', 'paid', 'failed', 'refunded'];
+        $statuses = ['pending', 'completed', 'cancelled', 'return'];
+        $paymentStatuses = ['pending', 'paid', 'unpaid', 'refunded'];
 
         for ($i = 1; $i <= 50; $i++) {
             $user = $users->random();
@@ -27,6 +27,7 @@ class OrderSeeder extends Seeder
                 ['id' => $i],
                 [
                     'user_id' => $user->id,
+                    'order_number' => 'ORD-' . strtoupper(uniqid()),
                     'total_amount' => 0,
                     'status' => $statuses[array_rand($statuses)],
                     'payment_status' => $paymentStatuses[array_rand($paymentStatuses)],

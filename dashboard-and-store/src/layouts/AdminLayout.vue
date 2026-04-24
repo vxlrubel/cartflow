@@ -6,6 +6,7 @@ import CloseCircle from '@/components/icons/CloseCircle.vue'
 import MenuHamburger from '@/components/icons/MenuHamburger.vue'
 import StopWatch from '@/components/icons/StopWatch.vue'
 import UserOptions from '@/components/admin/UserOptions.vue'
+import BackwordForword from '@/components/BackwordForword.vue'
 
 const sidebarOpen = ref(false)
 const currentTime = ref('')
@@ -66,6 +67,9 @@ onUnmounted(() => {
               <button @click="sidebarOpen = true" class="lg:hidden p-2 text-white">
                 <MenuHamburger/>
               </button>
+
+              <BackwordForword class="mr-2"/>
+
               <span class="text-sm font-bold text-white text-center rounded flex items-center gap-1 w-30">
                 <StopWatch size="20" />
                 {{ currentTime }}

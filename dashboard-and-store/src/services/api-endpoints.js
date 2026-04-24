@@ -134,9 +134,20 @@ export const API_ENDPOINTS = {
   },
 
   analytics: {
+    list: '/analytics',
+    create: '/analytics',
+    single: (id) => `/analytics/${id}`,
+    update: (id) => `/analytics/${id}`,
+    delete: (id) => `/analytics/${id}`,
+    restore: (id) => `/analytics/${id}/restore`,
+    forceDelete: (id) => `/analytics/${id}/force`,
+    trash: '/trash/analytics',
     overview: '/analytics/overview',
     revenue: '/analytics/revenue',
     products: '/analytics/products',
+    sales: '/analytics/sales',
+    orders: '/analytics/orders',
+    customers: '/analytics/customers',
   },
 
   reports: {

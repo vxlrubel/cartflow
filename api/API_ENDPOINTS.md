@@ -178,10 +178,34 @@
 
 ## 📊 Reports & Analytics
 
+### Analytics (Full CRUD)
+
+| Method | Endpoint                    | Description           |
+| ------ | ---------------------------- | --------------------- |
+| GET    | /analytics                   | List analytics       |
+| POST   | /analytics                   | Create analytics    |
+| GET    | /analytics/{id}              | Analytics details    |
+| PUT    | /analytics/{id}              | Update analytics    |
+| DELETE | /analytics/{id}              | Soft delete          |
+| POST   | /analytics/{id}/restore     | Restore              |
+| DELETE | /analytics/{id}/force        | Permanent delete     |
+| GET    | /trash/analytics             | Trash list           |
+
+### Dashboard Analytics
+
+| Method | Endpoint              | Description           |
+| ------ | -------------------- | --------------------- |
+| GET    | /analytics/overview  | Overview stats        |
+| GET    | /analytics/revenue  | Revenue analytics     |
+| GET    | /analytics/products | Product performance  |
+| GET    | /analytics/sales    | Sales analytics      |
+| GET    | /analytics/orders   | Order analytics      |
+| GET    | /analytics/customers | Customer insights   |
+
 ### Reports
 
-| Method | Endpoint                    |
-| ------ | ------------------------- |
+| Method | Endpoint                    | Description      |
+| ------ | ------------------------- | ---------------- |
 | GET    | /reports/period?type=daily   |
 | GET    | /reports/period?type=weekly   |
 | GET    | /reports/period?type=monthly  |
@@ -191,14 +215,6 @@
 | GET    | /reports/taxes             |
 | GET    | /reports/export           |
 | GET    | /reports/summary          |
-
-### Dashboard Analytics
-
-| Method | Endpoint            |
-| ------ | ------------------- |
-| GET    | /analytics/overview |
-| GET    | /analytics/revenue  |
-| GET    | /analytics/products |
 
 ---
 

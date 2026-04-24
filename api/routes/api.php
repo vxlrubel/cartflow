@@ -146,10 +146,18 @@ Route::prefix('v1')->group(function () {
         Route::post('/email-campaigns/{id}/restore', [EmailCampaignController::class, 'restore']);
         Route::delete('/email-campaigns/{id}/force', [EmailCampaignController::class, 'forceDelete']);
 
-        // Analytics & Reports
+        // Analytics & Reports (specific routes first to avoid conflicts)
         Route::get('/analytics/overview', [AnalyticsController::class, 'overview']);
         Route::get('/analytics/revenue', [AnalyticsController::class, 'revenue']);
         Route::get('/analytics/products', [AnalyticsController::class, 'products']);
+        Route::get('/analytics/sales', [AnalyticsController::class, 'sales']);
+        Route::get('/analytics/orders', [AnalyticsController::class, 'orders']);
+        Route::get('/analytics/customers', [AnalyticsController::class, 'customers']);
+
+        Route::apiResource('analytics', AnalyticsController::class);
+        Route::post('/analytics/{id}/restore', [AnalyticsController::class, 'restore']);
+        Route::delete('/analytics/{id}/force', [AnalyticsController::class, 'forceDelete']);
+        Route::get('/trash/analytics', [AnalyticsController::class, 'trash']);
 
         Route::get('/reports/sales', [AnalyticsController::class, 'sales']);
         Route::get('/reports/orders', [AnalyticsController::class, 'orders']);

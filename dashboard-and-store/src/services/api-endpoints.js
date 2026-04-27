@@ -181,6 +181,7 @@ export const API_ENDPOINTS = {
     single: (id) => `/customers/${id}`,
     update: (id) => `/customers/${id}`,
     delete: (id) => `/customers/${id}`,
+    trash: '/trash/customers',
     restore: (id) => `/customers/${id}/restore`,
     forceDelete: (id) => `/customers/${id}/force`,
     bulkSoftDelete: '/customers/bulk-soft-delete',

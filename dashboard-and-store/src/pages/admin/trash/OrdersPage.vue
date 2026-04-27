@@ -106,7 +106,7 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-4">
-    <PageTitle>Trash Orders</PageTitle>
+    <PageTitle title="Trash Orders" />
 
     <div v-if="loading" class="bg-white rounded-lg shadow p-6">
       <SkeletonLoader variant="table" />

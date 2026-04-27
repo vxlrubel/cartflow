@@ -94,7 +94,7 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-4">
-    <PageTitle>Trash Products</PageTitle>
+    <PageTitle title="Trash Products" />
 
     <div v-if="loading" class="bg-white rounded-lg shadow p-6">
       <SkeletonLoader variant="table" />

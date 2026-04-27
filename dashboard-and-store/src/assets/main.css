@@ -67,3 +67,34 @@ body {
 .button-primary-outline {
   @apply text-theme-500 select-none text-sm outline-0 hover:bg-theme-600 hover:text-white focus:ring-2 focus:ring-theme-300 focus:ring-offset-1 focus:bg-theme-500 focus:text-white  font-semibold h-8 inline-flex items-center justify-center px-3 rounded border-2 cursor-pointer border-theme-500 disabled:bg-gray-200 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed disabled:select-none transition-colors duration-200;
 }
+
+
+/* modal animation */
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-content-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.modal-content-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.modal-content-enter-from {
+  opacity: 0;
+  transform: scale(0.95) translateY(-20px);
+}
+
+.modal-content-leave-to {
+  opacity: 0;
+  transform: scale(0.95) translateY(20px);
+}

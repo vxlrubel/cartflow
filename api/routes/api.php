@@ -178,6 +178,7 @@ Route::prefix('v1')->middleware([CorsMiddleware::class])->group(function () {
 
         // Customers
         Route::apiResource('customers', CustomerController::class);
+        Route::get('/trash/customers', [CustomerController::class, 'trash']);
         Route::post('/customers/{id}/restore', [CustomerController::class, 'restore']);
         Route::delete('/customers/{id}/force', [CustomerController::class, 'forceDelete']);
         Route::post('/customers/bulk-soft-delete', [CustomerController::class, 'bulkSoftDelete']);

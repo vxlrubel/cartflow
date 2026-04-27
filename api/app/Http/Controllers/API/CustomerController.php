@@ -146,4 +146,35 @@ class CustomerController extends Controller
 
         return response()->json(['message' => 'Customers deactivated']);
     }
+
+    public function trash(Request $request): JsonResponse
+    {
+        $perPage = min((int) ($request->per_page ?? 15), 50);
+        $search = $request->search;
+        $sortBy = $request->sort_by ?? 'created_at';
+        $sortOrder = $request->sort_order ?? 'desc';
+
+        $customerRole = Role::where('name', 'customer')->first();
+
+        $query = Customer::onlyTrashed()
+            ->with('role:id,name')
+            ->where('role_id', $customerRole->id ?? 0);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        $allowedSorts = ['name', 'email', 'created_at'];
+        if (in_array($sortBy, $allowedSorts)) {
+            $query->orderBy($sortBy, $sortOrder === 'asc' ? 'asc' : 'desc');
+        }
+
+        $customers = $query->paginate($perPage);
+
+        return response()->json($customers);
+    }
 }

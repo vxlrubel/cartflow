@@ -351,6 +351,42 @@ export const useProductStore = defineStore('products', () => {
     }
   }
 
+  const forceDeleteProduct = async (id) => {
+    try {
+      await api.delete(`/products/${id}/force`)
+      await fetchTrashed()
+      await fetchCounts()
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Failed to permanently delete product'
+    }
+  }
+
+  const fetchTrashed = async () => {
+    loading.value = true
+    error.value = null
+    try {
+      const params = {
+        page: pagination.value.currentPage,
+        per_page: pagination.value.perPage,
+        sort_by: sortBy.value,
+        sort_order: sortOrder.value,
+      }
+      if (search.value) params.search = search.value
+      const response = await api.get(API_ENDPOINTS.products.trash, { params })
+      products.value = response.data.data || response.data
+      pagination.value = {
+        currentPage: response.data.current_page || 1,
+        lastPage: response.data.last_page || 1,
+        perPage: response.data.per_page || 15,
+        total: response.data.total || 0,
+      }
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Failed to fetch trashed products'
+    } finally {
+      loading.value = false
+    }
+  }
+
   const bulkRestore = async () => {
     if (selectedIds.value.length === 0) return
     loading.value = true
@@ -405,6 +441,8 @@ export const useProductStore = defineStore('products', () => {
     bulkInactive,
     softDelete,
     restoreProduct,
+    forceDeleteProduct,
+    fetchTrashed,
     bulkRestore,
   }
 })

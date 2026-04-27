@@ -200,6 +200,33 @@ export const useOrderStore = defineStore('orders', () => {
     }
   }
 
+  async function fetchTrashed() {
+    loading.value = true
+    error.value = null
+    try {
+      const params = {
+        page: pagination.value.currentPage,
+        per_page: pagination.value.perPage,
+        sort_by: sortBy.value,
+        sort_order: sortOrder.value,
+      }
+      if (search.value) params.search = search.value
+      const endpoint = API_ENDPOINTS.orders.trash
+      const response = await api.get(endpoint, { params })
+      orders.value = response.data.data || response.data
+      pagination.value = {
+        currentPage: response.data.current_page || 1,
+        lastPage: response.data.last_page || 1,
+        perPage: response.data.per_page || 15,
+        total: response.data.total || 0,
+      }
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Failed to fetch trashed orders'
+    } finally {
+      loading.value = false
+    }
+  }
+
   async function forceDeleteOrder(id) {
     try {
       await api.delete('/trash/orders/' + id + '/force')
@@ -390,6 +417,7 @@ export const useOrderStore = defineStore('orders', () => {
     updatePaymentStatus,
     deleteOrder,
     restoreOrder,
+    fetchTrashed,
     forceDeleteOrder,
     setPage,
     setSort,

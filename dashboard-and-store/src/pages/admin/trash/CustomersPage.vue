@@ -1,118 +1,252 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useCustomerStore } from '@/stores/customers'
+import PageTitle from '@/components/admin/PageTitle.vue'
+import SkeletonLoader from '@/components/SkeletonLoader.vue'
 
+const router = useRouter()
+const route = useRoute()
 const store = useCustomerStore()
 
-const formatDate = (date) => {
-  if (!date) return ''
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
+const loading = ref(true)
+const selectedIds = ref([])
+
+const customers = computed(() => store.customers)
+const pagination = computed(() => store.pagination)
+
+const handlePageChange = (page) => {
+  store.pagination.currentPage = page
+  store.fetchTrashed()
 }
 
-const restoreCustomer = async (id) => {
-  await store.restoreCustomer(id)
-}
-
-const permanentDelete = async (id) => {
-  if (!confirm('This action cannot be undone. Are you sure?')) return
+const handleRestore = async (id) => {
+  if (!confirm('Restore this customer?')) return
   try {
-    await window.axios.delete(`/customers/${id}/force`)
-    await store.fetchCustomers()
-    await store.fetchCounts()
+    await store.restoreCustomer(id)
+    await store.fetchTrashed()
   } catch (err) {
-    console.error('Failed to delete customer:', err)
+    alert(err.message || 'Failed to restore')
   }
 }
 
+const handleForceDelete = async (id) => {
+  if (!confirm('Permanently delete this customer? This cannot be undone!')) return
+  try {
+    await store.forceDeleteCustomer(id)
+    await store.fetchTrashed()
+  } catch (err) {
+    alert(err.message || 'Failed to delete')
+  }
+}
+
+const handleBulkRestore = async () => {
+  if (selectedIds.value.length === 0) return
+  if (!confirm(`Restore ${selectedIds.value.length} customers?`)) return
+  try {
+    for (const id of selectedIds.value) {
+      await store.restoreCustomer(id)
+    }
+    selectedIds.value = []
+    await store.fetchTrashed()
+  } catch (err) {
+    alert(err.message || 'Failed to restore')
+  }
+}
+
+const handleBulkForceDelete = async () => {
+  if (selectedIds.value.length === 0) return
+  if (!confirm(`Permanently delete ${selectedIds.value.length} customers? This cannot be undone!`)) return
+  try {
+    for (const id of selectedIds.value) {
+      await store.forceDeleteCustomer(id)
+    }
+    selectedIds.value = []
+    await store.fetchTrashed()
+  } catch (err) {
+    alert(err.message || 'Failed to delete')
+  }
+}
+
+const toggleSelectAll = () => {
+  if (selectedIds.value.length === customers.value.length) {
+    selectedIds.value = []
+  } else {
+    selectedIds.value = customers.value.map(c => c.id)
+  }
+}
+
+const toggleSelect = (id) => {
+  const index = selectedIds.value.indexOf(id)
+  if (index > -1) {
+    selectedIds.value.splice(index, 1)
+  } else {
+    selectedIds.value.push(id)
+  }
+}
+
+const getStatusBadge = (status) => {
+  const badges = {
+    active: 'bg-green-100 text-green-800',
+    inactive: 'bg-gray-100 text-gray-800',
+  }
+  return badges[status] || 'bg-gray-100 text-gray-800'
+}
+
+const getRoleBadge = (role) => {
+  const badges = {
+    admin: 'bg-purple-100 text-purple-800',
+    manager: 'bg-blue-100 text-blue-800',
+    customer: 'bg-green-100 text-green-800',
+  }
+  return badges[role] || 'bg-gray-100 text-gray-800'
+}
+
 onMounted(async () => {
-  store.setStatus('trash')
-  await store.fetchCustomers()
+  loading.value = true
+  await store.fetchTrashed()
+  loading.value = false
 })
 </script>
 
 <template>
   <div class="space-y-4">
-    <div class="bg-white rounded-lg shadow">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-neutral-200 p-6">
-        <h2 class="text-2xl font-medium text-gray-800">Trashed Customers</h2>
+    <PageTitle>Trash Customers</PageTitle>
 
-        <div class="flex items-center gap-4">
-          <span class="text-sm text-gray-500">{{ store.pagination.total }} in trash</span>
-          <button
-            v-if="store.selectedIds.length > 0"
-            @click="store.bulkRestore"
-            class="px-3 py-1 text-sm bg-green-600 text-white hover:bg-green-700 rounded transition-colors"
-          >
-            Restore Selected ({{ store.selectedIds.length }})
-          </button>
-        </div>
+    <div v-if="loading" class="bg-white rounded-lg shadow p-6">
+      <SkeletonLoader variant="table" />
+    </div>
+
+    <div v-else-if="store.error" class="bg-white rounded-lg shadow p-6">
+      <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+        {{ store.error }}
+        <button @click="store.fetchTrashed()" class="underline ml-2">Retry</button>
+      </div>
+    </div>
+
+    <div v-else class="bg-white rounded-lg shadow overflow-hidden">
+      <div v-if="customers.length === 0" class="p-6 text-center text-gray-500">
+        No trashed customers
       </div>
 
-      <div class="px-6">
-        <div v-if="store.loading" class="py-8 text-center text-gray-500">
-          <svg class="animate-spin h-6 w-6 text-theme-600 mx-auto" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-        </div>
-        <div v-else-if="store.customers.length === 0" class="py-8 text-center text-gray-500">
-          Trash is empty
-        </div>
-        <div v-else class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-4 py-3 text-left">
-                  <input type="checkbox" :checked="store.allSelected" @change="store.toggleSelectAll" class="rounded border-gray-300 text-theme-600 focus:ring-theme-500" />
-                </th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deleted At</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="customer in store.customers" :key="customer.id" class="hover:bg-gray-50">
-                <td class="px-4 py-4">
-                  <input type="checkbox" :checked="store.selectedIds.includes(customer.id)" @change="store.toggleSelect(customer.id)" class="rounded border-gray-300 text-theme-600 focus:ring-theme-500" />
-                </td>
-                <td class="px-4 py-4">
-                  <div class="text-sm font-medium text-gray-900">{{ customer.name }}</div>
-                </td>
-                <td class="px-4 py-4">
-                  <div class="text-sm text-gray-500">{{ customer.email }}</div>
-                </td>
-                <td class="px-4 py-4">
-                  <div class="text-sm text-gray-500">{{ formatDate(customer.deleted_at) }}</div>
-                </td>
-                <td class="px-4 py-4">
-                  <div class="flex items-center gap-2">
-                    <button @click="restoreCustomer(customer.id)" class="text-green-600 hover:text-green-900 text-sm font-medium">Restore</button>
-                    <button @click="permanentDelete(customer.id)" class="text-red-600 hover:text-red-900 text-sm font-medium">Delete Permanently</button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <div v-else>
+        <div class="p-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div class="flex items-center gap-2">
+            <input
+              type="checkbox"
+              :checked="selectedIds.length === customers.length && customers.length > 0"
+              @change="toggleSelectAll"
+              class="h-4 w-4 text-theme-600 rounded"
+            />
+            <span class="text-sm text-gray-600">{{ selectedIds.length }} selected</span>
+          </div>
+          <div v-if="selectedIds.length > 0" class="flex gap-2">
+            <button
+              @click="handleBulkRestore"
+              class="px-3 py-1.5 bg-green-600 text-white rounded text-sm hover:bg-green-700"
+            >
+              Restore Selected
+            </button>
+            <button
+              @click="handleBulkForceDelete"
+              class="px-3 py-1.5 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+            >
+              Delete Permanently
+            </button>
+          </div>
         </div>
 
-        <div v-if="store.pagination.lastPage > 1" class="flex items-center justify-between mt-4">
-          <div class="text-sm text-gray-700">
-            Showing page {{ store.pagination.currentPage }} of {{ store.pagination.lastPage }} ({{ store.pagination.total }} total)
-          </div>
-          <div class="flex gap-1">
-            <button
-              v-for="page in store.pagination.lastPage"
-              :key="page"
-              @click="store.setPage(page)"
-              :class="['px-3 py-1 rounded text-sm', store.pagination.currentPage === page ? 'bg-theme-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
-            >
-              {{ page }}
-            </button>
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <input type="checkbox" @change="toggleSelectAll" />
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Deleted</th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="customer in customers" :key="customer.id" class="hover:bg-gray-50">
+              <td class="px-6 py-4">
+                <input
+                  type="checkbox"
+                  :checked="selectedIds.includes(customer.id)"
+                  @change="toggleSelect(customer.id)"
+                  class="h-4 w-4 text-theme-600 rounded"
+                />
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div class="h-10 w-10 rounded-full bg-theme-100 flex items-center justify-center">
+                    <span class="text-theme-600 font-medium">
+                      {{ (customer.name || 'U').charAt(0).toUpperCase() }}
+                    </span>
+                  </div>
+                  <div>
+                    <div class="font-medium text-gray-900">{{ customer.name || 'Unknown' }}</div>
+                    <div class="text-sm text-gray-500">ID: {{ customer.id }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500">{{ customer.email }}</td>
+              <td class="px-6 py-4">
+                <span :class="['px-2 py-1 text-xs rounded-full', getRoleBadge(customer.role)]">
+                  {{ customer.role }}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <span :class="['px-2 py-1 text-xs rounded-full', getStatusBadge(customer.status)]">
+                  {{ customer.status }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500">
+                {{ customer.deleted_at ? new Date(customer.deleted_at).toLocaleDateString() : '-' }}
+              </td>
+              <td class="px-6 py-4 text-right">
+                <button
+                  @click="handleRestore(customer.id)"
+                  class="text-green-600 hover:text-green-800 text-sm font-medium mr-3"
+                >
+                  Restore
+                </button>
+                <button
+                  @click="handleForceDelete(customer.id)"
+                  class="text-red-600 hover:text-red-800 text-sm font-medium"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div v-if="pagination.lastPage > 1" class="px-6 py-4 border-t border-gray-200">
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-600">
+              Showing {{ (pagination.currentPage - 1) * pagination.perPage + 1 }} to
+              {{ Math.min(pagination.currentPage * pagination.perPage, pagination.total) }} of
+              {{ pagination.total }} results
+            </div>
+            <div class="flex gap-1">
+              <button
+                v-for="page in pagination.lastPage"
+                :key="page"
+                @click="handlePageChange(page)"
+                :class="[
+                  'px-3 py-1 text-sm rounded',
+                  page === pagination.currentPage
+                    ? 'bg-theme-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ]"
+              >
+                {{ page }}
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -338,6 +338,42 @@ export const useCustomerStore = defineStore('customers', () => {
     }
   }
 
+  const forceDeleteCustomer = async (id) => {
+    try {
+      await api.delete(API_ENDPOINTS.customers.forceDelete(id))
+      await fetchTrashed()
+      await fetchCounts()
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Failed to permanently delete customer'
+    }
+  }
+
+  const fetchTrashed = async () => {
+    loading.value = true
+    error.value = null
+    try {
+      const params = {
+        page: pagination.value.currentPage,
+        per_page: pagination.value.perPage,
+        sort_by: sortBy.value,
+        sort_order: sortOrder.value,
+      }
+      if (search.value) params.search = search.value
+      const response = await api.get(API_ENDPOINTS.customers.trash, { params })
+      customers.value = response.data.data || response.data
+      pagination.value = {
+        currentPage: response.data.current_page || 1,
+        lastPage: response.data.last_page || 1,
+        perPage: response.data.per_page || 15,
+        total: response.data.total || 0,
+      }
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Failed to fetch trashed customers'
+    } finally {
+      loading.value = false
+    }
+  }
+
   const bulkSoftDelete = async () => {
     if (selectedIds.value.length === 0) return
     loading.value = true
@@ -437,6 +473,8 @@ export const useCustomerStore = defineStore('customers', () => {
     toggleSelect,
     softDelete,
     restoreCustomer,
+    forceDeleteCustomer,
+    fetchTrashed,
     bulkSoftDelete,
     bulkActive,
     bulkInactive,

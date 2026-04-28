@@ -3,6 +3,11 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/products'
 import CurrencySymbol from '@/components/CurrencySymble.vue'
+import PageTitle from '@/components/admin/PageTitle.vue'
+import CustomSelect from '@/components/CustomSelect.vue'
+import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
+import TrashIcon from '@/components/icons/TrashIcon.vue'
+import EditIcon from '@/components/icons/EditIcon.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -12,10 +17,10 @@ const searchInput = ref('')
 const selectedBulkAction = ref('')
 
 const statusTabs = computed(() => [
-  { label: 'All', value: 'all', count: store.counts.all },
-  { label: 'Active', value: 'active', count: store.counts.active },
-  { label: 'Inactive', value: 'inactive', count: store.counts.inactive },
-  { label: 'Trash', value: 'trash', count: store.counts.trash },
+  { label: 'Publish', value: 'active', count: store.counts.active, className: 'publish' },
+  { label: 'Draft', value: 'inactive', count: store.counts.inactive, className: 'draft' },
+  { label: 'Trash', value: 'trash', count: store.counts.trash, className: 'trash' },
+  { label: 'All', value: 'all', count: store.counts.all, className: 'all' },
 ])
 
 const currentStatus = computed(() => {
@@ -43,11 +48,6 @@ const handleSearch = () => {
   store.setSearch(searchInput.value)
 }
 
-const clearSearch = () => {
-  searchInput.value = ''
-  store.setSearch('')
-}
-
 const handleBulkAction = async (action) => {
   if (!action || store.selectedIds.length === 0) return
 
@@ -62,6 +62,19 @@ const handleBulkAction = async (action) => {
   }
   selectedBulkAction.value = ''
 }
+
+const bulkActionsOptions = computed(() => {
+  if (!store.trashed) {
+    return [
+      { label: 'Bulk Actions', value: '' },
+      { label: 'Publish', value: 'active' },
+      { label: 'Draft', value: 'inactive' },
+      { label: 'Move to Trash', value: 'soft_delete' },
+    ]
+  } else {
+    return [{ label: 'Restore', value: 'restore' }]
+  }
+})
 
 const truncateText = (text, maxLength = 15) => {
   if (!text) return ''
@@ -103,116 +116,63 @@ watch(
 </script>
 
 <template>
-  <div class="space-y-4">
-    <div class="bg-white rounded-lg shadow">
-      <div
-        class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-neutral-200 p-6"
-      >
-        <h2 class="text-2xl font-medium text-gray-800">All Products</h2>
+  <div>
 
-        <router-link
-          to="/dashboard/products/create"
-          class="inline-flex items-center px-3 py-1 text-sm bg-theme-600 text-white hover:bg-theme-700 rounded transition-colors"
-        >
-          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Add Product
-        </router-link>
-      </div>
+    <PageTitle title="All Products">
+      <router-link to="/dashboard/products/create" class="button-primary-outline">
+        Add New
+      </router-link>
+    </PageTitle>
 
-      <div class="flex flex-wrap gap-2 mb-6 px-6">
+    <div class="flex items-center flex-wrap gap-2 text-[12px] select-none mb-4">
         <button
           v-for="tab in statusTabs"
           :key="tab.value"
           @click="handleStatusChange(tab.value)"
           :class="[
-            'py-1 cursor-pointer text-sm font-medium transition-colors',
-            currentStatus === tab.value ? 'text-theme-600' : 'text-gray-600 hover:text-theme-400',
+            tab.className,
+            currentStatus === tab.value ? 'border-current' : 'border-transparent',
           ]"
         >
           {{ tab.label }} ({{ tab.count }})
         </button>
-      </div>
+    </div>
 
-      <div
-        class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 px-6"
-      >
-        <div class="flex items-center gap-2">
-          <select
+
+    <div class="flex items-center justify-between gap-4 mb-4 flex-wrap">
+      <div class="flex items-center gap-2">
+        <div class="w-full md:w-60 flex items-center gap-2">
+          <CustomSelect
+            class="flex-1 text-sm"
             v-model="selectedBulkAction"
-            :disabled="store.selectedIds.length === 0"
-            class="select"
-          >
-            <option value="">Bulk Actions</option>
-            <template v-if="!store.trashed">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="soft_delete">Move to trash</option>
-            </template>
-            <template v-else>
-              <option value="restore">Restore</option>
-            </template>
-          </select>
-
-          <button
-            @click="handleBulkAction(selectedBulkAction)"
-            :disabled="!selectedBulkAction || store.selectedIds.length === 0"
-            class="apply-button"
-          >
-            Apply
-          </button>
-
-          <span v-if="store.selectedIds.length > 0" class="text-sm text-gray-500">
-            {{ store.selectedIds.length }} selected
-          </span>
-        </div>
-
-        <div class="relative">
-          <input
-            v-model="searchInput"
-            @keyup.enter="handleSearch"
-            type="text"
-            placeholder="Search by name or description..."
-            class="search-field"
+            :options="bulkActionsOptions"
           />
-          <svg
-            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-          <button
-            v-if="searchInput"
-            @click="clearSearch"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+          <PrimacyButton
+            label="Apply"
+            @click="handleBulkAction(selectedBulkAction)" />
+        </div>
+        <div v-if="store.selectedIds.length > 0" class="text-sm text-theme-500 w-30 font-medium">
+            {{ store.selectedIds.length }} items selected
         </div>
       </div>
 
-      <div class="px-6">
-        <div class="overflow-x-auto">
+      <div class="relative w-full md:max-w-64">
+        <input type="search"
+          v-model="searchInput"
+          @keyup.enter="handleSearch"
+          placeholder="Search..."  class="search-field w-full h-8">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
+
+    </div>
+
+
+
+    <div class="bg-white rounded-lg shadow">
+
+        <div class="overflow-x-auto rounded border border-gray-200 text-xs">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
@@ -236,7 +196,7 @@ watch(
                     { key: 'updated_at', label: 'Updated At' },
                   ]"
                   :key="column.key"
-                  class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
                 >
                   <div
                     v-if="sortableColumns.includes(column.key)"
@@ -263,14 +223,9 @@ watch(
                   </div>
                   <span v-else>{{ column.label }}</span>
                 </th>
-                <th
-                  class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Action
-                </th>
               </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+            <tbody class="bg-white divide-y divide-gray-200 align-top">
               <tr v-if="store.loading">
                 <td colspan="10" class="px-4 py-8 text-center text-gray-500">
                   <div class="flex items-center justify-center">
@@ -300,7 +255,7 @@ watch(
               <tr v-else-if="store.products.length === 0">
                 <td colspan="10" class="px-4 py-8 text-center text-gray-500">No products found</td>
               </tr>
-              <tr v-for="product in store.products" :key="product.id" class="hover:bg-gray-50">
+              <tr v-for="product in store.products" :key="product.id" class="hover:bg-gray-50 group">
                 <td class="px-4 py-4">
                   <input
                     type="checkbox"
@@ -311,6 +266,30 @@ watch(
                 </td>
                 <td class="px-4 py-4">
                   <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+                  <div class="flex items-center gap-3 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button
+                      @click="navigateToEdit(product.id)"
+                      class="text-theme-600 hover:text-theme-900 text-sm font-medium flex items-center gap-1"
+                    >
+                      <EditIcon size="12" />
+                      Edit
+                    </button>
+                    <button
+                      v-if="!store.trashed"
+                      @click="store.softDelete(product.id)"
+                      class="text-red-600 hover:text-red-900 font-medium flex items-center"
+                    >
+                      <TrashIcon size="12"/>
+                      Trash
+                    </button>
+                    <button
+                      v-else
+                      @click="store.restoreProduct(product.id)"
+                      class="text-green-600 hover:text-green-900 font-medium"
+                    >
+                      Restore
+                    </button>
+                  </div>
                 </td>
                 <td class="px-4 py-4">
                   <div class="text-sm text-gray-500">{{ truncateText(product.description) }}</div>
@@ -357,30 +336,7 @@ watch(
                 <td class="px-4 py-4">
                   <div class="text-sm text-gray-500">{{ formatDate(product.updated_at) }}</div>
                 </td>
-                <td class="px-4 py-4">
-                  <div class="flex items-center gap-2">
-                    <button
-                      @click="navigateToEdit(product.id)"
-                      class="text-theme-600 hover:text-theme-900 text-sm font-medium"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      v-if="!store.trashed"
-                      @click="store.softDelete(product.id)"
-                      class="text-red-600 hover:text-red-900 text-sm font-medium"
-                    >
-                      Trash
-                    </button>
-                    <button
-                      v-else
-                      @click="store.restoreProduct(product.id)"
-                      class="text-green-600 hover:text-green-900 text-sm font-medium"
-                    >
-                      Restore
-                    </button>
-                  </div>
-                </td>
+
               </tr>
             </tbody>
           </table>
@@ -409,7 +365,6 @@ watch(
             </button>
           </div>
         </div>
-      </div>
     </div>
   </div>
 </template>

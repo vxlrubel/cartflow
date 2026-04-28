@@ -4,8 +4,6 @@
   import PrimacyButton from '@/components/buttons/PrimacyButton.vue';
 import CustomSelect from '@/components/CustomSelect.vue';
 import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue';
-
-  const isUploading = ref(false);
   const isOpenUploaderModal = ref(false);
 
   function openUploaderModal() {

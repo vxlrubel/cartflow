@@ -265,11 +265,11 @@ watch(
                   />
                 </td>
                 <td class="px-4 py-4">
-                  <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+                  <div class="text-sm font-medium text-theme-500">{{ product.name }}</div>
                   <div class="flex items-center gap-3 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
                       @click="navigateToEdit(product.id)"
-                      class="text-theme-600 hover:text-theme-900 text-sm font-medium flex items-center gap-1"
+                      class="text-theme-600 hover:text-theme-900 text-xs font-medium flex items-center gap-1"
                     >
                       <EditIcon size="12" />
                       Edit
@@ -277,7 +277,7 @@ watch(
                     <button
                       v-if="!store.trashed"
                       @click="store.softDelete(product.id)"
-                      class="text-red-600 hover:text-red-900 font-medium flex items-center"
+                      class="text-red-600 hover:text-red-900 text-xs font-medium flex items-center"
                     >
                       <TrashIcon size="12"/>
                       Trash
@@ -285,7 +285,7 @@ watch(
                     <button
                       v-else
                       @click="store.restoreProduct(product.id)"
-                      class="text-green-600 hover:text-green-900 font-medium"
+                      class="text-green-600 hover:text-green-900 text-xs font-medium"
                     >
                       Restore
                     </button>

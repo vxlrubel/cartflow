@@ -77,7 +77,7 @@ import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue';
               <input type="checkbox" class="h-4 w-4 text-theme-500 border-gray-300 rounded focus:ring-theme-500">
             </td>
             <td scope="col" class=" text-left tracking-wider max-w-15">
-              <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="w-10">
+              <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="w-10 rounded-[5px] object-cover">
             </td>
             <td scope="col" class="px-3 py-3 text-left tracking-wider min-w-100">
               <div>Iphone 12 Pro (Max)</div>

@@ -72,6 +72,7 @@ export const useProductStore = defineStore('products', () => {
   const fetchProducts = async () => {
     loading.value = true
     error.value = null
+    products.value = []
     try {
       const params = {
         page: pagination.value.currentPage,

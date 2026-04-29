@@ -92,6 +92,13 @@ const formatDate = (date) => {
   })
 }
 
+const tableRows = computed(() => {
+  if (store.loading) {
+    return Array.from({ length: store.pagination.perPage }, (_, i) => ({ type: 'skeleton', key: 'sk-' + i }))
+  }
+  return store.products.map((product) => ({ type: 'product', data: product }))
+})
+
 const handlePageChange = (page) => {
   store.setPage(page)
 }
@@ -228,124 +235,131 @@ watch(
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200 align-top">
-              <tr v-if="store.loading">
-                <td colspan="10" class="px-4 py-8 text-center text-gray-500">
-                  <div class="flex items-center justify-center">
-                    <svg
-                      class="animate-spin h-6 w-6 text-theme-600 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        class="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        stroke-width="4"
-                      ></circle>
-                      <path
-                        class="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Loading...
-                  </div>
-                </td>
-              </tr>
-              <tr v-else-if="store.products.length === 0">
+              <tr v-if="!store.loading && store.products.length === 0">
                 <td colspan="10" class="px-4 py-8 text-center text-gray-500">No products found</td>
               </tr>
-              <tr v-for="product in store.products" :key="product.id" class="hover:bg-gray-50 group">
-                <td class="px-4 py-4">
-                  <input
-                    type="checkbox"
-                    :checked="store.selectedIds.includes(product.id)"
-                    @change="store.toggleSelect(product.id)"
-                    class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
-                  />
-                </td>
-                <td class="py-2 w-15">
-                  <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
-                    <path d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5C19.7426 20.75 20.75 19.7426 20.75 18.5V5.5C20.75 4.25736 19.7426 3.25 18.5 3.25H5.5ZM6.20103 13.6808C7.10463 12.4977 8.88749 12.5025 9.78466 13.6905L11.0002 15.3001C11.3508 15.7643 12.0734 15.6701 12.2931 15.1315L14.2708 10.2852C14.9381 8.65008 17.1428 8.3859 18.1774 9.81704L18.9656 10.9072C19.1505 11.1629 19.25 11.4705 19.25 11.786V13.8608V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V18.0031V16.088C4.75 15.7589 4.85819 15.439 5.05792 15.1775L6.20103 13.6808ZM7.01953 8.55957C7.01953 7.66211 7.74707 6.93457 8.64453 6.93457H8.65453C9.55199 6.93457 10.2795 7.66211 10.2795 8.55957C10.2795 9.45703 9.55199 10.1846 8.65453 10.1846H8.64453C7.74707 10.1846 7.01953 9.45703 7.01953 8.55957Z" fill="#343C54"/>
-                  </svg>
-                </td>
-                <td class="p-3">
-                  <div class="text-sm font-medium text-theme-500">{{ product.name }}</div>
-                  <div class="flex items-center gap-3 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button
-                      @click="navigateToEdit(product.id)"
-                      class="text-theme-600 hover:text-theme-900 text-xs font-medium flex items-center gap-1 cursor-pointer"
-                    >
-                      <EditIcon size="12" />
-                      <span>Edit</span>
-                    </button>
-                    <button
-                      v-if="!store.trashed"
-                      @click="store.softDelete(product.id)"
-                      class="text-red-600 hover:text-red-900 text-xs font-medium flex items-center gap-1 cursor-pointer"
-                    >
-                      <TrashIcon size="12"/>
-                      <span>Trash</span>
-                    </button>
-                    <button
-                      v-else
-                      @click="store.restoreProduct(product.id)"
-                      class="text-green-600 hover:text-green-900 text-xs font-medium flex items-center gap-1 cursor-pointer"
-                    >
-                      <RestoreFromTrashIcon size="12"/>
-                      <span class="pt-0.5">Restore</span>
-                    </button>
-                  </div>
-                </td>
-                <td class="p-3">
-                  <div class="text-sm text-gray-500">{{ truncateText(product.description) }}</div>
-                </td>
-                <td class="p-3">
-                  <div class="text-sm text-gray-500">{{ product.category?.name || '-' }}</div>
-                </td>
-                <td class="p-3">
-                  <div class="text-sm text-gray-500">{{ product.stock || 0 }}</div>
-                </td>
-                <td class="p-3">
-                  <div class="flex items-center gap-1 w-[70px]">
-                    <span
-                      :class="[
-                        'inline-flex rounded-full h-2 w-2',
-                        product.status === 'active'
-                          ? 'bg-green-700'
-                          : product.status === 'inactive'
-                            ? 'bg-red-800'
-                            : 'bg-gray-800',
-                      ]"
-                    ></span>
-                    <span
-                      :class="[
-                        'inline-flex capitalize text-sm font-medium',
-                        product.status === 'active'
-                          ? 'text-green-700'
-                          : product.status === 'inactive'
-                            ? 'text-red-800'
-                            : 'text-gray-800',
-                      ]"
-                      >{{ product.status || 'inactive' }}</span
-                    >
-                  </div>
-                </td>
-                <td class="p-3">
-                  <div class="text-sm text-gray-900">
-                    <CurrencySymbol />{{ parseFloat(product.price || 0).toFixed(2) }}
-                  </div>
-                </td>
-                <td class="p-3">
-                  <div class="text-sm text-gray-500">{{ formatDate(product.created_at) }}</div>
-                </td>
-                <td class="p-3">
-                  <div class="text-sm text-gray-500">{{ formatDate(product.updated_at) }}</div>
-                </td>
-
-              </tr>
+              <template v-for="row in tableRows" :key="row.type === 'product' ? row.data.id : row.key">
+                <tr v-if="row.type === 'product'" :key="row.data.id" class="hover:bg-gray-50 group">
+                  <td class="px-4 py-4">
+                    <input
+                      type="checkbox"
+                      :checked="store.selectedIds.includes(row.data.id)"
+                      @change="store.toggleSelect(row.data.id)"
+                      class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
+                    />
+                  </td>
+                  <td class="py-2 w-15">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
+                      <path d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5C19.7426 20.75 20.75 19.7426 20.75 18.5V5.5C20.75 4.25736 19.7426 3.25 18.5 3.25H5.5ZM6.20103 13.6808C7.10463 12.4977 8.88749 12.5025 9.78466 13.6905L11.0002 15.3001C11.3508 15.7643 12.0734 15.6701 12.2931 15.1315L14.2708 10.2852C14.9381 8.65008 17.1428 8.3859 18.1774 9.81704L18.9656 10.9072C19.1505 11.1629 19.25 11.4705 19.25 11.786V13.8608V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V18.0031V16.088C4.75 15.7589 4.85819 15.439 5.05792 15.1775L6.20103 13.6808ZM7.01953 8.55957C7.01953 7.66211 7.74707 6.93457 8.64453 6.93457H8.65453C9.55199 6.93457 10.2795 7.66211 10.2795 8.55957C10.2795 9.45703 9.55199 10.1846 8.65453 10.1846H8.64453C7.74707 10.1846 7.01953 9.45703 7.01953 8.55957Z" fill="#343C54"/>
+                    </svg>
+                  </td>
+                  <td class="p-3">
+                    <div class="text-sm font-medium text-theme-500">{{ row.data.name }}</div>
+                    <div class="flex items-center gap-3 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <button
+                        @click="navigateToEdit(row.data.id)"
+                        class="text-theme-600 hover:text-theme-900 text-xs font-medium flex items-center gap-1 cursor-pointer"
+                      >
+                        <EditIcon size="12" />
+                        <span>Edit</span>
+                      </button>
+                      <button
+                        v-if="!store.trashed"
+                        @click="store.softDelete(row.data.id)"
+                        class="text-red-600 hover:text-red-900 text-xs font-medium flex items-center gap-1 cursor-pointer"
+                      >
+                        <TrashIcon size="12"/>
+                        <span>Trash</span>
+                      </button>
+                      <button
+                        v-else
+                        @click="store.restoreProduct(row.data.id)"
+                        class="text-green-600 hover:text-green-900 text-xs font-medium flex items-center gap-1 cursor-pointer"
+                      >
+                        <RestoreFromTrashIcon size="12"/>
+                        <span class="pt-0.5">Restore</span>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="p-3">
+                    <div class="text-sm text-gray-500">{{ truncateText(row.data.description) }}</div>
+                  </td>
+                  <td class="p-3">
+                    <div class="text-sm text-gray-500">{{ row.data.category?.name || '-' }}</div>
+                  </td>
+                  <td class="p-3">
+                    <div class="text-sm text-gray-500">{{ row.data.stock || 0 }}</div>
+                  </td>
+                  <td class="p-3">
+                    <div class="flex items-center gap-1 w-[70px]">
+                      <span
+                        :class="[
+                          'inline-flex rounded-full h-2 w-2',
+                          row.data.status === 'active'
+                            ? 'bg-green-700'
+                            : row.data.status === 'inactive'
+                              ? 'bg-red-800'
+                              : 'bg-gray-800',
+                        ]"
+                      ></span>
+                      <span
+                        :class="[
+                          'inline-flex capitalize text-sm font-medium',
+                          row.data.status === 'active'
+                            ? 'text-green-700'
+                            : row.data.status === 'inactive'
+                              ? 'text-red-800'
+                              : 'text-gray-800',
+                        ]"
+                        >{{ row.data.status || 'inactive' }}</span
+                      >
+                    </div>
+                  </td>
+                  <td class="p-3">
+                    <div class="text-sm text-gray-900">
+                      <CurrencySymbol />{{ parseFloat(row.data.price || 0).toFixed(2) }}
+                    </div>
+                  </td>
+                  <td class="p-3">
+                    <div class="text-sm text-gray-500">{{ formatDate(row.data.created_at) }}</div>
+                  </td>
+                  <td class="p-3">
+                    <div class="text-sm text-gray-500">{{ formatDate(row.data.updated_at) }}</div>
+                  </td>
+                </tr>
+                <tr v-else class="animate-pulse">
+                  <td class="px-4 py-4">
+                    <div class="w-4 h-4 bg-gray-200 rounded"></div>
+                  </td>
+                  <td class="py-2 w-15">
+                    <div class="w-15 h-15 bg-gray-200 rounded"></div>
+                  </td>
+                  <td class="p-3">
+                    <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                  </td>
+                  <td class="p-3">
+                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                  </td>
+                  <td class="p-3">
+                    <div class="h-4 bg-gray-200 rounded w-1/3"></div>
+                  </td>
+                  <td class="p-3">
+                    <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+                  </td>
+                  <td class="p-3">
+                    <div class="h-4 bg-gray-200 rounded w-[70px]"></div>
+                  </td>
+                  <td class="p-3">
+                    <div class="h-4 bg-gray-200 rounded w-16"></div>
+                  </td>
+                  <td class="p-3">
+                    <div class="h-4 bg-gray-200 rounded w-24"></div>
+                  </td>
+                  <td class="p-3">
+                    <div class="h-4 bg-gray-200 rounded w-24"></div>
+                  </td>
+                </tr>
+              </template>
             </tbody>
           </table>
         </div>

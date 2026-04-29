@@ -187,6 +187,7 @@ watch(
                 </th>
                 <th
                   v-for="column in [
+                    { key: 'image', label: 'Image' },
                     { key: 'name', label: 'Name' },
                     { key: 'description', label: 'Description' },
                     { key: 'category', label: 'Category' },
@@ -265,7 +266,12 @@ watch(
                     class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
                   />
                 </td>
-                <td class="px-4 py-4">
+                <td class="py-2 w-15">
+                  <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
+                    <path d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5C19.7426 20.75 20.75 19.7426 20.75 18.5V5.5C20.75 4.25736 19.7426 3.25 18.5 3.25H5.5ZM6.20103 13.6808C7.10463 12.4977 8.88749 12.5025 9.78466 13.6905L11.0002 15.3001C11.3508 15.7643 12.0734 15.6701 12.2931 15.1315L14.2708 10.2852C14.9381 8.65008 17.1428 8.3859 18.1774 9.81704L18.9656 10.9072C19.1505 11.1629 19.25 11.4705 19.25 11.786V13.8608V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V18.0031V16.088C4.75 15.7589 4.85819 15.439 5.05792 15.1775L6.20103 13.6808ZM7.01953 8.55957C7.01953 7.66211 7.74707 6.93457 8.64453 6.93457H8.65453C9.55199 6.93457 10.2795 7.66211 10.2795 8.55957C10.2795 9.45703 9.55199 10.1846 8.65453 10.1846H8.64453C7.74707 10.1846 7.01953 9.45703 7.01953 8.55957Z" fill="#343C54"/>
+                  </svg>
+                </td>
+                <td class="p-3">
                   <div class="text-sm font-medium text-theme-500">{{ product.name }}</div>
                   <div class="flex items-center gap-3 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
@@ -293,16 +299,16 @@ watch(
                     </button>
                   </div>
                 </td>
-                <td class="px-4 py-4">
+                <td class="p-3">
                   <div class="text-sm text-gray-500">{{ truncateText(product.description) }}</div>
                 </td>
-                <td class="px-4 py-4">
+                <td class="p-3">
                   <div class="text-sm text-gray-500">{{ product.category?.name || '-' }}</div>
                 </td>
-                <td class="px-4 py-4">
+                <td class="p-3">
                   <div class="text-sm text-gray-500">{{ product.stock || 0 }}</div>
                 </td>
-                <td class="px-4 py-4">
+                <td class="p-3">
                   <div class="flex items-center gap-1 w-[70px]">
                     <span
                       :class="[
@@ -327,15 +333,15 @@ watch(
                     >
                   </div>
                 </td>
-                <td class="px-4 py-4">
+                <td class="p-3">
                   <div class="text-sm text-gray-900">
                     <CurrencySymbol />{{ parseFloat(product.price || 0).toFixed(2) }}
                   </div>
                 </td>
-                <td class="px-4 py-4">
+                <td class="p-3">
                   <div class="text-sm text-gray-500">{{ formatDate(product.created_at) }}</div>
                 </td>
-                <td class="px-4 py-4">
+                <td class="p-3">
                   <div class="text-sm text-gray-500">{{ formatDate(product.updated_at) }}</div>
                 </td>
 

@@ -8,6 +8,7 @@ import CustomSelect from '@/components/CustomSelect.vue'
 import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
 import TrashIcon from '@/components/icons/TrashIcon.vue'
 import EditIcon from '@/components/icons/EditIcon.vue'
+import RestoreFromTrashIcon from '@/components/icons/RestoreFromTrash.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -196,7 +197,7 @@ watch(
                     { key: 'updated_at', label: 'Updated At' },
                   ]"
                   :key="column.key"
-                  class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                  class="px-4 py-3 text-left text-sm font-medium text-gray-500 capitalize tracking-wider"
                 >
                   <div
                     v-if="sortableColumns.includes(column.key)"
@@ -269,25 +270,26 @@ watch(
                   <div class="flex items-center gap-3 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
                       @click="navigateToEdit(product.id)"
-                      class="text-theme-600 hover:text-theme-900 text-xs font-medium flex items-center gap-1"
+                      class="text-theme-600 hover:text-theme-900 text-xs font-medium flex items-center gap-1 cursor-pointer"
                     >
                       <EditIcon size="12" />
-                      Edit
+                      <span>Edit</span>
                     </button>
                     <button
                       v-if="!store.trashed"
                       @click="store.softDelete(product.id)"
-                      class="text-red-600 hover:text-red-900 text-xs font-medium flex items-center"
+                      class="text-red-600 hover:text-red-900 text-xs font-medium flex items-center gap-1 cursor-pointer"
                     >
                       <TrashIcon size="12"/>
-                      Trash
+                      <span>Trash</span>
                     </button>
                     <button
                       v-else
                       @click="store.restoreProduct(product.id)"
-                      class="text-green-600 hover:text-green-900 text-xs font-medium"
+                      class="text-green-600 hover:text-green-900 text-xs font-medium flex items-center gap-1 cursor-pointer"
                     >
-                      Restore
+                      <RestoreFromTrashIcon size="12"/>
+                      <span class="pt-0.5">Restore</span>
                     </button>
                   </div>
                 </td>

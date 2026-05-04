@@ -1,10 +1,16 @@
 <script setup>
-  import { ref } from 'vue';
+  import { ref, onMounted, watch } from 'vue';
+  import { useRoute, useRouter } from 'vue-router'
   import PageTitle from '@/components/admin/PageTitle.vue'
-  import PrimacyButton from '@/components/buttons/PrimacyButton.vue';
-import CustomSelect from '@/components/CustomSelect.vue';
-import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue';
+  import PrimaryButtonOutline from '@/components/buttons/PrimaryButtonOutline.vue'
+  import CustomSelect from '@/components/CustomSelect.vue'
+  import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue'
+  import GridView from '@/components/icons/GridView.vue'
+  import ListAlt from '@/components/icons/ListAlt.vue';
   const isOpenUploaderModal = ref(false);
+  const viewOptions = ref('grid');
+  const route = useRoute()
+  const router = useRouter()
 
   function openUploaderModal() {
     isOpenUploaderModal.value = true;
@@ -18,12 +24,25 @@ import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue';
     { label: 'Restore', value: 'restore' },
   ];
 
+  onMounted(() => {
+    if (route.query.view) {
+      viewOptions.value = route.query.view
+    }
+  })
+  watch(viewOptions, (newValue) => {
+    router.replace({
+      query: {
+        ...route.query,
+        view: newValue
+      }
+    })
+  })
 </script>
 
 <template>
   <div >
     <PageTitle title="Media Library">
-      <PrimacyButton label="Add New" @click="openUploaderModal" />
+      <PrimaryButtonOutline label="Add New" @click="openUploaderModal" />
     </PageTitle>
 
 
@@ -54,49 +73,75 @@ import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue';
 
     </div>
 
-
-    <div class="overflow-x-auto rounded border border-gray-200 text-xs">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-white text-gray-500">
-          <tr>
-            <th scope="col" class="p-3 text-left font-medium uppercase tracking-wider w-10">
-              <input type="checkbox" class="h-4 w-4 text-theme-500 border-gray-300 rounded focus:ring-theme-500">
-            </th>
-            <th scope="col" class="py-3 text-left font-bold capitalize tracking-wider">Image</th>
-            <th scope="col" class="px-3 py-3 text-left font-bold capitalize tracking-wider min-w-50">Name</th>
-            <th scope="col" class="px-6 py-3 text-left font-bold capitalize tracking-wider">Status</th>
-            <th scope="col" class="px-6 py-3 text-left font-bold capitalize tracking-wider">Created At</th>
-            <th scope="col" class="px-6 py-3 text-left font-bold capitalize tracking-wider">Updated At</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-         <tr v-for="n in 10" :key="n" class="group">
-            <td scope="col" class="p-3 text-left tracking-wider w-10">
-              <input type="checkbox" class="h-4 w-4 text-theme-500 border-gray-300 rounded focus:ring-theme-500">
-            </td>
-            <td scope="col" class=" text-left tracking-wider max-w-15">
-              <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="w-10 rounded-[5px] object-cover">
-            </td>
-            <td scope="col" class="px-3 py-3 text-left tracking-wider min-w-100">
-              <div>Iphone 12 Pro (Max)</div>
-              <div class="flex items-center flex-wrap gap-2 text-[11px] select-none pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <button class="text-theme-500 font-semibold cursor-pointer">View</button>
-                <button class="text-rose-500 font-semibold cursor-pointer">Trash</button>
-              </div>
-            </td>
-            <td scope="col" class="px-6 py-3 text-left tracking-wider">
-              <div class="flex items-center">
-                <span class="h-2 w-2 rounded-full bg-green-500 inline-flex"></span>
-                <span class="ml-2">Published</span>
-              </div>
-            </td>
-            <td scope="col" class="px-6 py-3 text-left tracking-wider">2023-10-01 10:00:00</td>
-            <td scope="col" class="px-6 py-3 text-left tracking-wider">2023-10-01 10:00:00</td>
-          </tr>
-        </tbody>
-      </table>
-
+    <div class="flex items-center gap-1 mb-3">
+      <button class="text-gray-500 cursor-pointer"
+        :class="{ 'text-theme-500': viewOptions === 'grid' }"
+        @click="viewOptions = 'grid'"
+      >
+        <GridView />
+      </button>
+      <button class="text-gray-500 cursor-pointer"
+        :class="{ 'text-theme-500': viewOptions === 'list' }"
+        @click="viewOptions = 'list'"
+      >
+        <ListAlt />
+      </button>
     </div>
+
+    <Transition name="modal">
+      <div class="overflow-x-auto rounded border border-gray-200 text-xs" v-if="viewOptions === 'list'">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-white text-gray-500">
+            <tr>
+              <th scope="col" class="p-3 text-left font-medium uppercase tracking-wider w-10">
+                <input type="checkbox" class="h-4 w-4 text-theme-500 border-gray-300 rounded focus:ring-theme-500">
+              </th>
+              <th scope="col" class="py-3 text-left font-bold capitalize tracking-wider">Image</th>
+              <th scope="col" class="px-3 py-3 text-left font-bold capitalize tracking-wider min-w-50">Name</th>
+              <th scope="col" class="px-6 py-3 text-left font-bold capitalize tracking-wider">Status</th>
+              <th scope="col" class="px-6 py-3 text-left font-bold capitalize tracking-wider">Created At</th>
+              <th scope="col" class="px-6 py-3 text-left font-bold capitalize tracking-wider">Updated At</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+          <tr v-for="n in 10" :key="n" class="group">
+              <td scope="col" class="p-3 text-left tracking-wider w-10">
+                <input type="checkbox" class="h-4 w-4 text-theme-500 border-gray-300 rounded focus:ring-theme-500">
+              </td>
+              <td scope="col" class=" text-left tracking-wider max-w-15">
+                <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="w-10 rounded-[5px] object-cover">
+              </td>
+              <td scope="col" class="px-3 py-3 text-left tracking-wider min-w-100">
+                <div>Iphone 12 Pro (Max)</div>
+                <div class="flex items-center flex-wrap gap-2 text-[11px] select-none pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <button class="text-theme-500 font-semibold cursor-pointer">View</button>
+                  <button class="text-rose-500 font-semibold cursor-pointer">Trash</button>
+                </div>
+              </td>
+              <td scope="col" class="px-6 py-3 text-left tracking-wider">
+                <div class="flex items-center">
+                  <span class="h-2 w-2 rounded-full bg-green-500 inline-flex"></span>
+                  <span class="ml-2">Published</span>
+                </div>
+              </td>
+              <td scope="col" class="px-6 py-3 text-left tracking-wider">2023-10-01 10:00:00</td>
+              <td scope="col" class="px-6 py-3 text-left tracking-wider">2023-10-01 10:00:00</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </Transition>
+    <Transition name="modal">
+      <div class="flex gap-2 flex-wrap" v-if="viewOptions=== 'grid'">
+        <div class="w-1/2 sm:max-w-40 border border-gray-200" v-for="n in 12" :key="n">
+          <div class="border-t border-gray-200 rounded">
+            <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="w-full rounded-[5px] object-cover">
+            <div class="p-2 border border-gray-200 text-sm font-medium line-clamp-1">Iphone 12 Pro (Max)</div>
+          </div>
+        </div>
+      </div>
+    </Transition>
 
     <Transition name="modal">
       <div v-if="isOpenUploaderModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-[2px]">
@@ -115,7 +160,7 @@ import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue';
 
           <div class="flex justify-end gap-2 p-4 border-t border-gray-300 flex-shrink-0">
             <CancelButtonOutline label="Cancel" @click="isOpenUploaderModal = false"/>
-             <PrimacyButton label="Upload" />
+             <PrimaryButtonOutline label="Upload" />
           </div>
 
         </div>

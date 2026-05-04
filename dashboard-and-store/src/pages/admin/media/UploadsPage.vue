@@ -145,8 +145,8 @@
 
     <Transition name="modal">
       <div v-if="isOpenUploaderModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-[2px]">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] flex flex-col">
-          <div class="flex items-center justify-between p-4 border-b border-gray-300 flex-shrink-0">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-137.5 max-h-[90vh] flex flex-col">
+          <div class="flex items-center justify-between p-4 border-b border-gray-300 shrink-0">
             <div class="text-lg font-medium">Upload Media</div>
             <button  class="text-gray-400 hover:text-gray-600" @click="isOpenUploaderModal = false">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,7 +155,13 @@
           </div>
 
           <div class="flex-1 overflow-y-auto">
-            <div class="p-4 space-y-4"></div>
+            <div class="p-4 space-y-4">
+
+              <div class="aspect-video flex items-center justify-center">
+                <input type="file">
+              </div>
+
+            </div>
           </div>
 
           <div class="flex justify-end gap-2 p-4 border-t border-gray-300 flex-shrink-0">

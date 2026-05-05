@@ -238,8 +238,8 @@ watch(
               <tr v-if="!store.loading && store.products.length === 0">
                 <td colspan="10" class="px-4 py-8 text-center text-gray-500">No products found</td>
               </tr>
-              <template v-for="row in tableRows" :key="row.type === 'product' ? row.data.id : row.key">
-                <tr v-if="row.type === 'product'" :key="row.data.id" class="hover:bg-gray-50 group">
+              <template v-for="(row, index) in tableRows" :key="row.type === 'product' ? row.data.id : row.key">
+                <tr v-if="row.type === 'product'" :key="row.data.id" class="hover:bg-gray-50 group item-anim" :style="{'--animation-delay' : index}">
                   <td class="px-4 py-4">
                     <input
                       type="checkbox"

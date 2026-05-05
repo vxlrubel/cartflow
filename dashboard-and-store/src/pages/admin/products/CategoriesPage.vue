@@ -220,9 +220,9 @@ const categoryOptions = computed(() => [
                   </td>
                 </tr>
                 <tr
-                  v-for="category in filteredCategories"
+                  v-for="(category, index) in filteredCategories"
                   :key="category.id"
-                  class="border-t hover:bg-gray-50"
+                  class="border-t border-gray-200 hover:bg-gray-50 item-anim" :style="{'--animation-delay' : index}"
                 >
                   <td class="px-4 py-3">{{ category.name }}</td>
                   <td class="px-4 py-3 text-gray-600">{{ category.slug }}</td>
@@ -256,7 +256,7 @@ const categoryOptions = computed(() => [
               </tbody>
             </table>
           </div>
-          <div v-if="totalPages > 1" class="p-4 border-t flex justify-center gap-2">
+          <div v-if="totalPages > 1" class="p-4 border-t border-gray-200 flex justify-center gap-2">
             <button
               v-for="page in totalPages"
               :key="page"

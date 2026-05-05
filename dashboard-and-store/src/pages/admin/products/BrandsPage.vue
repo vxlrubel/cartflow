@@ -218,9 +218,10 @@ onMounted(() => {
                   <td colspan="6" class="px-4 py-8 text-center text-gray-500">No brands found</td>
                 </tr>
                 <tr
-                  v-for="brand in filteredBrands"
+                  v-for="(brand, index) in filteredBrands"
                   :key="brand.id"
-                  class="border-t hover:bg-gray-50"
+                  class="border-t hover:bg-gray-50 item-anim"
+                  :style="{'--animation-delay' : index}"
                 >
                   <td class="px-4 py-3">
                     <img

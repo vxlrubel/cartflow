@@ -240,9 +240,10 @@ watch(
                   </td>
                 </tr>
                 <tr
-                  v-for="attribute in filteredAttributes"
+                  v-for="(attribute, index) in filteredAttributes"
                   :key="attribute.id"
-                  class="border-t hover:bg-gray-50"
+                  class="border-t hover:bg-gray-50 item-anim"
+                  :style="{'--animation-delay' : index}"
                 >
                   <td class="px-4 py-3">{{ attribute.name }}</td>
                   <td class="px-4 py-3 text-gray-600">{{ attribute.slug }}</td>

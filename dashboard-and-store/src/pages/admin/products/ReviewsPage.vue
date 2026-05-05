@@ -210,9 +210,10 @@ watch(statusFilter, (newStatus) => {
               </td>
             </tr>
             <tr
-              v-for="review in filteredReviews"
+              v-for="(review, index) in filteredReviews"
               :key="review.id"
-              class="border-t hover:bg-gray-50"
+              class="border-t hover:bg-gray-50 item-anim"
+              :style="{'--animation-delay' : index}"
             >
               <td class="px-4 py-3">
                 {{ review.product?.name || review.product_name || '-' }}

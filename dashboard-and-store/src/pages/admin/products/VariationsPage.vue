@@ -278,9 +278,10 @@ watch(
                   </td>
                 </tr>
                 <tr
-                  v-for="variation in filteredVariations"
+                  v-for="(variation, index) in filteredVariations"
                   :key="variation.id"
-                  class="border-t hover:bg-gray-50"
+                  class="border-t hover:bg-gray-50 item-anim"
+                  :style="{'--animation-delay' : index}"
                 >
                   <td class="px-4 py-3">
                     {{ variation.product_name || variation.product?.name || '-' }}

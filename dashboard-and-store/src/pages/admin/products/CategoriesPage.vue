@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import api from '@/services/api'
 import API_ENDPOINTS from '@/services/api-endpoints'
 import CustomSelect from '@/components/CustomSelect.vue'
+import PageTitle from '@/components/admin/PageTitle.vue'
 
 const categories = ref([])
 const loading = ref(false)
@@ -111,20 +112,17 @@ const categoryOptions = computed(() => [
 
 <template>
   <div>
-    <div
-      class="flex justify-between items-center mb-6 px-6 py-3 bg-white border border-neutral-200 rounded"
-    >
-      <h2 class="text-2xl font-medium capitalize tracking-wide">Categories</h2>
+    <PageTitle title="Categories">
       <button
         @click="
           showModal = true,
           resetForm()
         "
-        class="bg-theme-600 text-white px-4 py-2 rounded hover:bg-theme-700 text-sm cursor-pointer"
+        class="button-primary-outline"
       >
         Add Category
       </button>
-    </div>
+    </PageTitle>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-1">
@@ -152,7 +150,7 @@ const categoryOptions = computed(() => [
               <textarea
                 v-model="form.description"
                 rows="3"
-                class="w-full border border-gray-300 rounded text-sm px-3 py-1 focus:outline-none focus:ring-2 focus:ring-theme-500"
+                class="input-field min-h-20"
               ></textarea>
             </div>
             <div>

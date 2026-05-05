@@ -111,3 +111,21 @@ body {
   opacity: 0;
   transform: scale(0.95) translateY(20px);
 }
+
+/* list item animation */
+.item-anim {
+  animation: gridAnimation 0.215s ease-in-out;
+  animation-fill-mode: both;
+  animation-delay: calc(var(--animation-delay) * 0.05s);
+}
+
+@keyframes gridAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -104,7 +104,7 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="n in 10" :key="n" class="group">
+          <tr v-for="n in 10" :key="n" class="group item-anim hover:bg-gray-50" :style="{'--animation-delay' : n}">
               <td scope="col" class="p-3 text-left tracking-wider w-10">
                 <input type="checkbox" class="h-4 w-4 text-theme-500 border-gray-300 rounded focus:ring-theme-500">
               </td>
@@ -134,7 +134,7 @@
     </Transition>
     <Transition name="modal">
       <div class="flex gap-2 flex-wrap" v-if="viewOptions=== 'grid'">
-        <div class="w-1/2 sm:max-w-40 border border-gray-200" v-for="n in 12" :key="n">
+        <div class="w-1/2 sm:max-w-40 border border-gray-200 item-anim" v-for="n in 12" :key="n" :style="{'--animation-delay' : n}">
           <div class="border-t border-gray-200 rounded">
             <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="w-full rounded-[5px] object-cover">
             <div class="p-2 border border-gray-200 text-sm font-medium line-clamp-1">Iphone 12 Pro (Max)</div>

@@ -23,21 +23,21 @@ watch(searchQuery, async (query) => {
       ])
 
       results.value = []
-      
+
       if (productsRes.status === 'fulfilled') {
         const products = productsRes.value.data.data || productsRes.value.data || []
         if (products.length) {
           results.value.push({ type: 'Product', items: products })
         }
       }
-      
+
       if (ordersRes.status === 'fulfilled') {
         const orders = ordersRes.value.data.data || ordersRes.value.data || []
         if (orders.length) {
           results.value.push({ type: 'Order', items: orders })
         }
       }
-      
+
       if (customersRes.status === 'fulfilled') {
         const customers = customersRes.value.data.data || customersRes.value.data || []
         if (customers.length) {
@@ -89,34 +89,32 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="w-100 hidden text-gray-500 lg:flex lg:items-center lg:justify-center lg:relative" ref="selectRef">
-    <div class="relative w-full max-w-md">
-      <input 
+    <div class="w-full max-w-md">
+      <input
         v-model="searchQuery"
-        type="search" 
-        class="w-full px-4 py-2 pl-10 bg-white border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-500 focus:border-transparent" 
-        placeholder="Search keyword" 
+        type="search"
+        @focusin="isOpen = true"
+        class="input-field bg-white pl-15"
+        placeholder="Search keyword"
         @focus="visibleSearchContent"
       >
-      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
     </div>
 
     <Transition name="search-content">
-      <div v-if="isOpen" class="absolute top-full left-0 right-0 min-h-50 max-h-100 bg-white border border-gray-300 z-50 overflow-y-auto p-5 rounded">
+      <div v-if="isOpen" class="absolute top-full left-0 right-0 min-h-50 max-h-100 bg-white border border-gray-200 z-50 overflow-y-auto p-5 rounded shadow-lg">
         <div v-if="loading" class="flex justify-center py-4">
           <svg class="animate-spin h-6 w-6 text-theme-600" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm8 8a8 8 0 01-8-8V0C5.373 8 8 5.373 8 12h4zm8-8a8 8 0 018 8V0c-4.627 0-8 5.373-8 12h4z"></path>
           </svg>
         </div>
-        
+
         <ul v-else class="space-y-4">
           <li v-for="group in results" :key="group.type">
             <div class="text-gray-800 text-sm border-b border-gray-200 pb-1 mb-1 font-semibold">{{ group.type }}</div>
             <ul class="pl-3 text-sm">
               <li v-for="item in group.items" :key="item.id">
-                <button 
+                <button
                   @click="goToResult(item, group.type)"
                   class="text-blue-600 hover:text-blue-800 hover:underline"
                 >
@@ -125,7 +123,7 @@ onBeforeUnmount(() => {
               </li>
             </ul>
           </li>
-          
+
           <li v-if="results.length === 0 && searchQuery.length >= 2">
             <div class="text-gray-500 text-sm">No results found</div>
           </li>

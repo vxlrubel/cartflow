@@ -4,6 +4,7 @@ import api from '@/services/api'
 import API_ENDPOINTS from '@/services/api-endpoints'
 import CustomSelect from '@/components/CustomSelect.vue'
 import PageTitle from '@/components/admin/PageTitle.vue'
+import ConfirmAlert from '@/components/ConfirmAlert.vue'
 
 const categories = ref([])
 const loading = ref(false)
@@ -270,5 +271,7 @@ const categoryOptions = computed(() => [
         </div>
       </div>
     </div>
+
+    <ConfirmAlert/>
   </div>
 </template>

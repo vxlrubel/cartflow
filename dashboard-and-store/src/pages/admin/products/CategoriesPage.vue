@@ -187,7 +187,7 @@ const categoryOptions = computed(() => [
 
       <div class="lg:col-span-2">
         <div class="bg-white rounded-lg shadow">
-          <div class="p-4 border-b">
+          <div class="p-4 border-b bg-theme-100 text-white rounded-tl-lg rounded-tr-lg">
             <input
               v-model="search"
               @input="
@@ -196,7 +196,7 @@ const categoryOptions = computed(() => [
               "
               type="text"
               placeholder="Search categories..."
-              class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
+              class="input-field bg-white text-sm max-w-75 text-gray-600"
             />
           </div>
           <div class="overflow-x-auto">

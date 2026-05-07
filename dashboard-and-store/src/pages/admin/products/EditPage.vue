@@ -4,6 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/products'
 import TiptapEditor from '@/components/TiptapEditor.vue'
 import ImageUploader from '@/components/ImageUploader.vue'
+import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
+import CancelButton from '@/components/buttons/CancelButton.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -147,49 +149,35 @@ onMounted(loadFormData)
 </script>
 
 <template>
-  <div class="space-y-4">
-    <div class="bg-white rounded-lg shadow">
-      <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-200">
-        <h2 class="text-2xl font-bold text-gray-800">Edit Product</h2>
-        <button @click="handleCancel" class="text-gray-600 hover:text-gray-900">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
-
-      <div v-if="fetching" class="flex items-center justify-center py-12">
-        <svg class="animate-spin h-8 w-8 text-theme-600" fill="none" viewBox="0 0 24 24">
-          <circle
-            class="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            stroke-width="4"
-          ></circle>
-          <path
-            class="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
-      </div>
-
-      <form v-else @submit.prevent="handleSubmit" class="space-y-6">
-        <div class="grid grid-cols-12 gap-6 px-6 py-4 border-b border-neutral-200">
-          <div class="col-span-12 md:col-span-7 lg:col-span-8 xl:col-span-9 space-y-5">
+  <div>
+    <div v-if="fetching" class="flex items-center justify-center py-12">
+      <svg class="animate-spin h-8 w-8 text-theme-600" fill="none" viewBox="0 0 24 24">
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+    </div>
+    <div v-else class="flex flex-col md:flex-row gap-4 lg:gap-8 mb-20">
+      <div class="md:flex-1 bg-white border border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-800 px-4 lg:px-6 h-12.5 flex items-center border-b border-gray-300">Edit Product</h2>
+        <div class="py-3 px-4 lg:px-6">
+          <div class="space-y-5">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Product Name *</label>
               <input
                 v-model="form.name"
                 type="text"
-                class="select w-full"
+                class="input-field"
                 :class="{ 'border-red-500': errors.name }"
                 placeholder="Enter product name"
               />
@@ -204,8 +192,8 @@ onMounted(loadFormData)
               <input
                 type="text"
                 v-model="form.slug"
-                class="select w-full"
-                :class="{ 'border-red-500': errors.slug }"
+                class="input-field"
+                :class="{ 'invalid': errors.slug }"
                 placeholder="Enter product slug (e.g., product-name)"
               />
               <p v-if="errors.slug" class="mt-1 text-sm text-red-500">{{ errors.slug[0] }}</p>
@@ -220,8 +208,8 @@ onMounted(loadFormData)
                   <input
                     v-model="form.sku"
                     type="text"
-                    class="select w-full"
-                    :class="{ 'border-red-500': errors.sku }"
+                    class="input-field"
+                    :class="{ 'invalid': errors.sku }"
                     placeholder="Enter SKU"
                   />
                   <p v-if="errors.sku" class="mt-1 text-sm text-red-500">{{ errors.sku[0] }}</p>
@@ -230,6 +218,9 @@ onMounted(loadFormData)
                   <label class="block text-sm font-medium text-gray-700 mb-1">Images</label>
                   <ImageUploader v-model="form.images" :multiple="true" :max-files="5" />
                 </div>
+
+              </div>
+              <div class="space-y-6">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Price *</label>
                   <input
@@ -237,8 +228,8 @@ onMounted(loadFormData)
                     type="number"
                     step="0.01"
                     min="0"
-                    class="select w-full"
-                    :class="{ 'border-red-500': errors.price }"
+                    class="input-field"
+                    :class="{ 'invalid': errors.price }"
                     placeholder="0.00"
                   />
                   <p v-if="errors.price" class="mt-1 text-sm text-red-500">{{ errors.price[0] }}</p>
@@ -250,7 +241,7 @@ onMounted(loadFormData)
                     type="number"
                     step="0.01"
                     min="0"
-                    class="select w-full"
+                    class="input-field"
                     placeholder="0.00"
                   />
                 </div>
@@ -260,8 +251,8 @@ onMounted(loadFormData)
                     v-model="form.stock"
                     type="number"
                     min="0"
-                    class="select w-full"
-                    :class="{ 'border-red-500': errors.stock }"
+                    class="input-field"
+                    :class="{ 'invalid': errors.stock }"
                     placeholder="0"
                   />
                   <p v-if="errors.stock" class="mt-1 text-sm text-red-500">{{ errors.stock[0] }}</p>
@@ -269,113 +260,118 @@ onMounted(loadFormData)
               </div>
             </div>
           </div>
-          <div class="col-span-12 md:col-span-5 lg:col-span-4 xl:col-span-3 space-y-5">
-            <div class="border border-neutral-200 rounded">
-              <div class="px-3 py-1 font-medium bg-neutral-200">Status</div>
-              <ul class="select-none overflow-y-auto text-sm">
-                <li>
-                  <label
-                    class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100"
-                  >
-                    <input type="radio" name="status" value="active" v-model="form.status" />
-                    <span>Active</span>
-                  </label>
-                </li>
-                <li>
-                  <label
-                    class="text-sm text-gray-700 flex items-center space-x-1 py-1 px-3 cursor-pointer hover:bg-neutral-100"
-                  >
-                    <input type="radio" name="status" value="inactive" v-model="form.status" />
-                    <span>Inactive</span>
-                  </label>
-                </li>
-              </ul>
-            </div>
+        </div>
+      </div>
+      <div class="md:w-75 bg-white sticky top-20">
+        <div class="p-3 h-12.5 flex justify-end items-center border-b border-gray-300">
+          <CancelButton
+            label="Cancel"
+            @click="handleCancel"
+            :disabled="loading"
+          />
+          <PrimacyButton
+            label="Update"
+            class="ml-2"
+            @click="handleSubmit"
+            :loading="loading"
+          />
+        </div>
 
-            <div class="border border-neutral-200 rounded">
-              <div class="px-3 py-1 font-medium bg-neutral-200">Category</div>
-              <ul class="h-30 select-none overflow-y-auto text-sm">
-                <li v-for="category in categories" :key="category.id">
-                  <label
-                    class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100"
-                  >
-                    <input type="checkbox" :value="category.id" v-model="form.category_ids" />
-                    <span>{{ category.name }}</span>
-                  </label>
-                </li>
-              </ul>
-              <div class="border-t border-neutral-200 px-3 py-2 flex items-center space-x-2">
-                <input
-                  type="text"
-                  v-model="newCategory"
-                  @keyup.enter="createCategory"
-                  placeholder="Add new category"
-                  class="flex-1 text-[12px] h-7 px-3 border border-theme-400 bg-neutral-100 rounded focus:bg-theme-50 focus:text-theme-700 focus:border-theme-400 focus:outline-theme-400"
-                />
-                <button
-                  type="button"
-                  @click="createCategory"
-                  class="px-3 h-7 text-[12px] font-medium text-white bg-theme-600 rounded hover:bg-theme-700 focus:outline-none focus:ring-2 focus:ring-theme-500 cursor-pointer"
+        <div class="p-3 space-y-5">
+          <div class="border border-neutral-200 rounded">
+            <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Feature image</div>
+            <div class="aspect-video"></div>
+            <input type="file" class="hidden" id="featureImage" />
+            <label for="featureImage" class="block text-sm font-medium text-center text-gray-700 bg-neutral-200 py-1 cursor-pointer hover:bg-neutral-300">Choose Image</label>
+          </div>
+          <div class="border border-neutral-200 rounded">
+            <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Status</div>
+            <ul class="select-none overflow-y-auto text-sm">
+              <li>
+                <label
+                  class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100"
                 >
-                  Add
-                </button>
-              </div>
-              <p v-if="errors.category" class="px-3 pb-2 text-xs text-red-500">
-                {{ errors.category }}
-              </p>
-            </div>
-
-            <div class="border border-neutral-200 rounded">
-              <div class="px-3 py-1 font-medium bg-neutral-200">Brand</div>
-              <ul class="h-30 select-none overflow-y-auto text-sm">
-                <li v-for="brand in brands" :key="brand.id">
-                  <label
-                    class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100"
-                  >
-                    <input type="radio" name="brand" :value="brand.id" v-model="form.brand_id" />
-                    <span>{{ brand.name }}</span>
-                  </label>
-                </li>
-              </ul>
-
-              <div class="border-t border-neutral-200 px-3 py-2 flex items-center space-x-2">
-                <input
-                  type="text"
-                  v-model="newBrand"
-                  @keyup.enter="createBrand"
-                  placeholder="Add new brand"
-                  class="flex-1 text-[12px] h-7 px-3 border border-theme-400 bg-neutral-100 rounded focus:bg-theme-50 focus:text-theme-700 focus:border-theme-400 focus:outline-theme-400"
-                />
-                <button
-                  type="button"
-                  @click="createBrand"
-                  class="px-3 h-7 text-[12px] font-medium text-white bg-theme-600 rounded hover:bg-theme-700 focus:outline-none focus:ring-2 focus:ring-theme-500 cursor-pointer"
+                  <input type="radio" name="status" value="active" v-model="form.status" />
+                  <span>Active</span>
+                </label>
+              </li>
+              <li>
+                <label
+                  class="text-sm text-gray-700 flex items-center space-x-1 py-1 px-3 cursor-pointer hover:bg-neutral-100"
                 >
-                  Add
-                </button>
-              </div>
-              <p v-if="errors.brand" class="px-3 pb-2 text-xs text-red-500">{{ errors.brand }}</p>
+                  <input type="radio" name="status" value="inactive" v-model="form.status" />
+                  <span>Inactive</span>
+                </label>
+              </li>
+            </ul>
+          </div>
+
+          <div class="border border-neutral-200 rounded">
+            <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Category</div>
+            <ul class="h-30 select-none overflow-y-auto text-sm">
+              <li v-for="category in categories" :key="category.id">
+                <label
+                  class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100"
+                >
+                  <input type="checkbox" :value="category.id" v-model="form.category_ids" />
+                  <span>{{ category.name }}</span>
+                </label>
+              </li>
+            </ul>
+            <div class="border-t border-neutral-200 px-3 py-2 flex items-center space-x-2">
+              <input
+                type="text"
+                v-model="newCategory"
+                @keyup.enter="createCategory"
+                placeholder="Add new category"
+                class="flex-1 text-[12px] h-7 px-3 border border-theme-400 bg-neutral-100 rounded focus:bg-theme-50 focus:text-theme-700 focus:border-theme-400 focus:outline-theme-400"
+              />
+              <button
+                type="button"
+                @click="createCategory"
+                class="px-3 h-7 text-[12px] font-medium text-white bg-theme-600 rounded hover:bg-theme-700 focus:outline-none focus:ring-2 focus:ring-theme-500 cursor-pointer"
+              >
+                Add
+              </button>
             </div>
+            <p v-if="errors.category" class="px-3 pb-2 text-xs text-red-500">
+              {{ errors.category }}
+            </p>
+          </div>
+
+          <div class="border border-neutral-200 rounded">
+            <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Brand</div>
+            <ul class="h-30 select-none overflow-y-auto text-sm">
+              <li v-for="brand in brands" :key="brand.id">
+                <label
+                  class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100"
+                >
+                  <input type="radio" name="brand" :value="brand.id" v-model="form.brand_id" />
+                  <span>{{ brand.name }}</span>
+                </label>
+              </li>
+            </ul>
+
+            <div class="border-t border-neutral-200 px-3 py-2 flex items-center space-x-2">
+              <input
+                type="text"
+                v-model="newBrand"
+                @keyup.enter="createBrand"
+                placeholder="Add new brand"
+                class="flex-1 text-[12px] h-7 px-3 border border-theme-400 bg-neutral-100 rounded focus:bg-theme-50 focus:text-theme-700 focus:border-theme-400 focus:outline-theme-400"
+              />
+              <button
+                type="button"
+                @click="createBrand"
+                class="px-3 h-7 text-[12px] font-medium text-white bg-theme-600 rounded hover:bg-theme-700 focus:outline-none focus:ring-2 focus:ring-theme-500 cursor-pointer"
+              >
+                Add
+              </button>
+            </div>
+            <p v-if="errors.brand" class="px-3 pb-2 text-xs text-red-500">{{ errors.brand }}</p>
           </div>
         </div>
-
-        <div class="px-6 py-4 flex justify-end space-x-3">
-          <button
-            type="button"
-            @click="handleCancel"
-            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            :disabled="loading"
-            class="px-4 py-2 text-sm font-medium text-white bg-theme-600 rounded-lg hover:bg-theme-700 focus:outline-none focus:ring-2 focus:ring-theme-500 disabled:opacity-50"
-          >
-            {{ loading ? 'Updating...' : 'Update Product' }}
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>

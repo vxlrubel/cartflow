@@ -5,6 +5,8 @@ import API_ENDPOINTS from '@/services/api-endpoints'
 import CustomSelect from '@/components/CustomSelect.vue'
 import PageTitle from '@/components/admin/PageTitle.vue'
 import ConfirmAlert from '@/components/ConfirmAlert.vue'
+import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
+import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue'
 
 const categories = ref([])
 const loading = ref(false)
@@ -55,8 +57,12 @@ const resetForm = () => {
   editingId.value = null
 }
 
+
+const categoryLoading = ref(false)
+
 const submitForm = async () => {
   try {
+    categoryLoading.value = true
     if (editingId.value) {
       await api.put(API_ENDPOINTS.categories.update(editingId.value), form.value)
     } else {
@@ -67,6 +73,8 @@ const submitForm = async () => {
     fetchCategories()
   } catch (error) {
     console.error('Error saving category:', error)
+  } finally {
+    categoryLoading.value = false
   }
 }
 
@@ -140,67 +148,63 @@ const categoryOptions = computed(() => [
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-1">
-        <div class="bg-white rounded-lg shadow p-6">
-          <h3 class="text-lg font-semibold mb-4">
+        <div class="rounded-lg shadow bg-white">
+          <h3 class="text-lg font-semibold px-6 py-3 border-b border-gray-200">
             {{ editingId ? 'Edit Category' : 'Add Category' }}
           </h3>
-          <form @submit.prevent="submitForm" class="space-y-3">
-            <div>
-              <label class="block text-sm font-medium mb-1">Name</label>
-              <input
-                v-model="form.name"
-                @blur="generateSlug"
-                type="text"
-                class="input-field"
-                required
-              />
+          <form @submit.prevent="submitForm">
+              <div class="space-y-3 px-6 py-3">
+              <div>
+                <label class="block text-sm font-medium mb-1">Name</label>
+                <input
+                  v-model="form.name"
+                  @blur="generateSlug"
+                  type="text"
+                  class="input-field"
+                  required
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Slug</label>
+                <input v-model="form.slug" type="text" class="input-field" required />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Description</label>
+                <textarea
+                  v-model="form.description"
+                  rows="3"
+                  class="input-field min-h-20"
+                ></textarea>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Parent Category</label>
+                <CustomSelect v-model="form.parent_id" :options="categoryOptions" />
+              </div>
+              <div class="flex items-center">
+                <input v-model="form.is_active" type="checkbox" id="is_active" class="mr-2" />
+                <label for="is_active" class="text-sm">Active</label>
+              </div>
             </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Slug</label>
-              <input v-model="form.slug" type="text" class="input-field" required />
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Description</label>
-              <textarea
-                v-model="form.description"
-                rows="3"
-                class="input-field min-h-20"
-              ></textarea>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Parent Category</label>
-              <CustomSelect v-model="form.parent_id" :options="categoryOptions" />
-            </div>
-            <div class="flex items-center">
-              <input v-model="form.is_active" type="checkbox" id="is_active" class="mr-2" />
-              <label for="is_active" class="text-sm">Active</label>
-            </div>
-            <div class="flex gap-2">
-              <button
-                type="submit"
-                class="flex-1 text-sm bg-theme-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-theme-700"
-              >
-                {{ editingId ? 'Update' : 'Create' }}
-              </button>
-              <button
+            <div class="flex gap-2 px-6 py-3 border-t border-gray-200">
+              <PrimacyButton type="submit" :label="editingId ? 'Update' : 'Create'" :loading="categoryLoading" />
+
+              <CancelButtonOutline
                 v-if="editingId"
                 type="button"
+                label="Cancel"
                 @click="
                   resetForm(),
                   showModal = false
-                "
-                class="px-4 text-sm py-2 border border border-red-500 font-medium text-white cursor-pointer rounded bg-red-500 hover:bg-red-600"
-              >
-                Cancel
-              </button>
+                " />
             </div>
           </form>
         </div>
       </div>
 
       <div class="lg:col-span-2">
-        <div class="bg-white rounded-lg shadow">
-          <div class="p-4 border-b bg-theme-100 text-white rounded-tl-lg rounded-tr-lg">
+        <div class="rounded-lg shadow bg-white">
+          <div class="p-4 border-b rounded-tl-lg rounded-tr-lg flex items-center justify-between gap-4">
+            <div class="text-lg font-semibold">Categories</div>
             <input
               v-model="search"
               @input="

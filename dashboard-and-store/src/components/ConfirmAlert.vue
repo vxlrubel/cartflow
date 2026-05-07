@@ -1,7 +1,16 @@
-<!-- components/ConfirmAlert.vue -->
 <script setup>
-import { ref, watch } from 'vue'
-const isOpen = ref(true)
+import { ref } from 'vue'
+
+defineProps({
+  isOpen: { type: Boolean, default: false },
+  title: { type: String, default: 'Are you sure?' },
+  message: { type: String, default: 'This action cannot be undone. Are you sure you want to proceed?' },
+  confirmText: { type: String, default: 'Yes' },
+  cancelText: { type: String, default: 'No' },
+})
+
+const emit = defineEmits(['confirm', 'cancel'])
+
 const backdrop = ref(null)
 
 const handleBackdrop = () => {
@@ -28,44 +37,41 @@ const handleBackdrop = () => {
           @click.stop.prevent=""
         >
           <div class="border-b px-8 py-4 border-gray-200 bg-theme-500 rounded-tl-2xl rounded-tr-2xl">
-              <h2 class="text-xl font-semibold text-white">
-                Are you sure?
-              </h2>
-            </div>
+            <h2 class="text-xl font-semibold text-white">
+              {{ title }}
+            </h2>
+          </div>
 
-            <!-- Body -->
-            <div class="p-8">
-              <p class="text-gray-600 leading-relaxed">
-               This action cannot be undone. Are you sure you want to proceed?
-              </p>
-            </div>
+          <div class="p-8">
+            <p class="text-gray-600 leading-relaxed">
+              {{ message }}
+            </p>
+          </div>
 
-            <!-- Footer -->
-            <div class="flex items-center justify-end gap-3 border-t px-8 py-4 border-gray-200 rounded-bl-2xl rounded-br-2xl">
-              <button
-                type="button"
-                @click="isOpen = false"
-                class="button-cancel w-15"
-              >
-                No
-              </button>
+          <div class="flex items-center justify-end gap-3 border-t px-8 py-4 border-gray-200 rounded-bl-2xl rounded-br-2xl">
+            <button
+              type="button"
+              @click="emit('cancel')"
+              class="button-cancel w-15"
+            >
+              {{ cancelText }}
+            </button>
 
-              <button
-                type="button"
-                class="button-primary w-15"
-              >
-               Yes
-              </button>
-            </div>
+            <button
+              type="button"
+              @click="emit('confirm')"
+              class="button-primary w-15"
+            >
+              {{ confirmText }}
+            </button>
+          </div>
         </div>
       </div>
-
     </div>
   </Transition>
 </template>
 
 <style scoped>
-
 .animate-ping-shake {
   animation: pingShake 0.3s ease-in-out;
 }
@@ -74,27 +80,21 @@ const handleBackdrop = () => {
   0% {
     transform: scale(1) translateX(0);
   }
-
   15% {
     transform: scale(1.03) translateX(-4px);
   }
-
   30% {
     transform: scale(1.05) translateX(4px);
   }
-
   45% {
     transform: scale(1.04) translateX(-3px);
   }
-
   60% {
     transform: scale(1.03) translateX(3px);
   }
-
   75% {
     transform: scale(1.02) translateX(-2px);
   }
-
   100% {
     transform: scale(1) translateX(0);
   }

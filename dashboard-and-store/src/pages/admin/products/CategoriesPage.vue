@@ -23,6 +23,8 @@ const form = ref({
 })
 const editingId = ref(null)
 const showModal = ref(false)
+const showConfirmDelete = ref(false)
+const pendingDeleteId = ref(null)
 
 const fetchCategories = async () => {
   loading.value = true
@@ -74,14 +76,25 @@ const editCategory = (category) => {
   showModal.value = true
 }
 
-const deleteCategory = async (id) => {
-  if (!confirm('Are you sure you want to delete this category?')) return
+const confirmDelete = (id) => {
+  pendingDeleteId.value = id
+  showConfirmDelete.value = true
+}
+
+const handleDeleteConfirm = async () => {
   try {
-    await api.delete(API_ENDPOINTS.categories.delete(id))
+    await api.delete(API_ENDPOINTS.categories.delete(pendingDeleteId.value))
+    showConfirmDelete.value = false
+    pendingDeleteId.value = null
     fetchCategories()
   } catch (error) {
     console.error('Error deleting category:', error)
   }
+}
+
+const handleDeleteCancel = () => {
+  showConfirmDelete.value = false
+  pendingDeleteId.value = null
 }
 
 const paginate = (page) => {
@@ -245,7 +258,7 @@ const categoryOptions = computed(() => [
                       Edit
                     </button>
                     <button
-                      @click="deleteCategory(category.id)"
+                      @click="confirmDelete(category.id)"
                       class="text-red-600 hover:text-red-800"
                     >
                       Delete
@@ -272,6 +285,14 @@ const categoryOptions = computed(() => [
       </div>
     </div>
 
-    <ConfirmAlert/>
+    <ConfirmAlert
+      :isOpen="showConfirmDelete"
+      title="Delete Category"
+      message="Are you sure you want to delete this category? This action cannot be undone."
+      confirmText="Delete"
+      cancelText="Cancel"
+      @confirm="handleDeleteConfirm"
+      @cancel="handleDeleteCancel"
+    />
   </div>
 </template>

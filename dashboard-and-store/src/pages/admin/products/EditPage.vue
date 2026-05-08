@@ -6,6 +6,9 @@ import TiptapEditor from '@/components/TiptapEditor.vue'
 import ImageUploader from '@/components/ImageUploader.vue'
 import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
 import CancelButton from '@/components/buttons/CancelButton.vue'
+import ToastMessage from '@/components/ToastMessage.vue'
+import handleAxiosError from '@/services/handleAxiosError'
+
 
 const route = useRoute()
 const router = useRouter()
@@ -36,6 +39,10 @@ const newCategory = ref('')
 const newBrand = ref('')
 
 const slugPattern = /^[a-z0-9-]+$/
+
+const showToast = ref(false)
+const toastStatus = ref('success')
+const toastMessage = ref('')
 
 const isValidSlug = computed(() => {
   if (!form.value.slug) return true
@@ -123,19 +130,36 @@ const handleSubmit = async () => {
   if (!validateForm()) return
 
   loading.value = true
+
+  const payload = {
+    ...form.value,
+    price: parseFloat(form.value.price),
+    sale_price: form.value.sale_price ? parseFloat(form.value.sale_price) : null,
+    stock: parseInt(form.value.stock),
+    brand_id: form.value.brand_id || null,
+  }
+
   try {
-    await store.updateProduct(productId, {
-      ...form.value,
-      price: parseFloat(form.value.price),
-      sale_price: form.value.sale_price ? parseFloat(form.value.sale_price) : null,
-      stock: parseInt(form.value.stock),
-      brand_id: form.value.brand_id || null,
-    })
-    router.push('/dashboard/products')
+
+    await store.updateProduct(productId, payload)
+
+    toastStatus.value = 'success'
+    toastMessage.value = 'Product updated successfully!'
+    showToast.value = true
+
   } catch (err) {
-    if (err.response?.data?.errors) {
-      errors.value = err.response.data.errors
+
+    const response = handleAxiosError(err)
+
+    toastStatus.value = response.status
+    toastMessage.value = response.message
+
+    if (response.errors) {
+      errors.value = response.errors
     }
+
+    showToast.value = true
+
   } finally {
     loading.value = false
   }
@@ -146,10 +170,21 @@ const handleCancel = () => {
 }
 
 onMounted(loadFormData)
+
+  
+
 </script>
 
 <template>
   <div>
+
+    <ToastMessage
+      v-if="showToast"
+      :status="toastStatus"
+      :message="toastMessage"
+      @close="showToast = false"
+    />
+
     <div v-if="fetching" class="flex items-center justify-center py-12">
       <svg class="animate-spin h-8 w-8 text-theme-600" fill="none" viewBox="0 0 24 24">
         <circle

@@ -73,6 +73,13 @@ body {
 .button-cancel {
  @apply text-white select-none text-sm outline-0 bg-rose-500 hover:bg-rose-600 hover:text-white focus:ring-2 focus:ring-rose-300 focus:ring-offset-1 focus:bg-rose-500 focus:text-white  font-semibold h-8 inline-flex items-center justify-center px-3 rounded border-2 cursor-pointer border-rose-500 disabled:bg-gray-200 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed disabled:select-none transition-colors duration-200;
 }
+.button-success {
+  @apply text-white select-none text-sm outline-0 bg-green-500 hover:bg-green-600 hover:text-white focus:ring-2 focus:ring-green-300 focus:ring-offset-1 focus:bg-green-500 focus:text-white  font-semibold h-8 inline-flex items-center justify-center px-3 rounded border-2 cursor-pointer border-green-500 disabled:bg-gray-200 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed disabled:select-none transition-colors duration-200;
+}
+
+.button-warning {
+  @apply text-white select-none text-sm outline-0 bg-amber-500 hover:bg-amber-600 hover:text-white focus:ring-2 focus:ring-amber-300 focus:ring-offset-1 focus:bg-amber-500 focus:text-white  font-semibold h-8 inline-flex items-center justify-center px-3 rounded border-2 cursor-pointer border-amber-500 disabled:bg-gray-200 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed disabled:select-none transition-colors duration-200;
+}
 
 .publish{
   @apply text-green-600 font-semibold cursor-pointer border-b-2 hover:text-green-700 duration-150 transition-colors;

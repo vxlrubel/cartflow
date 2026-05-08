@@ -8,6 +8,7 @@ import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
 import CancelButton from '@/components/buttons/CancelButton.vue'
 import ToastMessage from '@/components/ToastMessage.vue'
 import handleAxiosError from '@/services/handleAxiosError'
+import { openMediaBox } from '@/services/media-box'
 
 
 const route = useRoute()
@@ -171,12 +172,29 @@ const handleCancel = () => {
 
 onMounted(loadFormData)
 
+
+const image = ref(null)
+
+const chooseImage = async () => {
+
+  const media = await openMediaBox()
+
+  image.value = media
+}
   
 
 </script>
 
 <template>
   <div>
+
+
+
+      <img
+        v-if="image"
+        :src="image.url"
+        class="w-32 mt-4"
+      >
 
     <ToastMessage
       v-if="showToast"
@@ -315,9 +333,15 @@ onMounted(loadFormData)
         <div class="p-3 space-y-5">
           <div class="border border-neutral-200 rounded">
             <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Feature image</div>
-            <div class="aspect-video"></div>
-            <input type="file" class="hidden" id="featureImage" />
-            <label for="featureImage" class="block text-sm font-medium text-center text-gray-700 bg-neutral-200 py-1 cursor-pointer hover:bg-neutral-300">Choose Image</label>
+            <div class="aspect-video relative">
+               <img
+                  v-if="image"
+                  :src="image.url"
+                  class="h-full w-full object-cover"
+                >
+              <button @click="chooseImage" class="absolute bottom-2 left-2 right-2 block text-sm font-medium text-center text-gray-700 bg-neutral-200 py-1 cursor-pointer hover:bg-neutral-300">Choose Image</button>
+            </div>
+            
           </div>
           <div class="border border-neutral-200 rounded">
             <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Status</div>

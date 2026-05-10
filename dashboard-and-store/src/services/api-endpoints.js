@@ -223,6 +223,14 @@ export const API_ENDPOINTS = {
     update: (id) => `/products/${id}/inventory`,
   },
 
+  media: {
+    list: '/media',
+    single: (id) => `/media/${id}`,
+    upload: '/media/upload',
+    update: (id) => `/media/${id}`,
+    delete: (id) => `/media/${id}`,
+  },
+
   settings: {
     list: '/settings',
     create: '/settings',

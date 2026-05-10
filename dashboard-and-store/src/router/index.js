@@ -394,10 +394,7 @@ router.beforeEach(async (to, _from) => {
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    if (to.path === '/customer/login') {
-      return true
-    }
-    return '/customer/login'
+    return '/login'
   }
 
   if (to.meta.guestOnly && authStore.isAuthenticated) {

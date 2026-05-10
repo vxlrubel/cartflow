@@ -1,9 +1,12 @@
 <script setup>
+import { ref } from 'vue'
 import { useMediaBoxStore } from '@/stores/mediaBoxStore'
 import CancelButton from '@/components/buttons/CancelButton.vue'
 import PrimaryButton from '@/components/buttons/PrimacyButton.vue'
 
 const store = useMediaBoxStore()
+
+const activeTab = ref('upload')
 
 const chooseMedia = (media) => {
   store.setMedia(media)
@@ -42,68 +45,93 @@ const uploadFile = async (event) => {
 
     <div
       v-if="store.isOpen"
-      class="fixed inset-0 z-55 bg-black/20 backdrop-blur-sm flex items-center justify-center"
+      class="fixed inset-0 z-55 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4 lg:px-8"
     >
 
-      <div class="bg-white w-full max-w-341.5 h-[calc(100dvh-2rem)] lg:h-[calc(100dvh-4rem)] rounded-xl overflow-hidden flex flex-col">
+      <div class="bg-white w-full h-[calc(100dvh-2rem)] lg:h-[calc(100dvh-4rem)] overflow-hidden flex flex-col">
 
         <!-- Header -->
-        <div class="border-b border-gray-300 px-4 h-15 flex items-center justify-between bg-[#f0f0f0]">
-
-          <h2 class="font-semibold text-2xl">
-            Media Library
-          </h2>
-
-          <button @click="store.close()" class="text-rose-500 hover:text-rose-600 cursor-pointer">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8.78362 8.78412C8.49073 9.07702 8.49073 9.55189 8.78362 9.84478L10.9388 12L8.78362 14.1552C8.49073 14.4481 8.49073 14.923 8.78362 15.2159C9.07652 15.5088 9.55139 15.5088 9.84428 15.2159L11.9995 13.0607L14.1546 15.2158C14.4475 15.5087 14.9224 15.5087 15.2153 15.2158C15.5082 14.9229 15.5082 14.448 15.2153 14.1551L13.0602 12L15.2153 9.84485C15.5082 9.55196 15.5082 9.07708 15.2153 8.78419C14.9224 8.4913 14.4475 8.4913 14.1546 8.78419L11.9995 10.9393L9.84428 8.78412C9.55139 8.49123 9.07652 8.49123 8.78362 8.78412Z" fill="currentColor"/>
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM3.5 12C3.5 7.30558 7.30558 3.5 12 3.5C16.6944 3.5 20.5 7.30558 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C7.30558 20.5 3.5 16.6944 3.5 12Z" fill="currentColor"/>
-            </svg>
-          </button>
+        <div class="border-b border-gray-300 h-19 flex flex-col">
+          <div class="flex items-center justify-between h-12">
+            <h2 class="font-semibold text-2xl text-gray-500 flex-1 px-4">
+              Media Library
+            </h2>
+            <button @click="store.close(), activeTab = 'upload'" class="text-gray-600 hover:text-theme-500 cursor-pointer h-12 w-12 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
+                <path d="m250.67-177-73.34-73.67 229-229.33-229-228.67 73.34-74.66L480-554.67l229.33-228.66 73.34 74.66L554.33-480l228.34 229.33L709.33-177 480-405.67 250.67-177Z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="flex items-center px-4 text-sm text-gray-600 h-7">
+            <button
+              type="button"
+              class="py-1 cursor-pointer"
+              :class="{'text-theme-500' : activeTab == 'upload'}"
+              @click="activeTab = 'upload'">Upload files</button>
+            <span class="mx-2">|</span>
+            <button
+              type="button"
+              class="py-1 cursor-pointer"
+              :class="{'text-theme-500' : activeTab == 'library'}"
+              @click="activeTab = 'library'">Media library</button>
+          </div>
         </div>
 
         <!-- Upload -->
         <div class="h-[calc(100dvh-2rem-120px)] lg:h-[calc(100dvh-4rem-120px)] flex flex-col">
-          <div class="p-4 border-b">
 
-            <input
-              type="file"
-              @change="uploadFile"
-            >
+          <template v-if="activeTab == 'upload'">
+            <div class="p-4 flex-1 flex items-center justify-center">
 
-          </div>
-
-          <!-- Media Grid -->
-          <div class="flex-1 overflow-auto p-4">
-
-            <div class="grid grid-cols-6 gap-4">
-
-              <div
-                v-for="media in store.medias"
-                :key="media.id"
-                @click="chooseMedia(media)"
-                class="border rounded-lg overflow-hidden cursor-pointer hover:border-blue-500"
-              >
-
-                <img
-                  :src="media.url"
-                  class="w-full h-28 object-cover"
-                >
-
+              <div class="text-center w-87.5 space-y-2">
+                <p class="text-[20px] text-gray-500 font-medium">Drop files to upload</p>
+                <span class="text-sm text-gray-400">or</span>
+                <p>
+                  <input
+                    class="hidden"
+                    type="file"
+                    id="uploadFilesInputField"
+                    @change="uploadFile"
+                  >
+                  <label for="uploadFilesInputField" class="inline-block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer border border-gray-300 my-3">
+                    Select Files
+                  </label>
+                </p>
+                <p class="text-sm text-gray-400">
+                  Maximum upload file size: 50 MB.
+                </p>
               </div>
 
             </div>
+          </template>
 
-          </div>
+          <!-- Media Grid -->
+          <template v-if="activeTab == 'library'">
+            <div class="flex-1 overflow-auto p-4">
+              <div class="grid grid-cols-6 gap-4">
+                <div
+                  v-for="media in store.medias"
+                  :key="media.id"
+                  @click="chooseMedia(media)"
+                  class="border rounded-lg overflow-hidden cursor-pointer hover:border-blue-500"
+                >
+                  <img
+                    :src="media.url"
+                    class="w-full h-28 object-cover"
+                  >
+                </div>
+              </div>
+            </div>
+          </template>
         </div>
 
         <div class="border-t border-gray-300 h-15 flex items-center justify-end px-4 gap-3 bg-[#f0f0f0]">
           <CancelButton
-            @click="store.close()"
+            @click="store.close(), activeTab = 'upload'"
             label="Close"
           />
           <PrimaryButton
-            label="Select Item"
+            label="Set selected item"
           />
         </div>
 

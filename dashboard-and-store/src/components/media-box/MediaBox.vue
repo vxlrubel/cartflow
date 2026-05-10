@@ -107,57 +107,57 @@ onMounted(() => {
         <!-- Upload -->
         <div class="h-[calc(100dvh-2rem-120px)] lg:h-[calc(100dvh-4rem-120px)] flex flex-col">
 
-          <Transition name="fadeinout">
-            <template v-if="activeTab == 'upload'">
-              <div class="p-4 flex-1 flex items-center justify-center">
 
-                <div class="text-center w-87.5 space-y-2">
-                  <p class="text-[20px] text-gray-500 font-medium">Drop files to upload</p>
-                  <span class="text-sm text-gray-400">or</span>
-                  <p>
-                    <input
-                      class="hidden"
-                      type="file"
-                      multiple
-                      id="uploadFilesInputField"
-                      @change="uploadFiles"
-                    >
-                    <label for="uploadFilesInputField" class="inline-block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer border border-gray-300 my-3">
-                      Select Files
-                    </label>
-                  </p>
-                  <p v-if="!uploading" class="text-sm text-gray-400">
-                    Maximum upload file size: 50 MB.
-                  </p>
-                  <div v-if="uploading" class="text-sm text-theme-500 font-medium">
-                    Uploading {{ uploadQueue.length }} file(s)...
-                  </div>
-                </div>
+          <template v-if="activeTab == 'upload'">
+            <div class="p-4 flex-1 flex items-center justify-center">
 
-              </div>
-            </template>
-          </Transition>
-          <!-- Media Grid -->
-          <Transition name="fadeinout">
-            <template v-if="activeTab == 'library'">
-              <div class="flex-1 overflow-auto p-4">
-                <div class="grid grid-cols-6 gap-4">
-                  <div
-                    v-for="media in store.medias"
-                    :key="media.id"
-                    @click="selectMedia(media)"
-                    class="border-2 rounded-lg overflow-hidden cursor-pointer hover:border-blue-500"
-                    :class="selectedMediaItem?.id === media.id ? 'border-blue-500' : 'border-transparent'"
+              <div class="text-center w-87.5 space-y-2">
+                <p class="text-[20px] text-gray-500 font-medium">Drop files to upload</p>
+                <span class="text-sm text-gray-400">or</span>
+                <p>
+                  <input
+                    class="hidden"
+                    type="file"
+                    multiple
+                    id="uploadFilesInputField"
+                    @change="uploadFiles"
                   >
-                    <img
-                      :src="media.url"
-                      class="w-full h-28 object-cover"
-                    >
-                  </div>
+                  <label for="uploadFilesInputField" class="inline-block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer border border-gray-300 my-3">
+                    Select Files
+                  </label>
+                </p>
+                <p v-if="!uploading" class="text-sm text-gray-400">
+                  Maximum upload file size: 50 MB.
+                </p>
+                <div v-if="uploading" class="text-sm text-theme-500 font-medium">
+                  Uploading {{ uploadQueue.length }} file(s)...
                 </div>
               </div>
-            </template>
-          </Transition>
+
+            </div>
+          </template>
+
+          <!-- Media Grid -->
+
+          <template v-if="activeTab == 'library'">
+            <div class="flex-1 overflow-auto p-4">
+              <div class="grid grid-cols-6 gap-4">
+                <div
+                  v-for="media in store.medias"
+                  :key="media.id"
+                  @click="selectMedia(media)"
+                  class="border-2 rounded-lg overflow-hidden cursor-pointer hover:border-blue-500"
+                  :class="selectedMediaItem?.id === media.id ? 'border-blue-500' : 'border-transparent'"
+                >
+                  <img
+                    :src="media.url"
+                    class="w-full h-28 object-cover"
+                  >
+                </div>
+              </div>
+            </div>
+          </template>
+
         </div>
 
         <div class="border-t border-gray-300 h-15 flex items-center justify-end px-4 gap-3 bg-[#f0f0f0]">
@@ -181,3 +181,4 @@ onMounted(() => {
   </Teleport>
 
 </template>
+

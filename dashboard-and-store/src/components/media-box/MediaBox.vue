@@ -1,8 +1,10 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useMediaBoxStore } from '@/stores/mediaBoxStore'
 import CancelButton from '@/components/buttons/CancelButton.vue'
 import PrimaryButton from '@/components/buttons/PrimacyButton.vue'
+import api from '@/services/api'
+import API_ENDPOINTS from '@/services/api-endpoints'
 
 const store = useMediaBoxStore()
 
@@ -13,7 +15,6 @@ const chooseMedia = (media) => {
 }
 
 const uploadFile = async (event) => {
-
   const file = event.target.files[0]
 
   if (!file) return
@@ -22,19 +23,22 @@ const uploadFile = async (event) => {
 
   formData.append('file', file)
 
-  /**
-   * Upload API
-   */
-
-  const response = await fetch('/api/upload', {
-    method: 'POST',
-    body: formData
+  const { data } = await api.post(API_ENDPOINTS.media.upload, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
   })
-
-  const data = await response.json()
 
   store.medias.unshift(data)
 }
+
+const loadMedia = async () => {
+  const { data } = await api.get(API_ENDPOINTS.media.list)
+
+  store.medias = data.data ?? []
+}
+
+onMounted(() => {
+  loadMedia()
+})
 </script>
 
 <template>

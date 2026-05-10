@@ -6,9 +6,9 @@ import TiptapEditor from '@/components/TiptapEditor.vue'
 import ImageUploader from '@/components/ImageUploader.vue'
 import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
 import CancelButton from '@/components/buttons/CancelButton.vue'
-import ToastMessage from '@/components/ToastMessage.vue'
 import handleAxiosError from '@/services/handleAxiosError'
 import { openMediaBox } from '@/services/media-box'
+import { showToast } from '@/services/toast'
 
 
 const route = useRoute()
@@ -40,10 +40,6 @@ const newCategory = ref('')
 const newBrand = ref('')
 
 const slugPattern = /^[a-z0-9-]+$/
-
-const showToast = ref(false)
-const toastStatus = ref('success')
-const toastMessage = ref('')
 
 const isValidSlug = computed(() => {
   if (!form.value.slug) return true
@@ -144,22 +140,17 @@ const handleSubmit = async () => {
 
     await store.updateProduct(productId, payload)
 
-    toastStatus.value = 'success'
-    toastMessage.value = 'Product updated successfully!'
-    showToast.value = true
+    showToast('success', 'Product updated successfully!')
 
   } catch (err) {
 
     const response = handleAxiosError(err)
 
-    toastStatus.value = response.status
-    toastMessage.value = response.message
-
     if (response.errors) {
       errors.value = response.errors
     }
 
-    showToast.value = true
+    showToast(response.status, response.message)
 
   } finally {
     loading.value = false
@@ -195,13 +186,6 @@ const chooseImage = async () => {
         :src="image.url"
         class="w-32 mt-4"
       >
-
-    <ToastMessage
-      v-if="showToast"
-      :status="toastStatus"
-      :message="toastMessage"
-      @close="showToast = false"
-    />
 
     <div v-if="fetching" class="flex items-center justify-center py-12">
       <svg class="animate-spin h-8 w-8 text-theme-600" fill="none" viewBox="0 0 24 24">

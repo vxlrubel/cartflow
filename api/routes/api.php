@@ -13,6 +13,7 @@ use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\CustomerGroupController;
 use App\Http\Controllers\API\EmailCampaignController;
 use App\Http\Controllers\API\InventoryController;
+use App\Http\Controllers\API\MediaController;
 use App\Http\Controllers\API\ReportsController;
 use App\Http\Controllers\API\OfferController;
 use App\Http\Controllers\API\OrderController;
@@ -189,6 +190,13 @@ Route::prefix('v1')->middleware([CorsMiddleware::class])->group(function () {
         Route::apiResource('customer-groups', CustomerGroupController::class);
         Route::post('/customer-groups/{id}/customers', [CustomerGroupController::class, 'addCustomers']);
         Route::delete('/customer-groups/{id}/customers', [CustomerGroupController::class, 'removeCustomers']);
+
+        // Media
+        Route::get('/media', [MediaController::class, 'index']);
+        Route::get('/media/{media}', [MediaController::class, 'show']);
+        Route::post('/media/upload', [MediaController::class, 'upload']);
+        Route::put('/media/{media}', [MediaController::class, 'update']);
+        Route::delete('/media/{media}', [MediaController::class, 'destroy']);
 
         // Activity Logs
         Route::get('/activity-logs', [ActivityLogController::class, 'index']);

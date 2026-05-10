@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useMediaBoxStore } from '@/stores/mediaBoxStore'
 import CancelButton from '@/components/buttons/CancelButton.vue'
 import PrimaryButton from '@/components/buttons/PrimacyButton.vue'
@@ -12,6 +12,7 @@ const activeTab = ref('upload')
 const uploading = ref(false)
 const uploadQueue = ref([])
 const selectedMediaItem = ref(null)
+const saving = ref(false)
 
 const selectMedia = (media) => {
   selectedMediaItem.value = media
@@ -59,6 +60,70 @@ const loadMedia = async () => {
   store.medias = data.data ?? []
 }
 
+const updateMeta = async (field, value) => {
+  if (!selectedMediaItem.value) return
+
+  saving.value = true
+
+  try {
+    const { data } = await api.put(API_ENDPOINTS.media.update(selectedMediaItem.value.id), {
+      [field]: value,
+    })
+
+    selectedMediaItem.value = data
+    const idx = store.medias.findIndex((m) => m.id === data.id)
+    if (idx !== -1) {
+      store.medias[idx] = data
+    }
+  } catch {
+    // ignore
+  } finally {
+    saving.value = false
+  }
+}
+
+const copyUrl = async () => {
+  if (!selectedMediaItem.value?.url) return
+
+  try {
+    await navigator.clipboard.writeText(selectedMediaItem.value.url)
+  } catch {
+    // fallback
+    const el = document.createElement('textarea')
+    el.value = selectedMediaItem.value.url
+    document.body.appendChild(el)
+    el.select()
+    document.execCommand('copy')
+    document.body.removeChild(el)
+  }
+}
+
+const getFileName = (media) => {
+  return media.file?.name || media.url?.split('/').pop() || 'Unnamed'
+}
+
+const formatSize = (bytes) => {
+  if (!bytes) return ''
+  const kb = bytes / 1024
+  if (kb < 1024) return `${kb.toFixed(1)} KB`
+  return `${(kb / 1024).toFixed(1)} MB`
+}
+
+const formatDate = (date) => {
+  if (!date) return ''
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
+
+const fileDimensions = computed(() => {
+  const f = selectedMediaItem.value?.file
+  if (f?.width && f?.height) return `${f.width} by ${f.height} pixels`
+  return ''
+})
+
 onMounted(() => {
   loadMedia()
 })
@@ -68,7 +133,7 @@ onMounted(() => {
 
   <Teleport to="body">
 
-    <Transition name="modal">
+    <Transition name="fadeinout">
 
     <div
       v-if="store.isOpen"
@@ -157,53 +222,81 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-              <div class="lg:w-75 p-4">
+              <div v-if="selectedMediaItem" class="lg:w-75 p-4 border-l border-gray-200">
 
                 <div class="text-sm uppercase text-gray-500">Attachment Details</div>
 
                 <div class="text-xs space-y-1 pb-3 border-b border-gray-300 mt-2 mb-4">
                   <div class="aspect-video mb-3">
-                    <img :src="selectedMediaItem?.url" :alt="selectedMediaItem?.name" class="h-full w-full object-cover"/>
+                    <img :src="selectedMediaItem.url" :alt="getFileName(selectedMediaItem)" class="h-full w-full object-cover"/>
                   </div>
 
-                  <p>Screenshot-2025-11-13-180352.png</p>
-                  <p>May 10, 2026</p>
-                  <p>98 KB</p>
-                  <p>926 by 631 pixels</p>
-                  <button class="text-sm text-red-500 hover:text-red-700 cursor-pointer">Delete permanently</button>
+                  <p>{{ getFileName(selectedMediaItem) }}</p>
+                  <p>{{ formatDate(selectedMediaItem.created_at) }}</p>
+                  <p v-if="selectedMediaItem.file?.size">{{ formatSize(selectedMediaItem.file.size) }}</p>
+                  <p v-if="fileDimensions">{{ fileDimensions }}</p>
+                  <button @click="selectedMediaItem = null" class="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">Deselect</button>
                 </div>
 
                 <div class="space-y-4 text-xs text-gray-400">
                   <div class="flex gap-2">
                     <span class="text-right flex-1 pt-2">Alt text</span>
                     <div class="w-45">
-                      <input type="text"  class="input-field"/>
+                      <input
+                        type="text"
+                        class="input-field"
+                        :value="selectedMediaItem.alt_text"
+                        @change="updateMeta('alt_text', $event.target.value)"
+                      />
                     </div>
                   </div>
                   <div class="flex gap-2">
                     <span class="text-right flex-1 pt-2">Title</span>
                     <div class="w-45">
-                      <input type="text"  class="input-field"/>
+                      <input
+                        type="text"
+                        class="input-field"
+                        :value="selectedMediaItem.title"
+                        @change="updateMeta('title', $event.target.value)"
+                      />
                     </div>
                   </div>
                   <div class="flex gap-2">
                     <span class="text-right flex-1 pt-2">Caption</span>
                     <div class="w-45">
-                      <textarea  class="input-field min-h-15"></textarea>
+                      <textarea
+                        class="input-field min-h-15"
+                        :value="selectedMediaItem.caption"
+                        @change="updateMeta('caption', $event.target.value)"
+                      ></textarea>
                     </div>
                   </div>
                   <div class="flex gap-2">
                     <span class="text-right flex-1 pt-2">Description</span>
                     <div class="w-45">
-                      <textarea  class="input-field min-h-15"></textarea>
+                      <textarea
+                        class="input-field min-h-15"
+                        :value="selectedMediaItem.description"
+                        @change="updateMeta('description', $event.target.value)"
+                      ></textarea>
                     </div>
                   </div>
                   <div class="flex gap-2">
                     <span class="text-right flex-1 pt-2">File URL</span>
                     <div class="w-45">
-                      <input type="text"  class="input-field"/>
-
-                      <button type="button" class="inline-block py-1 px-3 border border-theme-500 text-theme-500 font-medium cursor-pointer mt-2 rounded hover:bg-white">Copy to clipboard</button>
+                      <input
+                        type="text"
+                        class="input-field"
+                        :value="selectedMediaItem.url"
+                        readonly
+                      />
+                      <button
+                        type="button"
+                        @click="copyUrl"
+                        class="inline-block py-1 px-3 border border-theme-500 text-theme-500 font-medium cursor-pointer mt-2 rounded hover:bg-theme-50"
+                      >
+                        Copy to clipboard
+                      </button>
                     </div>
                   </div>
                 </div>

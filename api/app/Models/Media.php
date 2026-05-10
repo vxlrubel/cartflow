@@ -9,7 +9,7 @@ class Media extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['file', 'url'];
+    protected $fillable = ['file', 'url', 'alt_text', 'title', 'caption', 'description'];
 
     protected $casts = [
         'file' => 'array',

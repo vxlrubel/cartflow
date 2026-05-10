@@ -12,6 +12,10 @@ return new class extends Migration
             $table->id();
             $table->json('file')->nullable()->comment('Stores media file information (name, size, mime, path, etc.)');
             $table->text('url')->nullable()->comment('Uploaded file URL');
+            $table->string('alt_text')->nullable();
+            $table->string('title')->nullable();
+            $table->text('caption')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

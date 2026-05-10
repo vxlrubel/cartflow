@@ -50,15 +50,26 @@ class MediaController extends Controller
             $path = $file->storeAs('media', $filename, 'public');
             $url = Storage::disk('public')->url($path);
 
+            $info = [
+                'name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime' => $file->getMimeType(),
+                'ext' => $ext,
+                'path' => $path,
+            ];
+
+            $fullPath = Storage::disk('public')->path($path);
+            if (str_starts_with($file->getMimeType(), 'image/') && function_exists('getimagesize')) {
+                $dimensions = @getimagesize($fullPath);
+                if ($dimensions) {
+                    $info['width'] = $dimensions[0];
+                    $info['height'] = $dimensions[1];
+                }
+            }
+
             $data = [
                 'url' => $url,
-                'file' => [
-                    'name' => $file->getClientOriginalName(),
-                    'size' => $file->getSize(),
-                    'mime' => $file->getMimeType(),
-                    'ext' => $ext,
-                    'path' => $path,
-                ],
+                'file' => $info,
             ];
         } elseif ($request->filled('url')) {
             $data = [
@@ -97,15 +108,26 @@ class MediaController extends Controller
             $path = $file->storeAs('media', $filename, 'public');
             $url = Storage::disk('public')->url($path);
 
+            $info = [
+                'name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime' => $file->getMimeType(),
+                'ext' => $ext,
+                'path' => $path,
+            ];
+
+            $fullPath = Storage::disk('public')->path($path);
+            if (str_starts_with($file->getMimeType(), 'image/') && function_exists('getimagesize')) {
+                $dimensions = @getimagesize($fullPath);
+                if ($dimensions) {
+                    $info['width'] = $dimensions[0];
+                    $info['height'] = $dimensions[1];
+                }
+            }
+
             $media = Media::create([
                 'url' => $url,
-                'file' => [
-                    'name' => $file->getClientOriginalName(),
-                    'size' => $file->getSize(),
-                    'mime' => $file->getMimeType(),
-                    'ext' => $ext,
-                    'path' => $path,
-                ],
+                'file' => $info,
             ]);
 
             $uploaded[] = $media;
@@ -125,15 +147,26 @@ class MediaController extends Controller
             $path = $file->storeAs('media', $filename, 'public');
             $url = Storage::disk('public')->url($path);
 
+            $info = [
+                'name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime' => $file->getMimeType(),
+                'ext' => $ext,
+                'path' => $path,
+            ];
+
+            $fullPath = Storage::disk('public')->path($path);
+            if (str_starts_with($file->getMimeType(), 'image/') && function_exists('getimagesize')) {
+                $dimensions = @getimagesize($fullPath);
+                if ($dimensions) {
+                    $info['width'] = $dimensions[0];
+                    $info['height'] = $dimensions[1];
+                }
+            }
+
             $data = [
                 'url' => $url,
-                'file' => [
-                    'name' => $file->getClientOriginalName(),
-                    'size' => $file->getSize(),
-                    'mime' => $file->getMimeType(),
-                    'ext' => $ext,
-                    'path' => $path,
-                ],
+                'file' => $info,
             ];
         } else {
             if ($request->filled('url')) {
@@ -141,6 +174,12 @@ class MediaController extends Controller
             }
             if ($request->filled('file')) {
                 $data['file'] = $request->input('file');
+            }
+        }
+
+        foreach (['alt_text', 'title', 'caption', 'description'] as $field) {
+            if ($request->has($field)) {
+                $data[$field] = $request->input($field);
             }
         }
 

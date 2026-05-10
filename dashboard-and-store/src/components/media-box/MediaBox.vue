@@ -11,9 +11,16 @@ const store = useMediaBoxStore()
 const activeTab = ref('upload')
 const uploading = ref(false)
 const uploadQueue = ref([])
+const selectedMediaItem = ref(null)
 
-const chooseMedia = (media) => {
-  store.setMedia(media)
+const selectMedia = (media) => {
+  selectedMediaItem.value = media
+}
+
+const confirmSelection = () => {
+  if (selectedMediaItem.value) {
+    store.setMedia(selectedMediaItem.value)
+  }
 }
 
 const uploadFiles = async (event) => {
@@ -37,6 +44,7 @@ const uploadFiles = async (event) => {
 
     store.medias.unshift(...data)
     uploadQueue.value = []
+    activeTab.value = 'library'
   } catch {
     // handle error
   } finally {
@@ -135,8 +143,9 @@ onMounted(() => {
                 <div
                   v-for="media in store.medias"
                   :key="media.id"
-                  @click="chooseMedia(media)"
-                  class="border rounded-lg overflow-hidden cursor-pointer hover:border-blue-500"
+                  @click="selectMedia(media)"
+                  class="border-2 rounded-lg overflow-hidden cursor-pointer hover:border-blue-500"
+                  :class="selectedMediaItem?.id === media.id ? 'border-blue-500' : 'border-transparent'"
                 >
                   <img
                     :src="media.url"
@@ -155,6 +164,8 @@ onMounted(() => {
           />
           <PrimaryButton
             label="Set selected item"
+            :disabled="!selectedMediaItem"
+            @click="confirmSelection"
           />
         </div>
 

@@ -7,11 +7,13 @@ import CustomSelect from '@/components/CustomSelect.vue'
 import GridView from '@/components/icons/GridView.vue'
 import ListAlt from '@/components/icons/ListAlt.vue'
 import { openMediaBox } from '@/services/media-box'
+import { useMediaBoxStore } from '@/stores/mediaBoxStore'
 import api from '@/services/api'
 import API_ENDPOINTS from '@/services/api-endpoints'
 
 const route = useRoute()
 const router = useRouter()
+const mediaBoxStore = useMediaBoxStore()
 
 const medias = ref([])
 const loading = ref(false)
@@ -168,12 +170,8 @@ const forceDeleteMedia = async (id) => {
   }
 }
 
-const addFiles = async () => {
-  const media = await openMediaBox()
-  if (media) {
-    fetchMedia()
-    fetchCounts()
-  }
+const addFiles = () => {
+  openMediaBox()
 }
 
 const paginate = (page) => {
@@ -206,6 +204,13 @@ onMounted(() => {
 
 watch(viewOptions, (newValue) => {
   router.replace({ query: { ...route.query, view: newValue } })
+})
+
+watch(() => mediaBoxStore.isOpen, (newVal, oldVal) => {
+  if (oldVal && !newVal) {
+    fetchMedia()
+    fetchCounts()
+  }
 })
 </script>
 

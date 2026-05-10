@@ -195,6 +195,7 @@ Route::prefix('v1')->middleware([CorsMiddleware::class])->group(function () {
         Route::get('/media', [MediaController::class, 'index']);
         Route::get('/media/{media}', [MediaController::class, 'show']);
         Route::post('/media/upload', [MediaController::class, 'upload']);
+        Route::post('/media/upload-multiple', [MediaController::class, 'uploadMultiple']);
         Route::put('/media/{media}', [MediaController::class, 'update']);
         Route::delete('/media/{media}', [MediaController::class, 'destroy']);
         Route::post('/media/{id}/restore', [MediaController::class, 'restore']);

@@ -81,6 +81,39 @@ class MediaController extends Controller
         return response()->json($media, 201);
     }
 
+    public function uploadMultiple(Request $request): JsonResponse
+    {
+        $files = $request->file('files', []);
+
+        if (empty($files)) {
+            return response()->json(['error' => 'No files provided'], 422);
+        }
+
+        $uploaded = [];
+
+        foreach ($files as $file) {
+            $ext = $file->getClientOriginalExtension();
+            $filename = Str::uuid() . '.' . $ext;
+            $path = $file->storeAs('media', $filename, 'public');
+            $url = Storage::disk('public')->url($path);
+
+            $media = Media::create([
+                'url' => $url,
+                'file' => [
+                    'name' => $file->getClientOriginalName(),
+                    'size' => $file->getSize(),
+                    'mime' => $file->getMimeType(),
+                    'ext' => $ext,
+                    'path' => $path,
+                ],
+            ]);
+
+            $uploaded[] = $media;
+        }
+
+        return response()->json($uploaded, 201);
+    }
+
     public function update(Request $request, Media $media): JsonResponse
     {
         $data = [];

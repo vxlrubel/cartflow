@@ -9,25 +9,40 @@ import API_ENDPOINTS from '@/services/api-endpoints'
 const store = useMediaBoxStore()
 
 const activeTab = ref('upload')
+const uploading = ref(false)
+const uploadQueue = ref([])
 
 const chooseMedia = (media) => {
   store.setMedia(media)
 }
 
-const uploadFile = async (event) => {
-  const file = event.target.files[0]
+const uploadFiles = async (event) => {
+  const files = event.target.files
 
-  if (!file) return
+  if (!files || files.length === 0) return
+
+  uploading.value = true
+  uploadQueue.value = Array.from(files)
 
   const formData = new FormData()
 
-  formData.append('file', file)
+  for (const file of files) {
+    formData.append('files[]', file)
+  }
 
-  const { data } = await api.post(API_ENDPOINTS.media.upload, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }
-  })
+  try {
+    const { data } = await api.post(API_ENDPOINTS.media.uploadMultiple, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
 
-  store.medias.unshift(data)
+    store.medias.unshift(...data)
+    uploadQueue.value = []
+  } catch {
+    // handle error
+  } finally {
+    uploading.value = false
+    event.target.value = ''
+  }
 }
 
 const loadMedia = async () => {
@@ -94,16 +109,20 @@ onMounted(() => {
                   <input
                     class="hidden"
                     type="file"
+                    multiple
                     id="uploadFilesInputField"
-                    @change="uploadFile"
+                    @change="uploadFiles"
                   >
                   <label for="uploadFilesInputField" class="inline-block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer border border-gray-300 my-3">
                     Select Files
                   </label>
                 </p>
-                <p class="text-sm text-gray-400">
+                <p v-if="!uploading" class="text-sm text-gray-400">
                   Maximum upload file size: 50 MB.
                 </p>
+                <div v-if="uploading" class="text-sm text-theme-500 font-medium">
+                  Uploading {{ uploadQueue.length }} file(s)...
+                </div>
               </div>
 
             </div>

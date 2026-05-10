@@ -227,6 +227,7 @@ export const API_ENDPOINTS = {
     list: '/media',
     single: (id) => `/media/${id}`,
     upload: '/media/upload',
+    uploadMultiple: '/media/upload-multiple',
     update: (id) => `/media/${id}`,
     delete: (id) => `/media/${id}`,
     restore: (id) => `/media/${id}/restore`,

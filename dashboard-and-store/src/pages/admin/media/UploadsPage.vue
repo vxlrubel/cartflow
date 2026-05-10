@@ -7,14 +7,10 @@
   import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue'
   import GridView from '@/components/icons/GridView.vue'
   import ListAlt from '@/components/icons/ListAlt.vue';
-  const isOpenUploaderModal = ref(false);
+  import { openMediaBox } from '@/services/media-box'
   const viewOptions = ref('grid');
   const route = useRoute()
   const router = useRouter()
-
-  function openUploaderModal() {
-    isOpenUploaderModal.value = true;
-  }
 
   const bulkAction = ref('publish');
 
@@ -23,6 +19,13 @@
     { label: 'Move to Trash', value: 'trash' },
     { label: 'Restore', value: 'restore' },
   ];
+
+  const addFiles = async () => {
+
+  const media = await openMediaBox()
+
+  image.value = media
+}
 
   onMounted(() => {
     if (route.query.view) {
@@ -42,7 +45,7 @@
 <template>
   <div >
     <PageTitle title="Media Library">
-      <PrimaryButtonOutline label="Add New" @click="openUploaderModal" />
+      <PrimaryButtonOutline label="Add New" @click="addFiles" />
     </PageTitle>
 
 
@@ -139,36 +142,6 @@
             <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="w-full rounded-[5px] object-cover">
             <div class="p-2 border border-gray-200 text-sm font-medium line-clamp-1">Iphone 12 Pro (Max)</div>
           </div>
-        </div>
-      </div>
-    </Transition>
-
-    <Transition name="modal">
-      <div v-if="isOpenUploaderModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-[2px]">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-137.5 max-h-[90vh] flex flex-col">
-          <div class="flex items-center justify-between p-4 border-b border-gray-300 shrink-0">
-            <div class="text-lg font-medium">Upload Media</div>
-            <button  class="text-gray-400 hover:text-gray-600" @click="isOpenUploaderModal = false">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-          </div>
-
-          <div class="flex-1 overflow-y-auto">
-            <div class="p-4 space-y-4">
-
-              <div class="aspect-video flex items-center justify-center">
-                <input type="file">
-              </div>
-
-            </div>
-          </div>
-
-          <div class="flex justify-end gap-2 p-4 border-t border-gray-300 flex-shrink-0">
-            <CancelButtonOutline label="Cancel" @click="isOpenUploaderModal = false"/>
-             <PrimaryButtonOutline label="Upload" />
-          </div>
-
         </div>
       </div>
     </Transition>

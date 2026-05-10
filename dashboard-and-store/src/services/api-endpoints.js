@@ -229,6 +229,9 @@ export const API_ENDPOINTS = {
     upload: '/media/upload',
     update: (id) => `/media/${id}`,
     delete: (id) => `/media/${id}`,
+    restore: (id) => `/media/${id}/restore`,
+    forceDelete: (id) => `/media/${id}/force`,
+    trash: '/trash/media',
   },
 
   settings: {

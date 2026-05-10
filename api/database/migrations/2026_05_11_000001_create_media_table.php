@@ -13,6 +13,7 @@ return new class extends Migration
             $table->json('file')->nullable()->comment('Stores media file information (name, size, mime, path, etc.)');
             $table->text('url')->nullable()->comment('Uploaded file URL');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

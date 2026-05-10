@@ -11,9 +11,27 @@ use Illuminate\Support\Str;
 
 class MediaController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(Media::latest()->paginate(20));
+        $trashed = $request->query('trashed');
+
+        if ($trashed === 'all') {
+            $query = Media::withTrashed();
+        } elseif ($trashed) {
+            $query = Media::onlyTrashed();
+        } else {
+            $query = Media::query();
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('url', 'like', "%{$search}%")
+                  ->orWhere('file->name', 'like', "%{$search}%");
+            });
+        }
+
+        return response()->json($query->latest()->paginate($request->input('per_page', 20)));
     }
 
     public function show(Media $media): JsonResponse
@@ -100,6 +118,23 @@ class MediaController extends Controller
 
     public function destroy(Media $media): JsonResponse
     {
+        $media->delete();
+
+        return response()->json(['message' => 'Media moved to trash']);
+    }
+
+    public function restore($id): JsonResponse
+    {
+        $media = Media::withTrashed()->findOrFail($id);
+        $media->restore();
+
+        return response()->json($media);
+    }
+
+    public function forceDelete($id): JsonResponse
+    {
+        $media = Media::withTrashed()->findOrFail($id);
+
         $file = $media->file;
         if ($file && isset($file['path'])) {
             if (Storage::disk('public')->exists($file['path'])) {
@@ -107,8 +142,22 @@ class MediaController extends Controller
             }
         }
 
-        $media->delete();
+        $media->forceDelete();
 
-        return response()->json(['message' => 'Media deleted']);
+        return response()->json(['message' => 'Media permanently deleted']);
+    }
+
+    public function trash(Request $request): JsonResponse
+    {
+        $query = Media::onlyTrashed();
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('url', 'like', '%' . $request->search . '%')
+                  ->orWhere('file->name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        return response()->json($query->latest()->paginate($request->input('per_page', 20)));
     }
 }

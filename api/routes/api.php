@@ -197,6 +197,9 @@ Route::prefix('v1')->middleware([CorsMiddleware::class])->group(function () {
         Route::post('/media/upload', [MediaController::class, 'upload']);
         Route::put('/media/{media}', [MediaController::class, 'update']);
         Route::delete('/media/{media}', [MediaController::class, 'destroy']);
+        Route::post('/media/{id}/restore', [MediaController::class, 'restore']);
+        Route::delete('/media/{id}/force', [MediaController::class, 'forceDelete']);
+        Route::get('/trash/media', [MediaController::class, 'trash']);
 
         // Activity Logs
         Route::get('/activity-logs', [ActivityLogController::class, 'index']);

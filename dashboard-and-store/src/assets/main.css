@@ -125,6 +125,33 @@ body {
   transform: scale(0.95) translateY(20px);
 }
 
+/* Fade in animation */
+.fadeinout-enter-active,
+.fadeinout-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fadeinout-enter-from,
+.fadeinout-leave-to {
+  opacity: 0;
+}
+
+.fadeinout-content-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.fadeinout-content-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.fadeinout-content-enter-from {
+  opacity: 0;
+}
+
+.fadeinout-content-leave-to {
+  opacity: 0;
+}
+
 /* list item animation */
 .item-anim {
   animation: gridAnimation 0.215s ease-in-out;

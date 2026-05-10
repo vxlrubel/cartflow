@@ -140,20 +140,74 @@ onMounted(() => {
           <!-- Media Grid -->
 
           <template v-if="activeTab == 'library'">
-            <div class="flex-1 overflow-auto p-4">
-              <div class="grid grid-cols-6 gap-4">
-                <div
-                  v-for="media in store.medias"
-                  :key="media.id"
-                  @click="selectMedia(media)"
-                  class="border-2 rounded-lg overflow-hidden cursor-pointer hover:border-blue-500"
-                  :class="selectedMediaItem?.id === media.id ? 'border-blue-500' : 'border-transparent'"
-                >
-                  <img
-                    :src="media.url"
-                    class="w-full h-28 object-cover"
+            <div class="bg-[#f6f7f7] flex-1 overflow-auto flex flex-col lg:flex-row gap-4">
+              <div class="flex-1 bg-white p-4">
+                <div class="grid grid-cols-6 gap-4">
+                  <div
+                    v-for="media in store.medias"
+                    :key="media.id"
+                    @click="selectMedia(media)"
+                    class="border-2 rounded-lg overflow-hidden cursor-pointer hover:border-blue-500"
+                    :class="selectedMediaItem?.id === media.id ? 'border-blue-500' : 'border-transparent'"
                   >
+                    <img
+                      :src="media.url"
+                      class="w-full h-28 object-cover"
+                    >
+                  </div>
                 </div>
+              </div>
+              <div class="lg:w-75 p-4">
+
+                <div class="text-sm uppercase text-gray-500">Attachment Details</div>
+
+                <div class="text-xs space-y-1 pb-3 border-b border-gray-300 mt-2 mb-4">
+                  <div class="aspect-video mb-3">
+                    <img :src="selectedMediaItem?.url" :alt="selectedMediaItem?.name" class="h-full w-full object-cover"/>
+                  </div>
+
+                  <p>Screenshot-2025-11-13-180352.png</p>
+                  <p>May 10, 2026</p>
+                  <p>98 KB</p>
+                  <p>926 by 631 pixels</p>
+                  <button class="text-sm text-red-500 hover:text-red-700 cursor-pointer">Delete permanently</button>
+                </div>
+
+                <div class="space-y-4 text-xs text-gray-400">
+                  <div class="flex gap-2">
+                    <span class="text-right flex-1 pt-2">Alt text</span>
+                    <div class="w-45">
+                      <input type="text"  class="input-field"/>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <span class="text-right flex-1 pt-2">Title</span>
+                    <div class="w-45">
+                      <input type="text"  class="input-field"/>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <span class="text-right flex-1 pt-2">Caption</span>
+                    <div class="w-45">
+                      <textarea  class="input-field min-h-15"></textarea>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <span class="text-right flex-1 pt-2">Description</span>
+                    <div class="w-45">
+                      <textarea  class="input-field min-h-15"></textarea>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <span class="text-right flex-1 pt-2">File URL</span>
+                    <div class="w-45">
+                      <input type="text"  class="input-field"/>
+
+                      <button type="button" class="inline-block py-1 px-3 border border-theme-500 text-theme-500 font-medium cursor-pointer mt-2 rounded hover:bg-white">Copy to clipboard</button>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </template>

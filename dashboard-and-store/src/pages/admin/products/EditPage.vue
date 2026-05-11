@@ -328,6 +328,23 @@ const chooseImage = async () => {
                   :src="image.url"
                   class="h-full w-full object-cover"
                 >
+
+                <div class="absolute inset-0 flex flex-col justify-end items-around">
+                  <div class="flex items-center justify-around p-3">
+                    <button
+                      type="button"
+                      @click="chooseImage"
+                      class="bg-gray-800 hover:bg-gray-600 text-white flex items-center justify-center w-22 rounded transition-colors duration-200 text-xs font-medium py-2 cursor-pointer">
+                        Replace
+                    </button>
+                    <button type="button"
+                      @click="image = null"
+                      class="bg-rose-500 hover:bg-rose-600 text-white flex items-center justify-center w-22 rounded transition-colors duration-200 text-xs font-medium py-2 cursor-pointer">
+                      Remove
+                    </button>
+                  </div>
+                </div>
+
             </div>
             <div v-else class="p-3">
               <button
@@ -335,9 +352,6 @@ const chooseImage = async () => {
                 class="block text-sm font-medium text-center border border-neutral-300 text-gray-700 bg-neutral-100 py-3 w-full transition-colors duration-200 cursor-pointer hover:bg-neutral-200 hover:text-theme-500">
                 Choose Image
               </button>
-              <!-- Switch Button -->
-
-
             </div>
           </div>
 

@@ -61,7 +61,7 @@ body {
   @apply w-full border-2 border-gray-300 rounded text-sm px-3 h-8 focus:outline-none transition-colors duration-100 focus:bg-theme-50 focus:text-theme-600 focus:border-theme-500 focus:ring-2 focus:ring-theme-300 focus:ring-offset-1;
 }
 .input-field.invalid {
-  @apply border-rose-500 focus:border-rose-500 focus:ring-rose-300 focus:ring-offset-1 focus:bg-rose-50 focus:text-rose-600;
+  @apply border-rose-500 ring-2 ring-rose-300 ring-offset-1 bg-rose-50 text-rose-600;
 }
 
 .button-primary {

@@ -210,7 +210,7 @@ onMounted(loadFormData)
                 v-model="form.name"
                 type="text"
                 class="input-field"
-                :class="{ 'border-red-500': errors.name }"
+                :class="{ 'invalid': errors.name }"
                 placeholder="Enter product name"
               />
               <p v-if="errors.name" class="mt-1 text-sm text-red-500">{{ errors.name[0] }}</p>

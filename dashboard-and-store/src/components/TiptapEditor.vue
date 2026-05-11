@@ -29,6 +29,8 @@ const editor = useEditor({
   extensions: [
     StarterKit.configure({
       codeBlock: false,
+      link: false,
+      underline: false,
     }),
     TextAlign.configure({
       types: ['heading', 'paragraph'],

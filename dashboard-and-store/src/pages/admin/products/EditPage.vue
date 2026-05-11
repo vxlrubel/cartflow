@@ -3,13 +3,11 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/products'
 import TiptapEditor from '@/components/TiptapEditor.vue'
-import ImageUploader from '@/components/ImageUploader.vue'
 import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
 import CancelButton from '@/components/buttons/CancelButton.vue'
 import handleAxiosError from '@/services/handleAxiosError'
 import { openMediaBox } from '@/services/media-box'
 import { showToast } from '@/services/toast'
-
 
 const route = useRoute()
 const router = useRouter()
@@ -19,6 +17,7 @@ const productId = route.params.id
 
 const form = ref({
   name: '',
+  short_description: '',
   description: '',
   price: '',
   sale_price: '',
@@ -55,6 +54,7 @@ const loadFormData = async () => {
   if (product) {
     form.value = {
       name: product.name || '',
+      short_description: product.short_description || '',
       description: product.description || '',
       price: product.price || '',
       sale_price: product.sale_price || '',
@@ -64,8 +64,9 @@ const loadFormData = async () => {
       stock: product.stock || '',
       sku: product.sku || '',
       status: product.status || 'active',
-      images: product.images || [],
+      images: product.images ? product.images.map(img => img.url) : [],
     }
+    image.value = product.images && product.images.length > 0 ? product.images[0] : null
   }
   fetching.value = false
 }
@@ -161,18 +162,20 @@ const handleCancel = () => {
   router.push('/dashboard/products')
 }
 
-onMounted(loadFormData)
-
-
 const image = ref(null)
 
 const chooseImage = async () => {
-
   const media = await openMediaBox()
-
   image.value = media
+  form.value.images = media ? [media.url] : []
 }
 
+const removeImage = () => {
+  image.value = null
+  form.value.images = []
+}
+
+onMounted(loadFormData)
 
 </script>
 
@@ -212,6 +215,18 @@ const chooseImage = async () => {
               />
               <p v-if="errors.name" class="mt-1 text-sm text-red-500">{{ errors.name[0] }}</p>
             </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Short Description</label>
+                <textarea
+                  v-model="form.short_description"
+                  type="text"
+                  class="input-field min-h-30 resize-none"
+                  :class="{ 'invalid': errors.short_description }"
+                  placeholder="Enter short description"
+                ></textarea>
+                <p v-if="errors.short_description" class="mt-1 text-sm text-red-500">{{ errors.short_description[0] }}</p>
+              </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
               <TiptapEditor v-model="form.description" placeholder="Enter product description" />
@@ -230,62 +245,54 @@ const chooseImage = async () => {
                 Slug can only contain lowercase letters (a-z), numbers (0-9), and hyphens (-)
               </p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="space-y-6">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">SKU *</label>
-                  <input
-                    v-model="form.sku"
-                    type="text"
-                    class="input-field"
-                    :class="{ 'invalid': errors.sku }"
-                    placeholder="Enter SKU"
-                  />
-                  <p v-if="errors.sku" class="mt-1 text-sm text-red-500">{{ errors.sku[0] }}</p>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Images</label>
-                  <ImageUploader v-model="form.images" :multiple="true" :max-files="5" />
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">SKU *</label>
+                <input
+                  v-model="form.sku"
+                  type="text"
+                  class="input-field"
+                  :class="{ 'invalid': errors.sku }"
+                  placeholder="Enter SKU"
+                />
+                <p v-if="errors.sku" class="mt-1 text-sm text-red-500">{{ errors.sku[0] }}</p>
               </div>
-              <div class="space-y-6">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Price *</label>
-                  <input
-                    v-model="form.price"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    class="input-field"
-                    :class="{ 'invalid': errors.price }"
-                    placeholder="0.00"
-                  />
-                  <p v-if="errors.price" class="mt-1 text-sm text-red-500">{{ errors.price[0] }}</p>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Sale Price</label>
-                  <input
-                    v-model="form.sale_price"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    class="input-field"
-                    placeholder="0.00"
-                  />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Stock *</label>
-                  <input
-                    v-model="form.stock"
-                    type="number"
-                    min="0"
-                    class="input-field"
-                    :class="{ 'invalid': errors.stock }"
-                    placeholder="0"
-                  />
-                  <p v-if="errors.stock" class="mt-1 text-sm text-red-500">{{ errors.stock[0] }}</p>
-                </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Price *</label>
+                <input
+                  v-model="form.price"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  class="input-field"
+                  :class="{ 'invalid': errors.price }"
+                  placeholder="0.00"
+                />
+                <p v-if="errors.price" class="mt-1 text-sm text-red-500">{{ errors.price[0] }}</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Sale Price</label>
+                <input
+                  v-model="form.sale_price"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  class="input-field"
+                  placeholder="0.00"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Stock *</label>
+                <input
+                  v-model="form.stock"
+                  type="number"
+                  min="0"
+                  class="input-field"
+                  :class="{ 'invalid': errors.stock }"
+                  placeholder="0"
+                />
+                <p v-if="errors.stock" class="mt-1 text-sm text-red-500">{{ errors.stock[0] }}</p>
               </div>
             </div>
           </div>
@@ -318,33 +325,30 @@ const chooseImage = async () => {
               </label>
             </div>
           </div>
-
           <div class="border border-neutral-200 rounded">
             <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Feature image</div>
             <div
               v-if="image"
               class="aspect-video relative">
-               <img
-                  :src="image.url"
-                  class="h-full w-full object-cover"
-                >
-
-                <div class="absolute inset-0 flex flex-col justify-end items-around">
-                  <div class="flex items-center justify-around p-3">
-                    <button
-                      type="button"
-                      @click="chooseImage"
-                      class="bg-gray-800 hover:bg-gray-600 text-white flex items-center justify-center w-22 rounded transition-colors duration-200 text-xs font-medium py-2 cursor-pointer">
-                        Replace
-                    </button>
-                    <button type="button"
-                      @click="image = null"
-                      class="bg-rose-500 hover:bg-rose-600 text-white flex items-center justify-center w-22 rounded transition-colors duration-200 text-xs font-medium py-2 cursor-pointer">
-                      Remove
-                    </button>
-                  </div>
+              <img
+                :src="image.url"
+                class="h-full w-full object-cover"
+              >
+              <div class="absolute inset-0 flex flex-col justify-end items-around">
+                <div class="flex items-center justify-around p-3">
+                  <button
+                    type="button"
+                    @click="chooseImage"
+                    class="bg-gray-800 hover:bg-gray-600 text-white flex items-center justify-center w-22 rounded transition-colors duration-200 text-xs font-medium py-2 cursor-pointer">
+                    Replace
+                  </button>
+                  <button type="button"
+                    @click="removeImage"
+                    class="bg-rose-500 hover:bg-rose-600 text-white flex items-center justify-center w-22 rounded transition-colors duration-200 text-xs font-medium py-2 cursor-pointer">
+                    Remove
+                  </button>
                 </div>
-
+              </div>
             </div>
             <div v-else class="p-3">
               <button
@@ -354,7 +358,6 @@ const chooseImage = async () => {
               </button>
             </div>
           </div>
-
           <div class="border border-neutral-200 rounded">
             <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Category</div>
             <ul class="h-30 select-none overflow-y-auto text-sm">

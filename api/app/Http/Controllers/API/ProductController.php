@@ -52,6 +52,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'short_description' => 'nullable|string|max:500',
             'slug' => 'nullable|string|regex:/^[a-z0-9-]+$/|unique:products,slug',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
@@ -103,6 +104,7 @@ class ProductController extends Controller
             'sku' => 'sometimes|unique:products,sku,'.$id,
             'category_ids' => 'nullable|array',
             'category_ids.*' => 'exists:categories,id',
+            'short_description' => 'nullable|string|max:500',
             'images' => 'nullable|array',
         ]);
 

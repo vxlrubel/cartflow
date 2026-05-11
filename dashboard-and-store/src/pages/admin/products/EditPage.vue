@@ -314,29 +314,11 @@ const enabled = ref(false)
             <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200 flex items-center justify-between">
               <span>Publish</span>
               <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" class="sr-only peer">
+                <input type="checkbox" class="sr-only peer" :checked="form.status === 'active'" @change="form.status = $event.target.checked ? 'active' : 'inactive'" />
                 <span class="w-12 h-6 bg-gray-300 rounded peer-checked:bg-theme-500 transition-colors duration-300"></span>
                 <span class="absolute left-1 top-1 w-5 h-4 bg-white rounded shadow-md transition-transform duration-300 peer-checked:translate-x-5"></span>
               </label>
             </div>
-            <ul class="select-none overflow-y-auto text-sm">
-              <li>
-                <label
-                  class="text-sm text-gray-700 flex items-center space-x-1 py-[2px] px-3 cursor-pointer hover:bg-neutral-100"
-                >
-                  <input type="radio" name="status" value="active" v-model="form.status" />
-                  <span>Active</span>
-                </label>
-              </li>
-              <li>
-                <label
-                  class="text-sm text-gray-700 flex items-center space-x-1 py-1 px-3 cursor-pointer hover:bg-neutral-100"
-                >
-                  <input type="radio" name="status" value="inactive" v-model="form.status" />
-                  <span>Inactive</span>
-                </label>
-              </li>
-            </ul>
           </div>
 
           <div class="border border-neutral-200 rounded">

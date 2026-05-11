@@ -17,6 +17,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.2",
     "@tiptap/extension-code-block-lowlight": "^3.22.3",
     "@tiptap/extension-link": "^3.22.3",

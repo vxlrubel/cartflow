@@ -85,18 +85,18 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
 
 <template>
   <div
-    class="border-2 border-gray-300 rounded overflow-hidden focus-within:ring-2 focus-within:ring-theme-300 focus-within:border-theme-500"
+    class="border-2 border-gray-300 rounded overflow-hidden focus-within:ring-2 focus-within:ring-offset-1 focus-within:ring-theme-300 focus-within:border-theme-500"
   >
     <div
       v-if="editor"
-      class="flex flex-wrap items-center gap-1 p-2 bg-gray-50 border-b border-gray-300"
+      class="flex flex-wrap items-center gap-1 px-2 py-1 bg-[#f0f0f0] border-b border-gray-300"
     >
       <!-- Text Format -->
       <button
         type="button"
         @click="editor.chain().focus().toggleBold().run()"
-        :class="{ 'bg-gray-200': editor.isActive('bold') }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive('bold') }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Bold (Ctrl+B)"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,8 +117,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleItalic().run()"
-        :class="{ 'bg-gray-200': editor.isActive('italic') }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive('italic') }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Italic (Ctrl+I)"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,8 +134,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleUnderline().run()"
-        :class="{ 'bg-gray-200': editor.isActive('underline') }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive('underline') }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Underline (Ctrl+U)"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,8 +150,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleStrike().run()"
-        :class="{ 'bg-gray-200': editor.isActive('strike') }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive('strike') }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Strikethrough"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,8 +166,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleCode().run()"
-        :class="{ 'bg-gray-200': editor.isActive('code') }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive('code') }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Inline Code"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -186,8 +186,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-        :class="{ 'bg-gray-200': isHeadingActive(1) }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors font-bold text-sm"
+        :class="{ 'bg-white': isHeadingActive(1) }"
+        class="p-1.5 rounded hover:bg-white transition-colors font-bold text-sm"
         title="Heading 1"
       >
         H1
@@ -195,8 +195,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-        :class="{ 'bg-gray-200': isHeadingActive(2) }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors font-bold text-sm"
+        :class="{ 'bg-white': isHeadingActive(2) }"
+        class="p-1.5 rounded hover:bg-white transition-colors font-bold text-sm"
         title="Heading 2"
       >
         H2
@@ -204,8 +204,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-        :class="{ 'bg-gray-200': isHeadingActive(3) }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors font-bold text-sm"
+        :class="{ 'bg-white': isHeadingActive(3) }"
+        class="p-1.5 rounded hover:bg-white transition-colors font-bold text-sm"
         title="Heading 3"
       >
         H3
@@ -214,13 +214,13 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         type="button"
         @click="editor.chain().focus().toggleParagraph().run()"
         :class="{
-          'bg-gray-200':
+          'bg-white':
             editor.isActive('paragraph') &&
             !isHeadingActive(1) &&
             !isHeadingActive(2) &&
             !isHeadingActive(3),
         }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors text-sm"
+        class="p-1.5 rounded hover:bg-white transition-colors text-sm"
         title="Paragraph"
       >
         P
@@ -232,8 +232,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleBulletList().run()"
-        :class="{ 'bg-gray-200': editor.isActive('bulletList') }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive('bulletList') }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Bullet List"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -248,8 +248,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleOrderedList().run()"
-        :class="{ 'bg-gray-200': editor.isActive('orderedList') }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive('orderedList') }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Numbered List"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,8 +264,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleBlockquote().run()"
-        :class="{ 'bg-gray-200': editor.isActive('blockquote') }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive('blockquote') }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Blockquote"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -284,8 +284,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().setTextAlign('left').run()"
-        :class="{ 'bg-gray-200': editor.isActive({ textAlign: 'left' }) }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive({ textAlign: 'left' }) }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Align Left"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -300,8 +300,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().setTextAlign('center').run()"
-        :class="{ 'bg-gray-200': editor.isActive({ textAlign: 'center' }) }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive({ textAlign: 'center' }) }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Align Center"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -316,8 +316,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().setTextAlign('right').run()"
-        :class="{ 'bg-gray-200': editor.isActive({ textAlign: 'right' }) }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive({ textAlign: 'right' }) }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Align Right"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -332,8 +332,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().setTextAlign('justify').run()"
-        :class="{ 'bg-gray-200': editor.isActive({ textAlign: 'justify' }) }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        :class="{ 'bg-white': editor.isActive({ textAlign: 'justify' }) }"
+        class="p-1.5 rounded hover:bg-white transition-colors"
         title="Justify"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -353,8 +353,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         <button
           type="button"
           @click="showLinkInput = !showLinkInput"
-          :class="{ 'bg-gray-200': editor.isActive('link') }"
-          class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+          :class="{ 'bg-white': editor.isActive('link') }"
+          class="p-1.5 rounded hover:bg-white transition-colors"
           title="Insert Link"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -414,8 +414,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleSubscript().run()"
-        :class="{ 'bg-gray-200': editor.isActive('subscript') }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors text-xs"
+        :class="{ 'bg-white': editor.isActive('subscript') }"
+        class="p-1.5 rounded hover:bg-white transition-colors text-xs"
         title="Subscript"
       >
         X<sub>2</sub>
@@ -423,8 +423,8 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
       <button
         type="button"
         @click="editor.chain().focus().toggleSuperscript().run()"
-        :class="{ 'bg-gray-200': editor.isActive('superscript') }"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors text-xs"
+        :class="{ 'bg-white': editor.isActive('superscript') }"
+        class="p-1.5 rounded hover:bg-white transition-colors text-xs"
         title="Superscript"
       >
         X<sup>2</sup>
@@ -437,7 +437,7 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         type="button"
         @click="editor.chain().focus().undo().run()"
         :disabled="!editor.can().undo()"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors disabled:opacity-50"
+        class="p-1.5 rounded hover:bg-white transition-colors disabled:opacity-50"
         title="Undo (Ctrl+Z)"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -453,7 +453,7 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
         type="button"
         @click="editor.chain().focus().redo().run()"
         :disabled="!editor.can().redo()"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors disabled:opacity-50"
+        class="p-1.5 rounded hover:bg-white transition-colors disabled:opacity-50"
         title="Redo (Ctrl+Y)"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -506,5 +506,23 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
   border-radius: 0.25rem;
   font-family: monospace;
   font-size: 0.875em;
+}
+
+.ProseMirror h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
 }
 </style>

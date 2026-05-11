@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/products'
 import TiptapEditor from '@/components/TiptapEditor.vue'
@@ -123,6 +123,10 @@ const validateForm = () => {
 
   return Object.keys(errors.value).length === 0
 }
+
+watch(form, () => {
+  errors.value = {}
+}, { deep: true })
 
 const handleSubmit = async () => {
   if (!validateForm()) return

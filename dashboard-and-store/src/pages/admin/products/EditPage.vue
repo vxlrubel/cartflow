@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useProductStore } from '@/stores/products'
 import TiptapEditor from '@/components/TiptapEditor.vue'
 import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
@@ -42,14 +42,39 @@ const newBrand = ref('')
 
 const slugPattern = /^[a-z0-9-]+$/
 
+const isValidSlug = computed(() => {
+  if (!form.value.slug) return true
+  return slugPattern.test(form.value.slug)
+})
+
 const hasChanges = computed(() => {
   if (!originalForm.value) return false
   return JSON.stringify(form.value) !== JSON.stringify(originalForm.value)
 })
 
-const isValidSlug = computed(() => {
-  if (!form.value.slug) return true
-  return slugPattern.test(form.value.slug)
+const confirmLeave = (to) => {
+  return window.confirm('You have unsaved changes. Are you sure you want to leave?')
+}
+
+onBeforeRouteLeave((to, from) => {
+  if (hasChanges.value && !confirmLeave()) {
+    return false
+  }
+})
+
+const handleBeforeUnload = (e) => {
+  if (hasChanges.value) {
+    e.preventDefault()
+    e.returnValue = ''
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
 })
 
 const loadFormData = async () => {

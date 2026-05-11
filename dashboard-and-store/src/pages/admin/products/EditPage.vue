@@ -173,6 +173,8 @@ const chooseImage = async () => {
   image.value = media
 }
 
+const enabled = ref(false)
+
 
 </script>
 
@@ -307,20 +309,16 @@ const chooseImage = async () => {
         </div>
 
         <div class="p-3 space-y-5">
-          <div class="border border-neutral-200 rounded">
-            <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Feature image</div>
-            <div class="aspect-video relative">
-               <img
-                  v-if="image"
-                  :src="image.url"
-                  class="h-full w-full object-cover"
-                >
-              <button @click="chooseImage" class="absolute bottom-2 left-2 right-2 block text-sm font-medium text-center text-gray-700 bg-neutral-200 py-1 cursor-pointer hover:bg-neutral-300">Choose Image</button>
-            </div>
 
-          </div>
           <div class="border border-neutral-200 rounded">
-            <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Status</div>
+            <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200 flex items-center justify-between">
+              <span>Publish</span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer">
+                <span class="w-12 h-6 bg-gray-300 rounded peer-checked:bg-theme-500 transition-colors duration-300"></span>
+                <span class="absolute left-1 top-1 w-5 h-4 bg-white rounded shadow-md transition-transform duration-300 peer-checked:translate-x-5"></span>
+              </label>
+            </div>
             <ul class="select-none overflow-y-auto text-sm">
               <li>
                 <label
@@ -339,6 +337,28 @@ const chooseImage = async () => {
                 </label>
               </li>
             </ul>
+          </div>
+
+          <div class="border border-neutral-200 rounded">
+            <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Feature image</div>
+            <div
+              v-if="image"
+              class="aspect-video relative">
+               <img
+                  :src="image.url"
+                  class="h-full w-full object-cover"
+                >
+            </div>
+            <div v-else class="p-3">
+              <button
+                @click="chooseImage"
+                class="block text-sm font-medium text-center border border-neutral-300 text-gray-700 bg-neutral-100 py-3 w-full transition-colors duration-200 cursor-pointer hover:bg-neutral-200 hover:text-theme-500">
+                Choose Image
+              </button>
+              <!-- Switch Button -->
+
+
+            </div>
           </div>
 
           <div class="border border-neutral-200 rounded">

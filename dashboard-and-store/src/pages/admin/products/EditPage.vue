@@ -173,8 +173,6 @@ const chooseImage = async () => {
   image.value = media
 }
 
-const enabled = ref(false)
-
 
 </script>
 

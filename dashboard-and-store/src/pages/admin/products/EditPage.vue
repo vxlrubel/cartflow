@@ -35,10 +35,17 @@ const brands = ref([])
 const loading = ref(false)
 const fetching = ref(true)
 const errors = ref({})
+const originalForm = ref(null)
+
 const newCategory = ref('')
 const newBrand = ref('')
 
 const slugPattern = /^[a-z0-9-]+$/
+
+const hasChanges = computed(() => {
+  if (!originalForm.value) return false
+  return JSON.stringify(form.value) !== JSON.stringify(originalForm.value)
+})
 
 const isValidSlug = computed(() => {
   if (!form.value.slug) return true
@@ -67,6 +74,7 @@ const loadFormData = async () => {
       images: product.images ? product.images.map(img => img.url) : [],
     }
     image.value = product.images && product.images.length > 0 ? product.images[0] : null
+    originalForm.value = JSON.parse(JSON.stringify(form.value))
   }
   fetching.value = false
 }
@@ -314,6 +322,7 @@ onMounted(loadFormData)
             class="ml-2"
             @click="handleSubmit"
             :loading="loading"
+            :disabled="!hasChanges"
           />
         </div>
 

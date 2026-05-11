@@ -85,7 +85,7 @@ const isHeadingActive = (level) => editor.value?.isActive('heading', { level })
 
 <template>
   <div
-    class="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-theme-500 focus-within:border-theme-500"
+    class="border-2 border-gray-300 rounded overflow-hidden focus-within:ring-2 focus-within:ring-theme-300 focus-within:border-theme-500"
   >
     <div
       v-if="editor"

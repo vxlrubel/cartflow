@@ -172,20 +172,12 @@ const chooseImage = async () => {
 
   image.value = media
 }
-  
+
 
 </script>
 
 <template>
   <div>
-
-
-
-      <img
-        v-if="image"
-        :src="image.url"
-        class="w-32 mt-4"
-      >
 
     <div v-if="fetching" class="flex items-center justify-center py-12">
       <svg class="animate-spin h-8 w-8 text-theme-600" fill="none" viewBox="0 0 24 24">
@@ -325,7 +317,7 @@ const chooseImage = async () => {
                 >
               <button @click="chooseImage" class="absolute bottom-2 left-2 right-2 block text-sm font-medium text-center text-gray-700 bg-neutral-200 py-1 cursor-pointer hover:bg-neutral-300">Choose Image</button>
             </div>
-            
+
           </div>
           <div class="border border-neutral-200 rounded">
             <div class="px-3 py-1 font-medium bg-gray-50 border-b text-sm border-neutral-200">Status</div>

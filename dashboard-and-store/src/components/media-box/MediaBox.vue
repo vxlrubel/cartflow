@@ -307,7 +307,7 @@ onMounted(() => {
 
         </div>
 
-        <div class="border-t border-gray-300 h-15 flex items-center justify-end px-4 gap-3 bg-[#f0f0f0]">
+        <div class="border-t border-gray-300 h-15 flex items-center justify-end px-4 gap-3 bg-white">
           <CancelButton
             @click="store.close(), activeTab = 'upload'"
             label="Close"

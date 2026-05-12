@@ -282,7 +282,7 @@ watch(
                     </div>
                   </td>
                   <td class="p-3">
-                    <div class="text-sm text-gray-500">{{ truncateText(row.data.description) }}</div>
+                    <div class="text-sm text-gray-500" v-html="truncateText(row.data?.short_description, 50)"></div>
                   </td>
                   <td class="p-3">
                     <div class="text-sm text-gray-500">{{ row.data.category?.name || '-' }}</div>

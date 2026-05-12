@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router'
 import MediaBox from '@/components/media-box/MediaBox.vue'
 import ToastMessage from '@/components/ToastMessage.vue'
+import LeaveConfirmation from '@/components/LeaveConfirmation.vue'
 import { useToastStore } from '@/stores/toastStore'
 
 const toastStore = useToastStore()
@@ -10,6 +11,7 @@ const toastStore = useToastStore()
 <template>
   <RouterView />
   <MediaBox />
+  <LeaveConfirmation />
   <ToastMessage
     v-if="toastStore.visible"
     :status="toastStore.status"

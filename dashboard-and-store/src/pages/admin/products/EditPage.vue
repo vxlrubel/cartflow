@@ -8,6 +8,9 @@ import CancelButton from '@/components/buttons/CancelButton.vue'
 import handleAxiosError from '@/services/handleAxiosError'
 import { openMediaBox } from '@/services/media-box'
 import { showToast } from '@/services/toast'
+import { useConfirmLeave } from '@/composables/useConfirmLeave'
+
+const { confirmLeave } = useConfirmLeave()
 
 const route = useRoute()
 const router = useRouter()
@@ -52,12 +55,8 @@ const hasChanges = computed(() => {
   return JSON.stringify(form.value) !== JSON.stringify(originalForm.value)
 })
 
-const confirmLeave = () => {
-  return window.confirm('You have unsaved changes. Are you sure you want to leave?')
-}
-
-onBeforeRouteLeave(() => {
-  if (hasChanges.value && !confirmLeave()) {
+onBeforeRouteLeave(async () => {
+  if (hasChanges.value && !(await confirmLeave())) {
     return false
   }
 })

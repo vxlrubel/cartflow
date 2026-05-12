@@ -52,11 +52,11 @@ const hasChanges = computed(() => {
   return JSON.stringify(form.value) !== JSON.stringify(originalForm.value)
 })
 
-const confirmLeave = (to) => {
+const confirmLeave = () => {
   return window.confirm('You have unsaved changes. Are you sure you want to leave?')
 }
 
-onBeforeRouteLeave((to, from) => {
+onBeforeRouteLeave(() => {
   if (hasChanges.value && !confirmLeave()) {
     return false
   }

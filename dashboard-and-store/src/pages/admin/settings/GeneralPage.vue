@@ -80,12 +80,36 @@
         { label: 'Asia/Tokyo', value: 'Asia/Tokyo' }
       ]" v-model="timezone" placeholder="Select Timezone"/>
     </SettingsOption>
-    <SettingsOption label="Date Format" :hint="'Preview: ' + selectedDate">
 
+    <SettingsOption label="Week Starts On">
+      <CustomSelect v-model="weekStart" class="max-w-50" :options="[
+        { label: 'Sunday', value: 'sunday' },
+        { label: 'Monday', value: 'monday' },
+        { label: 'Tuesday', value: 'tuesday' },
+        { label: 'Wednesday', value: 'wednesday' },
+        { label: 'Thursday', value: 'thursday' },
+        { label: 'Friday', value: 'friday' },
+        { label: 'Saturday', value: 'saturday' }
+      ]"/>
+    </SettingsOption>
+
+    <SettingsOption label="Date Format" :hint="'Preview: ' + selectedDate">
       <div class="max-w-75 text-sm">
         <DateFormatPicker v-model="selectedDate" />
       </div>
     </SettingsOption>
+
+    <SettingsOption label="Time Format" :hint="'Preview: ' + selectedTime">
+      <div class="max-w-75 text-sm">
+         <TimeFormatPicker v-model="selectedTime" />
+      </div>
+    </SettingsOption>
+
+    <div class="pt-4 pb-15 border-t border-gray-300">
+      <PrimacyButton label="Save Changes"/>
+    </div>
+
+
 
   </div>
 
@@ -100,8 +124,11 @@ import SettingsOption from '@/components/admin/SettingsOption.vue'
 import { openMediaBox } from '@/services/media-box'
 import CustomSelect from '@/components/CustomSelect.vue'
 import DateFormatPicker from '@/components/DateFormatPicker.vue'
+import TimeFormatPicker from '@/components/TimeFormatPicker.vue'
+import PrimacyButton from '../../../components/buttons/PrimacyButton.vue'
 
 const selectedDate = ref('')
+const selectedTime = ref('')
 
 
 const siteIcon = ref(null)
@@ -113,4 +140,6 @@ const chooseSiteIcon = async () => {
 
 const language = ref('en-US')
 const timezone = ref('UTC')
+const weekStart = ref('sunday')
+
 </script>

@@ -179,6 +179,7 @@ const handleSubmit = async () => {
     await store.updateProduct(productId, payload)
 
     showToast('success', 'Product updated successfully!')
+    originalForm.value = JSON.parse(JSON.stringify(form.value))
 
   } catch (err) {
 

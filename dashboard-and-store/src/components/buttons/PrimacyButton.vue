@@ -17,6 +17,10 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  loadingText: {
+    type: String,
+    default: 'Loading...'
   }
 })
 
@@ -42,7 +46,7 @@ const handleClick = (event) => {
     "
   >
     <template v-if="loading">
-      <LoadingIcon class="mr-1" /> Loading...
+      <LoadingIcon class="mr-1" /> {{ loadingText }}
     </template>
     <template v-else>
       {{ label }}

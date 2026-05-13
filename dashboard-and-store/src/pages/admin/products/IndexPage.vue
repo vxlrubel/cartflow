@@ -12,6 +12,7 @@ import RestoreFromTrashIcon from '@/components/icons/RestoreFromTrash.vue'
 import placeholderImage from '@/assets/img/product-placeholder.webp'
 import InputSearch from '@/components/input/InputSearch.vue'
 import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue'
+import { useDeleteConfirmation } from '@/composables/useDeleteConfirmation'
 
 
 const featureImageUrl = (product) => {
@@ -116,6 +117,15 @@ const handlePageChange = (page) => {
 
 const navigateToEdit = (id) => {
   router.push(`/dashboard/products/edit/${id}`)
+}
+
+const { confirm } = useDeleteConfirmation()
+
+const handleTrash = async (id) => {
+  const confirmed = await confirm('Move to Trash', 'Are you sure you want to move this product to trash?')
+  if (confirmed) {
+    await store.softDelete(id)
+  }
 }
 
 const clearSearchBulkActionStatus = () => {
@@ -283,7 +293,7 @@ watch(
                     </button>
                     <button
                       v-if="!store.trashed"
-                      @click="store.softDelete(row.data.id)"
+                      @click="handleTrash(row.data.id)"
                       class="text-red-600 hover:text-red-900 text-xs font-medium flex items-center gap-1 cursor-pointer"
                     >
                       <TrashIcon size="12"/>

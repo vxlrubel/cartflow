@@ -119,10 +119,8 @@ const navigateToEdit = (id) => {
 }
 
 const clearSearchBulkActionStatus = () => {
-  handleStatusChange('all')
   selectedBulkAction.value = ''
-  searchInput.value = ''
-  handleSearch()
+  router.push({ query: {} })
 }
 
 onMounted(async () => {
@@ -166,10 +164,10 @@ watch(
 
 
     <div class="flex items-center justify-between gap-4 mb-4 flex-wrap">
-      <div class="flex items-center gap-2">
+      <div class="flex flex-1 items-center gap-2">
         <div class="flex-1 w-full sm:max-w-76 flex items-center gap-2">
           <CustomSelect
-            class="flex-1 text-sm min-w-40"
+            class="flex-1 text-sm"
             v-model="selectedBulkAction"
             :options="bulkActionsOptions"
           />

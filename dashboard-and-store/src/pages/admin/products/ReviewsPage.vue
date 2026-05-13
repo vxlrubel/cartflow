@@ -3,20 +3,21 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api'
 import API_ENDPOINTS from '@/services/api-endpoints'
+import PageTitle from '@/components/admin/PageTitle.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
+import InputSearch from '@/components/input/InputSearch.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const reviews = ref([])
 const loading = ref(false)
-const search = ref('')
+const searchInput = ref('')
 const currentPage = ref(1)
 const perPage = ref(10)
 const totalItems = ref(0)
-const totalPages = ref(1)
-const paginationLinks = ref([])
 const lastPage = ref(1)
+const paginationLinks = ref([])
 
 const statusFilter = ref('')
 const searchTimeout = ref(null)
@@ -31,7 +32,7 @@ const handleSearch = () => {
   if (searchTimeout.value) clearTimeout(searchTimeout.value)
   searchTimeout.value = setTimeout(() => {
     currentPage.value = 1
-    router.push({ query: { ...route.query, page: 1, search: search.value || undefined } })
+    router.push({ query: { ...route.query, page: 1, search: searchInput.value || undefined } })
   }, 200)
 }
 
@@ -43,7 +44,7 @@ const fetchReviews = async (page = 1) => {
       params: {
         page,
         per_page: perPage.value,
-        search: search.value,
+        search: searchInput.value,
         status: statusFilter.value || undefined,
       },
     })
@@ -51,14 +52,13 @@ const fetchReviews = async (page = 1) => {
     if (Array.isArray(resData)) {
       reviews.value = resData
       totalItems.value = resData.length
-      totalPages.value = 1
+      lastPage.value = 1
       paginationLinks.value = []
     } else {
       reviews.value = resData.data || []
       totalItems.value = resData.total || 0
-      totalPages.value = resData.last_page || 1
-      currentPage.value = resData.current_page || 1
       lastPage.value = resData.last_page || 1
+      currentPage.value = resData.current_page || 1
       paginationLinks.value = resData.links || []
     }
   } catch (error) {
@@ -102,7 +102,7 @@ const navigateToPage = (page) => {
 const syncFromQuery = () => {
   currentPage.value = parseInt(route.query.page) || 1
   statusFilter.value = route.query.status || ''
-  search.value = route.query.search || ''
+  searchInput.value = route.query.search || ''
 }
 
 const formatDate = (date) => {
@@ -118,7 +118,12 @@ const getStarRating = (rating) => {
   return '★'.repeat(rating) + '☆'.repeat(5 - rating)
 }
 
-const filteredReviews = computed(() => reviews.value)
+const tableRows = computed(() => {
+  if (loading.value) {
+    return Array.from({ length: perPage.value }, (_, i) => ({ type: 'skeleton', key: 'sk-' + i }))
+  }
+  return reviews.value.map((review) => ({ type: 'review', data: review }))
+})
 
 onMounted(() => {
   syncFromQuery()
@@ -146,7 +151,7 @@ watch(
 watch(
   () => route.query.search,
   (newSearch) => {
-    search.value = newSearch || ''
+    searchInput.value = newSearch || ''
     fetchReviews(1)
   },
 )
@@ -158,138 +163,146 @@ watch(statusFilter, (newStatus) => {
 </script>
 
 <template>
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold">Reviews</h2>
+  <div>
+
+    <PageTitle title="Reviews" />
+
+    <div class="flex items-center flex-wrap gap-2 text-[12px] select-none mb-4">
       <button
-        @click="fetchReviews(currentPage)"
-        class="bg-theme-600 text-white px-4 py-2 rounded hover:bg-theme-700"
+        v-for="opt in statusOptions"
+        :key="opt.value"
+        @click="statusFilter = opt.value"
+        :class="[
+          'all',
+          statusFilter === opt.value ? 'border-current' : 'border-transparent',
+        ]"
       >
-        Refresh
+        {{ opt.label }}
       </button>
     </div>
 
-    <div class="bg-white rounded-lg shadow">
-      <div class="p-4 border-b flex flex-wrap gap-4">
-        <div class="flex-1 min-w-[200px]">
-          <input
-            v-model="search"
-            @input="handleSearch"
-            type="text"
+    <div class="flex items-center justify-between gap-4 mb-4 flex-wrap">
+      <div class="flex flex-1 items-center gap-2">
+        <div class="w-full sm:max-w-64">
+          <InputSearch
+            v-model="searchInput"
+            class="bg-white fw-medium"
             placeholder="Search reviews..."
-            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-500"
+            @search="handleSearch"
           />
         </div>
-        <CustomSelect
-          v-model="statusFilter"
-          :options="statusOptions"
-          class="w-40"
-        />
       </div>
+    </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full">
+    <div class="bg-white rounded-lg shadow">
+      <div class="overflow-x-auto rounded border border-gray-200 text-xs">
+        <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Product</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">User</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Rating</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Comment</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Status</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Date</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Actions</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 capitalize tracking-wider">Product</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 capitalize tracking-wider">User</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 capitalize tracking-wider">Rating</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 capitalize tracking-wider">Comment</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 capitalize tracking-wider">Status</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 capitalize tracking-wider">Date</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 capitalize tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-if="loading">
-              <td colspan="7" class="px-4 py-8 text-center text-gray-500">Loading...</td>
+          <tbody class="bg-white divide-y divide-gray-200 align-top">
+            <tr v-if="!loading && reviews.length === 0">
+              <td colspan="7" class="px-4 py-8 text-center text-gray-500">No reviews found</td>
             </tr>
-            <tr v-else-if="reviews.length === 0">
-              <td colspan="7" class="px-4 py-8 text-center text-gray-500">
-                No reviews found
-              </td>
-            </tr>
-            <tr
-              v-for="(review, index) in filteredReviews"
-              :key="review.id"
-              class="border-t hover:bg-gray-50 item-anim"
-              :style="{'--animation-delay' : index}"
-            >
-              <td class="px-4 py-3">
-                {{ review.product?.name || review.product_name || '-' }}
-              </td>
-              <td class="px-4 py-3">
-                {{ review.user?.name || review.user_name || 'Anonymous' }}
-              </td>
-              <td class="px-4 py-3">
-                <span class="text-yellow-500">{{ getStarRating(review.rating) }}</span>
-              </td>
-              <td class="px-4 py-3 max-w-xs">
-                <div class="truncate" :title="review.comment">
-                  {{ review.comment || '-' }}
-                </div>
-              </td>
-              <td class="px-4 py-3">
-                <span
-                  :class="{
-                    'bg-yellow-100 text-yellow-800': review.status === 'pending',
-                    'bg-green-100 text-green-800': review.status === 'approved',
-                    'bg-red-100 text-red-800': review.status === 'rejected',
-                  }"
-                  class="px-2 py-1 rounded text-xs capitalize"
-                >
-                  {{ review.status }}
-                </span>
-              </td>
-              <td class="px-4 py-3 text-gray-600">
-                {{ formatDate(review.created_at) }}
-              </td>
-              <td class="px-4 py-3">
-                <div class="flex gap-2">
-                  <button
-                    v-if="review.status === 'pending'"
-                    @click="updateStatus(review.id, 'approved')"
-                    class="text-green-600 hover:text-green-800 text-sm"
+            <template v-for="(row, index) in tableRows" :key="row.type === 'review' ? row.data.id : row.key">
+              <tr v-if="row.type === 'review'" :key="row.data.id" class="hover:bg-gray-50 group item-anim" :style="{'--animation-delay' : index}">
+                <td class="p-3 min-w-40">
+                  <div class="text-sm font-medium text-gray-900">{{ row.data.product?.name || row.data.product_name || '-' }}</div>
+                </td>
+                <td class="p-3 min-w-32">
+                  <div class="text-sm text-gray-500">{{ row.data.user?.name || row.data.user_name || 'Anonymous' }}</div>
+                </td>
+                <td class="p-3">
+                  <span class="text-yellow-500 text-sm">{{ getStarRating(row.data.rating) }}</span>
+                </td>
+                <td class="p-3 min-w-60 max-w-80">
+                  <div class="text-sm text-gray-500 truncate" :title="row.data.comment">
+                    {{ row.data.comment || '-' }}
+                  </div>
+                </td>
+                <td class="p-3">
+                  <span
+                    :class="{
+                      'bg-yellow-100 text-yellow-800': row.data.status === 'pending',
+                      'bg-green-100 text-green-800': row.data.status === 'approved',
+                      'bg-red-100 text-red-800': row.data.status === 'rejected',
+                    }"
+                    class="px-2 py-1 rounded text-xs capitalize font-medium"
                   >
-                    Approve
-                  </button>
-                  <button
-                    v-if="review.status === 'pending'"
-                    @click="updateStatus(review.id, 'rejected')"
-                    class="text-red-600 hover:text-red-800 text-sm"
-                  >
-                    Reject
-                  </button>
-                  <button
-                    @click="deleteReview(review.id)"
-                    class="text-red-600 hover:text-red-800 text-sm"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
+                    {{ row.data.status }}
+                  </span>
+                </td>
+                <td class="p-3">
+                  <div class="text-sm text-gray-500 whitespace-nowrap">{{ formatDate(row.data.created_at) }}</div>
+                </td>
+                <td class="p-3">
+                  <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button
+                      v-if="row.data.status === 'pending'"
+                      @click="updateStatus(row.data.id, 'approved')"
+                      class="text-green-600 hover:text-green-800 text-xs font-medium cursor-pointer"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      v-if="row.data.status === 'pending'"
+                      @click="updateStatus(row.data.id, 'rejected')"
+                      class="text-red-600 hover:text-red-800 text-xs font-medium cursor-pointer"
+                    >
+                      Reject
+                    </button>
+                    <button
+                      @click="deleteReview(row.data.id)"
+                      class="text-rose-600 hover:text-rose-900 text-xs font-medium cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr v-else class="animate-pulse">
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-3/4"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-1/2"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-16"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-2/3"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-20"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-24"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-20"></div></td>
+              </tr>
+            </template>
           </tbody>
         </table>
       </div>
+    </div>
 
-      <div v-if="paginationLinks.length > 0" class="p-4 border-t flex justify-center gap-1">
+    <div v-if="lastPage > 1" class="flex items-center justify-between mt-4">
+      <div class="text-sm text-gray-700">
+        Showing page {{ currentPage }} of {{ lastPage }} ({{ totalItems }} total)
+      </div>
+      <div class="flex gap-1">
         <button
-          v-for="link in paginationLinks"
-          :key="link.label"
-          @click="link.url && navigateToPage(getLinkPage(link))"
-          :disabled="!link.url"
+          v-for="page in lastPage"
+          :key="page"
+          @click="navigateToPage(page)"
           :class="[
-            link.active
+            'h-8 min-w-8 rounded text-sm flex items-center justify-center font-bold cursor-pointer border border-gray-300',
+            currentPage === page
               ? 'bg-theme-600 text-white'
-              : !link.url
-                ? 'opacity-50 cursor-not-allowed'
-                : 'bg-gray-100 hover:bg-gray-200'
+              : 'bg-white text-theme-500 hover:bg-gray-50',
           ]"
-          class="px-3 py-1 rounded"
-          v-html="link.label"
-        ></button>
+        >
+          {{ page }}
+        </button>
       </div>
     </div>
+
   </div>
 </template>

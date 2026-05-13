@@ -166,7 +166,12 @@ onMounted(loadFormData)
 
     <div class="flex flex-col md:flex-row gap-4 lg:gap-8 mb-20">
       <div class="md:flex-1 bg-white border border-gray-200">
-        <h2 class="text-xl font-semibold text-gray-800 px-4 lg:px-6 h-12.5 flex items-center border-b border-gray-300">Add Product</h2>
+        <h2 class="text-xl font-semibold text-gray-800 px-4 lg:px-6 h-12.5 flex items-center border-b border-gray-300">
+          Add New Product
+          <router-link to="/dashboard/products" class="button-primary-outline ml-4">
+            All Products
+          </router-link>
+        </h2>
         <div class="py-3 px-4 lg:px-6">
           <div class="space-y-5">
             <div>
@@ -271,8 +276,9 @@ onMounted(loadFormData)
             :disabled="loading"
           />
           <PrimaryButton
-            label="Save"
-            class="ml-2"
+            label="Save Changes"
+            loadingText="Saving"
+            class="ml-2 w-31.5"
             @click="handleSubmit"
             :loading="loading"
           />

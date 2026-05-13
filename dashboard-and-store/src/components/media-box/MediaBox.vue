@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useMediaBoxStore } from '@/stores/mediaBoxStore'
 import CancelButton from '@/components/buttons/CancelButton.vue'
-import PrimaryButton from '@/components/buttons/PrimacyButton.vue'
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue'
 import api from '@/services/api'
 import API_ENDPOINTS from '@/services/api-endpoints'
 

@@ -2,7 +2,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import PageTitle from '@/components/admin/PageTitle.vue'
-import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue'
 
 const store = useSettingsStore()
 
@@ -96,7 +96,7 @@ onMounted(() => {
 
       <div class="flex items-center gap-4 mt-5 pt-5 border-t border-gray-300">
         <span v-if="saved" class="text-green-600 font-medium">Settings saved!</span>
-        <PrimacyButton label="Save Changes" type="submit" :loading="saving" loadingText="Saving..."/>
+        <PrimaryButton label="Save Changes" type="submit" :loading="saving" loadingText="Saving..."/>
       </div>
     </form>
   </div>

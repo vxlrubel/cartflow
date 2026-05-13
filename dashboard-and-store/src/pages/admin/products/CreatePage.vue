@@ -3,7 +3,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/products'
 import TiptapEditor from '@/components/TiptapEditor.vue'
-import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue'
 import CancelButton from '@/components/buttons/CancelButton.vue'
 import handleAxiosError from '@/services/handleAxiosError'
 import { openMediaBox } from '@/services/media-box'
@@ -270,7 +270,7 @@ onMounted(loadFormData)
             @click="handleCancel"
             :disabled="loading"
           />
-          <PrimacyButton
+          <PrimaryButton
             label="Save"
             class="ml-2"
             @click="handleSubmit"

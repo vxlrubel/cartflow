@@ -106,7 +106,7 @@
     </SettingsOption>
 
     <div class="pt-4 pb-15 border-t border-gray-300">
-      <PrimacyButton label="Save Changes"/>
+      <PrimaryButton label="Save Changes"/>
     </div>
 
 
@@ -125,7 +125,7 @@ import { openMediaBox } from '@/services/media-box'
 import CustomSelect from '@/components/CustomSelect.vue'
 import DateFormatPicker from '@/components/DateFormatPicker.vue'
 import TimeFormatPicker from '@/components/TimeFormatPicker.vue'
-import PrimacyButton from '../../../components/buttons/PrimacyButton.vue'
+import PrimaryButton from '../../../components/buttons/PrimaryButton.vue'
 
 const selectedDate = ref('')
 const selectedTime = ref('')

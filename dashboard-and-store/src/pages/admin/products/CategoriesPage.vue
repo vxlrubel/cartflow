@@ -5,7 +5,7 @@ import API_ENDPOINTS from '@/services/api-endpoints'
 import CustomSelect from '@/components/CustomSelect.vue'
 import PageTitle from '@/components/admin/PageTitle.vue'
 import ConfirmAlert from '@/components/ConfirmAlert.vue'
-import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue'
 import CancelButtonOutline from '@/components/buttons/CancelButtonOutline.vue'
 
 const categories = ref([])
@@ -186,7 +186,7 @@ const categoryOptions = computed(() => [
               </div>
             </div>
             <div class="flex gap-2 px-6 py-3 border-t border-gray-200">
-              <PrimacyButton type="submit" :label="editingId ? 'Update' : 'Create'" :loading="categoryLoading" />
+              <PrimaryButton type="submit" :label="editingId ? 'Update' : 'Create'" :loading="categoryLoading" />
 
               <CancelButtonOutline
                 v-if="editingId"

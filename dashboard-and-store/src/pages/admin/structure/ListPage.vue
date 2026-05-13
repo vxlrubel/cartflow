@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue';
   import PageTitle from '@/components/admin/PageTitle.vue'
-  import PrimacyButton from '@/components/buttons/PrimacyButton.vue';
+  import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import CustomSelect from '@/components/CustomSelect.vue';
 
   const isLoading = ref(false);
@@ -29,7 +29,7 @@ import CustomSelect from '@/components/CustomSelect.vue';
 <template>
   <div >
     <PageTitle title="List Structure">
-      <PrimacyButton label="Add New" @click="submitForm" :loading="isLoading" />
+      <PrimaryButton label="Add New" @click="submitForm" :loading="isLoading" />
     </PageTitle>
 
 

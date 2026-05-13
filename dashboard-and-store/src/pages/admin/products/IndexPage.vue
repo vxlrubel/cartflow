@@ -5,7 +5,7 @@ import { useProductStore } from '@/stores/products'
 import CurrencySymbol from '@/components/CurrencySymble.vue'
 import PageTitle from '@/components/admin/PageTitle.vue'
 import CustomSelect from '@/components/CustomSelect.vue'
-import PrimacyButton from '@/components/buttons/PrimacyButton.vue'
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue'
 import TrashIcon from '@/components/icons/TrashIcon.vue'
 import EditIcon from '@/components/icons/EditIcon.vue'
 import RestoreFromTrashIcon from '@/components/icons/RestoreFromTrash.vue'
@@ -155,7 +155,7 @@ watch(
             v-model="selectedBulkAction"
             :options="bulkActionsOptions"
           />
-          <PrimacyButton
+          <PrimaryButton
             label="Apply"
             @click="handleBulkAction(selectedBulkAction)" />
         </div>

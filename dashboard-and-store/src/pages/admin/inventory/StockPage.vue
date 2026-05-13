@@ -1,10 +1,14 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useInventoryStore } from '@/stores/inventory'
 import CurrencySymbol from '@/components/CurrencySymble.vue'
+import PageTitle from '@/components/admin/PageTitle.vue'
+import CustomSelect from '@/components/CustomSelect.vue'
+import InputSearch from '@/components/input/InputSearch.vue'
 
 const route = useRoute()
+const router = useRouter()
 const store = useInventoryStore()
 
 const searchInput = ref('')
@@ -42,9 +46,11 @@ const handleSearch = () => {
   store.setSearch(searchInput.value)
 }
 
-const clearSearch = () => {
+const clearSearchBulkActionStatus = () => {
+  selectedBulkAction.value = ''
   searchInput.value = ''
   store.setSearch('')
+  router.push({ query: {} })
 }
 
 const handleStockEdit = (item) => {
@@ -84,6 +90,19 @@ const handlePageChange = (page) => {
   store.setPage(page)
 }
 
+const bulkActionsOptions = [
+  { label: 'Bulk Actions', value: '' },
+  { label: 'Restock All', value: 'restock' },
+  { label: 'Move to Trash', value: 'soft_delete' },
+]
+
+const tableRows = computed(() => {
+  if (store.loading) {
+    return Array.from({ length: store.pagination.perPage }, (_, i) => ({ type: 'skeleton', key: 'sk-' + i }))
+  }
+  return store.items.map((item) => ({ type: 'item', data: item }))
+})
+
 onMounted(async () => {
   store.syncFromQuery()
   searchInput.value = store.search
@@ -101,231 +120,147 @@ watch(
 </script>
 
 <template>
-  <div class="space-y-4">
-    <div class="bg-white rounded-lg shadow">
-      <div
-        class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-neutral-200 p-6"
+  <div>
+
+    <PageTitle title="Stock Management" />
+
+    <div class="flex items-center flex-wrap gap-2 text-[12px] select-none mb-4">
+      <button
+        v-for="tab in statusTabs"
+        :key="tab.value"
+        @click="handleStatusChange(tab.value)"
+        :class="[
+          'all',
+          currentStatus === tab.value ? 'border-current' : 'border-transparent',
+        ]"
       >
-        <h2 class="text-2xl font-medium text-gray-800">Stock Management</h2>
+        {{ tab.label }} ({{ tab.count }})
+      </button>
+    </div>
 
-        <div class="flex items-center gap-2">
-          <button
-            @click="store.fetchItems()"
-            class="inline-flex items-center px-3 py-1.5 text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 rounded transition-colors"
-          >
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
-            Refresh
-          </button>
-        </div>
-      </div>
-
-      <div class="flex flex-wrap gap-2 mb-6 px-6">
-        <button
-          v-for="tab in statusTabs"
-          :key="tab.value"
-          @click="handleStatusChange(tab.value)"
-          :class="[
-            'py-1 cursor-pointer text-sm font-medium transition-colors',
-            currentStatus === tab.value ? 'text-theme-600' : 'text-gray-600 hover:text-theme-400',
-          ]"
-        >
-          {{ tab.label }} ({{ tab.count }})
-        </button>
-      </div>
-
-      <div
-        class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 px-6"
-      >
-        <div class="flex items-center gap-2">
-          <select
+    <div class="flex items-center justify-between gap-4 mb-4 flex-wrap">
+      <div class="flex flex-1 items-center gap-2">
+        <div class="flex-1 w-full sm:max-w-76 flex items-center gap-2">
+          <CustomSelect
+            class="flex-1 text-sm"
             v-model="selectedBulkAction"
-            :disabled="store.selectedIds.length === 0"
-            class="select"
-          >
-            <option value="">Bulk Actions</option>
-            <option value="restock">Restock All</option>
-            <option value="soft_delete">Move to trash</option>
-          </select>
-
+            :options="bulkActionsOptions"
+          />
           <button
             @click="selectedBulkAction"
             :disabled="!selectedBulkAction || store.selectedIds.length === 0"
-            class="apply-button"
+            class="button-primary"
           >
             Apply
           </button>
-
-          <span v-if="store.selectedIds.length > 0" class="text-sm text-gray-500">
-            {{ store.selectedIds.length }} selected
-          </span>
-        </div>
-
-        <div class="relative">
-          <input
-            v-model="searchInput"
-            @keyup.enter="handleSearch"
-            type="text"
-            placeholder="Search by product name or SKU..."
-            class="search-field"
-          />
-          <svg
-            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
           <button
-            v-if="searchInput"
-            @click="clearSearch"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            @click="clearSearchBulkActionStatus"
+            class="button-cancel"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            Clear
           </button>
+        </div>
+        <div v-if="store.selectedIds.length > 0" class="text-sm text-theme-500 w-30 font-medium">
+          {{ store.selectedIds.length }} items selected
         </div>
       </div>
 
-      <div class="px-6">
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-4 py-3 text-left">
-                  <input
-                    type="checkbox"
-                    :checked="store.allSelected"
-                    @change="store.toggleSelectAll"
-                    class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
-                  />
-                </th>
-                <th
-                  v-for="column in [
-                    { key: 'name', label: 'Product Name' },
-                    { key: 'sku', label: 'SKU' },
-                    { key: 'stock', label: 'Stock' },
-                    { key: 'price', label: 'Price' },
-                    { key: 'updated_at', label: 'Last Updated' },
-                  ]"
-                  :key="column.key"
-                  class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+      <div class="w-full sm:max-w-64">
+        <InputSearch
+          v-model="searchInput"
+          class="bg-white fw-medium"
+          placeholder="Search by product name or SKU..."
+          @search="handleSearch"
+        />
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow">
+      <div class="overflow-x-auto rounded border border-gray-200 text-xs">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left">
+                <input
+                  type="checkbox"
+                  :checked="store.allSelected"
+                  @change="store.toggleSelectAll"
+                  class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
+                />
+              </th>
+              <th
+                v-for="column in [
+                  { key: 'name', label: 'Product Name' },
+                  { key: 'sku', label: 'SKU' },
+                  { key: 'stock', label: 'Stock' },
+                  { key: 'price', label: 'Price' },
+                  { key: 'updated_at', label: 'Last Updated' },
+                ]"
+                :key="column.key"
+                class="px-4 py-3 text-left text-sm font-medium text-gray-500 capitalize tracking-wider"
+              >
+                <div
+                  v-if="sortableColumns.includes(column.key)"
+                  @click="handleSort(column.key)"
+                  class="flex items-center gap-1 cursor-pointer hover:text-gray-700"
                 >
-                  <div
-                    v-if="sortableColumns.includes(column.key)"
-                    @click="handleSort(column.key)"
-                    class="flex items-center gap-1 cursor-pointer hover:text-gray-700"
+                  <svg
+                    class="w-3 h-3 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <svg
-                      class="w-3 h-3 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-                      />
-                    </svg>
-                    {{ column.label }}
-                    <span v-if="isSorted(column.key)" class="text-theme-600">
-                      {{ getSortIcon(column.key) }}
-                    </span>
-                  </div>
-                  <span v-else>{{ column.label }}</span>
-                </th>
-                <th
-                  class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-if="store.loading">
-                <td colspan="8" class="px-4 py-8 text-center text-gray-500">
-                  <div class="flex items-center justify-center">
-                    <svg
-                      class="animate-spin h-6 w-6 text-theme-600 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        class="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        stroke-width="4"
-                      ></circle>
-                      <path
-                        class="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Loading...
-                  </div>
-                </td>
-              </tr>
-              <tr v-else-if="store.items.length === 0">
-                <td colspan="8" class="px-4 py-8 text-center text-gray-500">No inventory items found</td>
-              </tr>
-              <tr v-for="item in store.items" :key="item.id" class="hover:bg-gray-50">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+                    />
+                  </svg>
+                  {{ column.label }}
+                  <span v-if="isSorted(column.key)" class="text-theme-600">
+                    {{ getSortIcon(column.key) }}
+                  </span>
+                </div>
+                <span v-else>{{ column.label }}</span>
+              </th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 capitalize tracking-wider">Action</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200 align-top">
+            <tr v-if="!store.loading && store.items.length === 0">
+              <td colspan="8" class="px-4 py-8 text-center text-gray-500">No inventory items found</td>
+            </tr>
+            <template v-for="(row, index) in tableRows" :key="row.type === 'item' ? row.data.id : row.key">
+              <tr v-if="row.type === 'item'" :key="row.data.id" class="hover:bg-gray-50 group item-anim" :style="{'--animation-delay' : index}">
                 <td class="px-4 py-4">
                   <input
                     type="checkbox"
-                    :checked="store.selectedIds.includes(item.id)"
-                    @change="store.toggleSelect(item.id)"
+                    :checked="store.selectedIds.includes(row.data.id)"
+                    @change="store.toggleSelect(row.data.id)"
                     class="rounded border-gray-300 text-theme-600 focus:ring-theme-500"
                   />
                 </td>
-                <td class="px-4 py-4">
-                  <div class="text-sm font-medium text-gray-900">{{ item.product_name || item.name }}</div>
+                <td class="p-3 min-w-40">
+                  <div class="text-sm font-medium text-gray-900">{{ row.data.product_name || row.data.name }}</div>
                 </td>
-                <td class="px-4 py-4">
-                  <div class="text-sm text-gray-500">{{ item.sku || '-' }}</div>
+                <td class="p-3">
+                  <div class="text-sm text-gray-500">{{ row.data.sku || '-' }}</div>
                 </td>
-                <td class="px-4 py-4">
-                  <div v-if="editingStockId === item.id" class="flex items-center gap-2">
+                <td class="p-3">
+                  <div v-if="editingStockId === row.data.id" class="flex items-center gap-2">
                     <input
                       v-model="editingStockValue"
                       type="number"
                       min="0"
                       class="w-20 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-theme-500 focus:border-theme-500"
                     />
-                    <button
-                      @click="saveStockEdit"
-                      class="text-green-600 hover:text-green-900"
-                    >
+                    <button @click="saveStockEdit" class="text-green-600 hover:text-green-800 cursor-pointer">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                       </svg>
                     </button>
-                    <button
-                      @click="cancelStockEdit"
-                      class="text-red-600 hover:text-red-900"
-                    >
+                    <button @click="cancelStockEdit" class="text-red-600 hover:text-red-800 cursor-pointer">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                       </svg>
@@ -335,69 +270,79 @@ watch(
                     <span
                       :class="[
                         'inline-flex rounded-full h-2 w-2',
-                        getStockStatus(item.stock).color === 'green'
+                        getStockStatus(row.data.stock).color === 'green'
                           ? 'bg-green-600'
-                          : getStockStatus(item.stock).color === 'orange'
+                          : getStockStatus(row.data.stock).color === 'orange'
                             ? 'bg-orange-500'
                             : 'bg-red-600',
                       ]"
                     ></span>
-                    <span class="text-sm font-medium">{{ item.stock || 0 }}</span>
+                    <span class="text-sm font-medium">{{ row.data.stock || 0 }}</span>
                   </div>
                 </td>
-                <td class="px-4 py-4">
+                <td class="p-3">
                   <div class="text-sm text-gray-900">
-                    <CurrencySymbol />{{ parseFloat(item.price || 0).toFixed(2) }}
+                    <CurrencySymbol />{{ parseFloat(row.data.price || 0).toFixed(2) }}
                   </div>
                 </td>
-                <td class="px-4 py-4">
-                  <div class="text-sm text-gray-500">{{ formatDate(item.updated_at) }}</div>
+                <td class="p-3">
+                  <div class="text-sm text-gray-500 whitespace-nowrap">{{ formatDate(row.data.updated_at) }}</div>
                 </td>
-                <td class="px-4 py-4">
-                  <div class="flex items-center gap-2">
+                <td class="p-3">
+                  <div class="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
-                      @click="handleStockEdit(item)"
-                      class="text-theme-600 hover:text-theme-900 text-sm font-medium"
+                      @click="handleStockEdit(row.data)"
+                      class="text-theme-600 hover:text-theme-900 text-xs font-medium cursor-pointer"
                     >
                       Edit Stock
                     </button>
                     <router-link
-                      :to="`/dashboard/products/edit/${Number(item.id)}`"
-                      class="text-gray-600 hover:text-gray-900 text-sm font-medium"
+                      :to="`/dashboard/products/edit/${Number(row.data.id)}`"
+                      class="text-gray-500 hover:text-gray-800 text-xs font-medium"
                     >
                       View Product
                     </router-link>
                   </div>
                 </td>
               </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div v-if="store.pagination.lastPage > 1" class="flex items-center justify-between mt-4">
-          <div class="text-sm text-gray-700">
-            Showing page {{ store.pagination.currentPage }} of {{ store.pagination.lastPage }} ({{
-              store.pagination.total
-            }}
-            total)
-          </div>
-          <div class="flex gap-1">
-            <button
-              v-for="page in store.pagination.lastPage"
-              :key="page"
-              @click="handlePageChange(page)"
-              :class="[
-                'px-3 py-1 rounded text-sm',
-                store.pagination.currentPage === page
-                  ? 'bg-theme-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-              ]"
-            >
-              {{ page }}
-            </button>
-          </div>
-        </div>
+              <tr v-else class="animate-pulse">
+                <td class="px-4 py-4"><div class="w-4 h-4 bg-gray-200 rounded"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-3/4"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-20"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-16"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-16"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-24"></div></td>
+                <td class="p-3"><div class="h-4 bg-gray-200 rounded w-20"></div></td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <div v-if="store.pagination.lastPage > 1" class="flex items-center justify-between mt-4">
+      <div class="text-sm text-gray-700">
+        Showing page {{ store.pagination.currentPage }} of {{ store.pagination.lastPage }} ({{
+          store.pagination.total
+        }}
+        total)
+      </div>
+      <div class="flex gap-1">
+        <button
+          v-for="page in store.pagination.lastPage"
+          :key="page"
+          @click="handlePageChange(page)"
+          :class="[
+            'h-8 min-w-8 rounded text-sm flex items-center justify-center font-bold cursor-pointer border border-gray-300',
+            store.pagination.currentPage === page
+              ? 'bg-theme-600 text-white'
+              : 'bg-white text-theme-500 hover:bg-gray-50',
+          ]"
+        >
+          {{ page }}
+        </button>
+      </div>
+    </div>
+
   </div>
 </template>

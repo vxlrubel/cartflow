@@ -3,7 +3,7 @@
 
     <label v-if="label" class="font-medium mb-1.5 text-sm text-gray-700 block" :for="labelConnectId">{{ label }}</label>
 
-    <div class="relative">
+    <div class="relative" ref="selectRef">
       <!-- Left Icon -->
       <span
         class="absolute left-0 top-0 inline-flex h-10 w-10 items-center justify-center z-10"
@@ -25,7 +25,7 @@
       <!-- Toggle Button -->
       <button
         type="button"
-        @click="toggleInputType"
+        @click.stop="toggleInputType"
         class="absolute right-0 top-0 inline-flex h-10 w-10 items-center justify-center z-10"
       >
         <VisibilityOn
@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 import LockIcon from '@/components/icons/LockIcon.vue'
 import VisibilityOn from '@/components/icons/VisibilityOn.vue'
@@ -83,6 +83,9 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
+
+const selectRef = ref(null)
+
 const labelConnectId = computed(() => {
   return `email-${crypto.randomUUID()}`
 })
@@ -101,4 +104,20 @@ const toggleInputType = () => {
 const handleInput = (event) => {
   emit('update:modelValue', event.target.value)
 }
+
+// Close outside
+const handleClickOutside = (e) => {
+  if (selectRef.value && !selectRef.value.contains(e.target)) {
+    inputType.value = 'password'
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
 </script>

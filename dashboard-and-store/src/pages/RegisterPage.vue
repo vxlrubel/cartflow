@@ -6,6 +6,11 @@
     </div>
 
     <form @submit.prevent="handleRegister" class="space-y-6">
+
+
+      <div class="border-l-3 px-3 py-2 border-rose-500 text-rose-600 bg-rose-100 text-sm font-medium">Generated error message.</div>
+      <hr>
+      <div class="border-l-3 px-3 py-2 border-green-500 text-green-600 bg-green-100 text-sm font-medium">Generated success message.</div>
       <div
         v-if="authStore.error"
         class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg"
@@ -20,58 +25,32 @@
         {{ successMessage }}
       </div>
 
-      <div>
-        <label for="name" class="block text-sm font-medium text-gray-700 mb-2"> Full Name </label>
-        <input
-          id="name"
+
+      <div class="space-y-4">
+
+        <InputEmail
+          require="true"
+          label="Full Name"
+          placeholder="Enter your full name"
           v-model="form.name"
-          type="text"
-          required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
-          placeholder="John Doe"
         />
-      </div>
 
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-          Email Address
-        </label>
-        <input
-          id="email"
+        <InputEmail
+          require="true"
+          label="Email Address"
+          placeholder="example@domain.com"
+          hint="Enter your valid email address with @"
           v-model="form.email"
-          type="email"
-          required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
-          placeholder="you@example.com"
         />
-      </div>
 
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-          Password
-        </label>
-        <input
-          id="password"
+        <InputPassword
+          label="Password"\
           v-model="form.password"
-          type="password"
-          required
-          minlength="8"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
-          placeholder="Min. 8 characters"
         />
-      </div>
-
-      <div>
-        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
-          Confirm Password
-        </label>
-        <input
-          id="password_confirmation"
+        <InputPassword
+          label="Confirm Password"\
+          placeholder="Confirm Your Password"
           v-model="form.password_confirmation"
-          type="password"
-          required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
-          placeholder="Confirm your password"
         />
       </div>
 
@@ -106,6 +85,8 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import AuthLayout from '@/layouts/AuthLayout.vue'
+import InputPassword from '@/components/input/InputPassword.vue'
+import InputEmail from '@/components/input/InputEmail.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()

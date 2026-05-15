@@ -24,8 +24,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 
-import EnvelopeIcon  from '@/components/icons/EnvelopeIcon.vue'
-
 defineProps({
   modelValue: {
     type: String,

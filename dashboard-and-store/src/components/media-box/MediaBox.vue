@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useMediaBoxStore } from '@/stores/mediaBoxStore'
 import CancelButton from '@/components/buttons/CancelButton.vue'
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue'
@@ -82,6 +82,16 @@ const updateMeta = async (field, value) => {
   }
 }
 
+watch(() => store.isOpen, async (open) => {
+  if (open) {
+    try {
+      await loadMedia()
+    } catch {
+      // silently fail
+    }
+  }
+})
+
 const copyUrl = async () => {
   if (!selectedMediaItem.value?.url) return
 
@@ -125,7 +135,7 @@ const fileDimensions = computed(() => {
 })
 
 onMounted(() => {
-  loadMedia()
+  // load media lazily when modal opens via watcher
 })
 </script>
 

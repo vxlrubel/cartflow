@@ -5,7 +5,7 @@
       <p class="text-gray-600 mt-2">Sign in to manage your store</p>
     </div>
 
-    <form @submit.prevent="handleLogin" class="space-y-6">
+    <form @submit.prevent="handleLogin" class="space-y-4 p-10 bg-white rounded-2xl">
       <div
         v-if="authStore.error"
         class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg"
@@ -13,45 +13,32 @@
         {{ authStore.error }}
       </div>
 
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-          Email Address
-        </label>
-        <input
-          id="email"
+      <InputEmail
+          require="true"
+          label="Email Address"
+          placeholder="example@domain.com"
+          hint="Enter your valid email address with @"
           v-model="form.email"
-          type="email"
-          required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
-          placeholder="admin@example.com"
         />
-      </div>
 
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-          Password
-        </label>
-        <input
-          id="password"
+      <InputPassword
+          label="Password"\
+          placeholder="Password"
           v-model="form.password"
-          type="password"
-          required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-theme-500 focus:border-transparent"
-          placeholder="Enter your password"
+        />
+
+      <div class="flex justify-end">
+        <PrimaryButton
+          type="submit"
+          label="Login"
+          :disabled="authStore.loading"
+          :loading="authStore.loading"
         />
       </div>
-
-      <button
-        type="submit"
-        :disabled="authStore.loading"
-        class="w-full bg-theme-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-theme-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-      >
-        {{ authStore.loading ? 'Signing in...' : 'Sign In' }}
-      </button>
     </form>
 
     <div class="mt-6 text-center">
-      <p class="text-gray-600 text-sm">
+      <p class="text-gray-600 text-sm font-medium">
         Are you a customer?
         <router-link to="/customer/login" class="text-theme-600 hover:text-theme-700 font-medium">
           Login here
@@ -60,7 +47,7 @@
     </div>
 
     <div class="mt-4 text-center">
-      <router-link to="/" class="text-gray-500 hover:text-gray-700 text-sm">
+      <router-link to="/" class="text-gray-500 hover:text-gray-700 text-sm font-medium">
         &larr; Back to home
       </router-link>
     </div>
@@ -71,6 +58,9 @@
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import AuthLayout from '@/layouts/AuthLayout.vue'
+import InputPassword from '@/components/input/InputPassword.vue'
+import InputEmail from '@/components/input/InputEmail.vue'
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue'
 
 const authStore = useAuthStore()
 

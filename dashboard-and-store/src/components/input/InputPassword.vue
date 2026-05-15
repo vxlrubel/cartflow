@@ -1,12 +1,12 @@
 <template>
   <div>
 
-    <label v-if="label" class="font-medium mb-1.5 text-sm text-gray-700 block" :for="labelConnectId">{{ label }}</label>
+    <label v-if="label" class="font-medium mb-1.5 text-sm text-gray-700 inline-block" :for="labelConnectId">{{ label }}</label>
 
     <div class="relative" ref="selectRef">
       <!-- Left Icon -->
       <span
-        class="absolute left-0 top-0 inline-flex h-10 w-10 items-center justify-center z-10"
+        class="absolute left-0 top-0 inline-flex h-8 w-10 items-center justify-center z-10"
       >
         <LockIcon size="16" />
       </span>
@@ -19,14 +19,14 @@
         :type="inputType"
         :placeholder="placeholder"
         :disabled="disabled"
-        class="w-full h-10 rounded border-2 border-gray-300 px-10 text-sm transition-all duration-150 focus:outline-none focus:border-theme-500 focus:ring-2 focus:ring-theme-300 focus:ring-offset-1 disabled:cursor-not-allowed disabled:bg-gray-100  placeholder:text-theme-500 focus:bg-theme-50"
+        class="w-full h-8 rounded border-2 border-gray-300 px-10 text-sm transition-all duration-150 focus:outline-none focus:border-theme-500 focus:ring-2 focus:ring-theme-300 focus:ring-offset-1 disabled:cursor-not-allowed disabled:bg-gray-100  focus:text-theme-500 focus:bg-theme-50"
       />
 
       <!-- Toggle Button -->
       <button
         type="button"
         @click.stop="toggleInputType"
-        class="absolute right-0 top-0 inline-flex h-10 w-10 items-center justify-center z-10"
+        class="absolute right-0 top-0 inline-flex h-8 w-10 items-center justify-center z-10"
       >
         <VisibilityOn
           v-if="inputType === 'password'"

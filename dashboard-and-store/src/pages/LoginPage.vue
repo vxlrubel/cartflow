@@ -8,8 +8,7 @@
     <form @submit.prevent="handleLogin" class="space-y-4 p-10 bg-white rounded-2xl">
       <div
         v-if="authStore.error"
-        class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg"
-      >
+        class="border-l-3 px-3 py-2 border-rose-500 text-rose-600 bg-rose-100 text-sm font-medium">
         {{ authStore.error }}
       </div>
 

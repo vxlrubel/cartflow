@@ -1,12 +1,7 @@
 <script setup>
 import { useDeleteConfirmation } from '@/composables/useDeleteConfirmation'
 
-defineProps({
-  title: { type: String, default: 'Are you sure?' },
-  description: { type: String, default: 'Do you want to proceed with deleting this item?' },
-})
-
-const { show, title: dialogTitle, description: dialogDesc, onConfirm, onCancel } = useDeleteConfirmation()
+const { show, title, description, onConfirm, onCancel } = useDeleteConfirmation()
 </script>
 
 <template>
@@ -18,8 +13,8 @@ const { show, title: dialogTitle, description: dialogDesc, onConfirm, onCancel }
         @click.self="onCancel"
       >
         <div class="w-full max-w-sm rounded bg-white shadow-2xl p-8 fade-in-scale">
-          <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ dialogTitle ?? title }}</h3>
-          <p class="text-sm text-gray-600 mb-6">{{ dialogDesc ?? description }}</p>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ title }}</h3>
+          <p class="text-sm text-gray-600 mb-6">{{ description }}</p>
           <div class="flex justify-end gap-2">
             <button class="button-secondary min-w-15" @click="onCancel">No</button>
             <button class="button-cancel" @click="onConfirm">Yes, do it</button>

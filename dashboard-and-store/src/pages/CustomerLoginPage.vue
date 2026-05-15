@@ -37,7 +37,7 @@
     </form>
 
     <div class="mt-6 text-center">
-      <p class="text-gray-600 text-sm">
+      <p class="text-gray-600 text-sm font-medium">
         Don't have an account?
         <router-link to="/register" class="text-theme-600 hover:text-theme-700 font-medium">
           Register here
@@ -46,13 +46,13 @@
     </div>
 
     <div class="mt-4 text-center">
-      <router-link to="/login" class="text-gray-500 hover:text-gray-700 text-sm">
+      <router-link to="/login" class="text-gray-500 hover:text-gray-700 text-sm font-medium">
         Admin Login?
       </router-link>
     </div>
 
     <div class="mt-2 text-center">
-      <router-link to="/" class="text-gray-500 hover:text-gray-700 text-sm">
+      <router-link to="/" class="text-gray-500 hover:text-gray-700 text-sm font-medium">
         &larr; Back to home
       </router-link>
     </div>

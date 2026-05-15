@@ -16,6 +16,12 @@ const routes = [
     meta: { title: 'Products' },
   },
   {
+    path: '/products/:id',
+    name: 'product-detail',
+    component: () => import('@/pages/ProductDetailPage.vue'),
+    meta: { title: 'Product Detail' },
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('@/pages/LoginPage.vue'),

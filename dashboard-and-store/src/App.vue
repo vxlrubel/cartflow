@@ -13,7 +13,7 @@ const toastStore = useToastStore()
   <RouterView />
   <MediaBox />
   <LeaveConfirmation />
-  <DeleteConfirmation title="Move to Trash" shortDescription="Are you sure you want to move this item to trash?" />
+  <DeleteConfirmation />
   <ToastMessage
     v-if="toastStore.visible"
     :status="toastStore.status"

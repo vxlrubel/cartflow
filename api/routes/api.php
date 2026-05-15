@@ -70,6 +70,14 @@ Route::prefix('v1')->middleware([CorsMiddleware::class])->group(function () {
         return response()->json(['user' => $admin]);
     });
 
+    // Public read-only routes (no auth required)
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/products/{id}', [ProductController::class, 'show']);
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/{id}', [CategoryController::class, 'show']);
+    Route::get('/media', [MediaController::class, 'index']);
+    Route::get('/media/{media}', [MediaController::class, 'show']);
+
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/auth/logout', [AuthController::class, 'logout']);
         Route::get('/auth/me', [AuthController::class, 'me']);
@@ -88,8 +96,10 @@ Route::prefix('v1')->middleware([CorsMiddleware::class])->group(function () {
         Route::get('/permissions', [PermissionController::class, 'index']);
         Route::post('/permissions', [PermissionController::class, 'store']);
 
-        // Products
-        Route::apiResource('products', ProductController::class);
+        // Products (mutations only)
+        Route::post('/products', [ProductController::class, 'store']);
+        Route::put('/products/{id}', [ProductController::class, 'update']);
+        Route::delete('/products/{id}', [ProductController::class, 'destroy']);
         Route::post('/products/{id}/restore', [ProductController::class, 'restore']);
         Route::delete('/products/{id}/force', [ProductController::class, 'forceDelete']);
         Route::get('/trash/products', [ProductController::class, 'trash']);
@@ -97,8 +107,10 @@ Route::prefix('v1')->middleware([CorsMiddleware::class])->group(function () {
         Route::post('/products/bulk-active', [ProductController::class, 'bulkActive']);
         Route::post('/products/bulk-inactive', [ProductController::class, 'bulkInactive']);
 
-        // Categories
-        Route::apiResource('categories', CategoryController::class);
+        // Categories (mutations only)
+        Route::post('/categories', [CategoryController::class, 'store']);
+        Route::put('/categories/{id}', [CategoryController::class, 'update']);
+        Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
         Route::post('/categories/{id}/restore', [CategoryController::class, 'restore']);
 
         // Brands
@@ -191,9 +203,7 @@ Route::prefix('v1')->middleware([CorsMiddleware::class])->group(function () {
         Route::post('/customer-groups/{id}/customers', [CustomerGroupController::class, 'addCustomers']);
         Route::delete('/customer-groups/{id}/customers', [CustomerGroupController::class, 'removeCustomers']);
 
-        // Media
-        Route::get('/media', [MediaController::class, 'index']);
-        Route::get('/media/{media}', [MediaController::class, 'show']);
+        // Media (mutations only)
         Route::post('/media/upload', [MediaController::class, 'upload']);
         Route::post('/media/upload-multiple', [MediaController::class, 'uploadMultiple']);
         Route::put('/media/{media}', [MediaController::class, 'update']);

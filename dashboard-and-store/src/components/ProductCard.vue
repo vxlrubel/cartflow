@@ -53,18 +53,28 @@
 </template>
 
 <script setup>
-defineProps({
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+
+const props = defineProps({
   product: {
     type: Object,
     required: true,
   },
 })
 
+const authStore = useAuthStore()
+const router = useRouter()
+
 const formatPrice = (price) => {
   return parseFloat(price).toFixed(2)
 }
 
 const addToCart = () => {
-  console.log('Add to cart:', defineProps.product?.id)
+  if (!authStore.isAuthenticated) {
+    router.push('/customer/login?redirect=/products')
+    return
+  }
+  console.log('Add to cart:', props.product.id)
 }
 </script>
